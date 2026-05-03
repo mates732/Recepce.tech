@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Obchodní podmínky — recepce.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+html { scroll-snap-type: none !important; }
+body { min-height: 100vh; }
+
+.page-hero {
+  padding: 140px clamp(24px,5vw,64px) 64px;
+  text-align: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 120%; height: 80%;
+  background: radial-gradient(ellipse 60% 50% at 50% 10%, rgba(74,124,89,.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.page-hero > * { position: relative; z-index: 1; }
+.page-hero h1 {
+  font-size: clamp(32px,4.5vw,62px); font-weight: 500;
+  letter-spacing: -.04em; line-height: 1.05;
+  margin-bottom: 14px; text-wrap: balance;
+  animation: fadein .8s .1s var(--ease) both;
+}
+.page-hero h1 em { font-style: italic; font-weight: 400; color: var(--fg-mute); }
+.page-hero p {
+  font-size: clamp(14px,1.1vw,17px); color: var(--fg-dim);
+  max-width: 44ch; margin: 0 auto;
+  animation: fadein .8s .2s var(--ease) both;
+}
+
+.legal-wrap {
+  max-width: 760px; margin: 0 auto;
+  padding: clamp(48px,6vw,72px) clamp(24px,5vw,40px) clamp(80px,9vw,120px);
+}
+.legal-updated {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
+  color: var(--fg-mute); text-transform: uppercase;
+  margin-bottom: 52px; display: block;
+  padding-bottom: 16px; border-bottom: 1px solid var(--line-2);
+}
+
+.legal-section { margin-bottom: 48px; }
+.legal-section h2 {
+  font-size: clamp(16px,1.6vw,20px); font-weight: 600;
+  letter-spacing: -.02em; margin-bottom: 16px; color: var(--fg);
+}
+.legal-section p {
+  font-size: 15px; color: var(--fg-dim); line-height: 1.8;
+  margin-bottom: 14px; max-width: 70ch;
+}
+.legal-section p:last-child { margin-bottom: 0; }
+.legal-section ul {
+  list-style: none; padding: 0; margin: 14px 0;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.legal-section ul li {
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: 15px; color: var(--fg-dim); line-height: 1.7;
+}
+.legal-section ul li::before {
+  content: '—'; color: var(--fg-mute); flex-shrink: 0;
+  font-family: var(--mono); font-size: 12px; padding-top: 3px;
+}
+.legal-section a {
+  color: var(--fg); text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: var(--line-hi); transition: text-decoration-color .2s;
+}
+.legal-section a:hover { text-decoration-color: var(--fg); }
+
+.legal-divider { border: none; border-top: 1px solid var(--line-2); margin: 0 0 48px; }
+
+.legal-highlight {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r); padding: 18px 22px;
+  margin: 14px 0;
+}
+.legal-highlight p {
+  font-size: 14px; color: var(--fg-dim); line-height: 1.7; margin: 0;
+}
+
+.legal-contact-box {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: var(--r-xl); padding: clamp(24px,3vw,36px); margin-top: 52px;
+}
+.legal-contact-box h3 {
+  font-size: 16px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 12px;
+}
+.legal-contact-box p {
+  font-size: 15px; color: var(--fg-dim); line-height: 1.75; margin-bottom: 0;
+}
+</style>
+<script src="nav.js" defer></script>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="brand">
+    <span class="brand-full"><span class="brand-name">recepce</span><span class="brand-tld">.tech</span></span><span class="brand-short">RT</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+  </button>
+</nav>
+
+<div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+  <nav class="menu-nav">
+    <a href="index.html" data-cs="Domů" data-en="Home">Domů</a>
+    <a href="profese.html" data-cs="Pro koho" data-en="For who">Pro koho</a>
+    <a href="webdesign.html" data-cs="Webdesign" data-en="Webdesign">Webdesign</a>
+    <a href="faq.html" data-cs="Q&amp;A" data-en="Q&amp;A">Q&amp;A</a>
+    <a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a>
+  </nav>
+  <div class="menu-lang">
+    <button id="btn-cs" class="active" onclick="setLang('cs')">CS</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<main>
+<section class="page-hero">
+  <div class="wrap">
+    <span class="label" data-cs="Právní dokument" data-en="Legal document">Právní dokument</span>
+    <h1 data-cs="Obchodní <em>podmínky</em>" data-en="Terms of <em>service</em>">Obchodní <em>podmínky</em></h1>
+    <p data-cs="Podmínky poskytování AI recepční služby recepce.tech." data-en="Terms and conditions for the recepce.tech AI receptionist service.">
+      Podmínky poskytování AI recepční služby recepce.tech.
+    </p>
+  </div>
+</section>
+
+<div class="legal-wrap">
+  <span class="legal-updated" data-cs="Platnost od 1. ledna 2025" data-en="Effective from 1 January 2025">Platnost od 1. ledna 2025</span>
+
+  <!-- 1 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="1. Smluvní strany a předmět smlouvy" data-en="1. Parties and subject matter">1. Smluvní strany a předmět smlouvy</h2>
+    <p data-cs="Poskytovatelem služby je fyzická osoba provozující recepce.tech (dále jen „poskytovatel"), kontakt: vojanmatyas@gmail.com, tel. +420 732 839 892. Klientem je fyzická nebo právnická osoba, která si objedná službu recepce.tech (dále jen „klient")." data-en="The service provider is the individual operating recepce.tech (hereinafter 'provider'), contact: vojanmatyas@gmail.com, tel. +420 732 839 892. The client is the natural or legal person ordering the recepce.tech service (hereinafter 'client').">
+      Poskytovatelem služby je fyzická osoba provozující recepce.tech (dále jen „poskytovatel"),
+      kontakt: <a href="mailto:vojanmatyas@gmail.com">vojanmatyas@gmail.com</a>,
+      tel. <a href="tel:+420732839892">+420 732 839 892</a>.
+      Klientem je fyzická nebo právnická osoba, která si objedná službu recepce.tech (dále jen „klient").
+    </p>
+    <p data-cs="Předmětem smlouvy je poskytování AI recepční služby — automatizovaného hlasového asistenta pro příjem hovorů, správu rezervací a komunikaci se zákazníky klienta." data-en="The subject of the agreement is the provision of the AI receptionist service — an automated voice assistant for answering calls, managing bookings, and communicating with the client's customers.">
+      Předmětem smlouvy je poskytování AI recepční služby — automatizovaného hlasového asistenta pro příjem hovorů, správu rezervací a komunikaci se zákazníky klienta.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 2 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="2. Objednávka a uzavření smlouvy" data-en="2. Order and contract conclusion">2. Objednávka a uzavření smlouvy</h2>
+    <p data-cs="Smlouva je uzavřena potvrzením objednávky poskytovatelem prostřednictvím e-mailu nebo jiné dohodnuté formy. Objednávku lze zadat přes kontaktní formulář, e-mailem nebo telefonicky." data-en="The contract is concluded upon the provider's confirmation of the order via email or another agreed form. Orders can be placed via the contact form, email, or phone.">
+      Smlouva je uzavřena potvrzením objednávky poskytovatelem prostřednictvím e-mailu nebo jiné dohodnuté formy. Objednávku lze zadat přes kontaktní formulář, e-mailem nebo telefonicky.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 3 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="3. Platební podmínky" data-en="3. Payment terms">3. Platební podmínky</h2>
+    <div class="legal-highlight">
+      <p data-cs="Příprava (nastavení) se zahájí po uhrazení zálohy ve výši 50 % ceny za nastavení. Po dokončení nastavení uhradí klient zbývajících 50 % + první měsíční poplatek, načež je služba spuštěna do ostrého provozu." data-en="Preparation (setup) begins after payment of a 50% deposit of the setup fee. After setup is complete, the client pays the remaining 50% plus the first monthly fee, after which the service goes live.">
+        Příprava (nastavení) se zahájí po uhrazení zálohy ve výši 50 % ceny za nastavení. Po dokončení nastavení uhradí klient zbývajících 50 % + první měsíční poplatek, načež je služba spuštěna do ostrého provozu.
+      </p>
+    </div>
+    <p data-cs="Měsíční poplatky jsou splatné vždy do 15. dne příslušného měsíce, není-li dohodnuto jinak. V případě prodlení s platbou je poskytovatel oprávněn pozastavit provoz služby." data-en="Monthly fees are due by the 15th of the relevant month unless otherwise agreed. In the event of late payment, the provider is entitled to suspend the service.">
+      Měsíční poplatky jsou splatné vždy do 15. dne příslušného měsíce, není-li dohodnuto jinak. V případě prodlení s platbou je poskytovatel oprávněn pozastavit provoz služby.
+    </p>
+    <p data-cs="Veškeré ceny jsou sjednány individuálně a sděleny klientovi před uzavřením smlouvy. Poskytovatel si vyhrazuje právo upravit ceny pro budoucí fakturační období s 30denním předstihem." data-en="All prices are individually agreed and communicated to the client before contract conclusion. The provider reserves the right to adjust prices for future billing periods with 30 days' notice.">
+      Veškeré ceny jsou sjednány individuálně a sděleny klientovi před uzavřením smlouvy. Poskytovatel si vyhrazuje právo upravit ceny pro budoucí fakturační období s 30denním předstihem.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 4 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="4. Rozsah a kvalita služby" data-en="4. Scope and quality of service">4. Rozsah a kvalita služby</h2>
+    <p data-cs="Poskytovatel garantuje dostupnost (uptime) platformy na úrovni 99,9 % v měsíčním průměru. Plánované odstávky pro údržbu budou klientovi oznámeny alespoň 24 hodin předem." data-en="The provider guarantees platform availability (uptime) of 99.9% on a monthly average. Planned maintenance outages will be notified to the client at least 24 hours in advance.">
+      Poskytovatel garantuje dostupnost (uptime) platformy na úrovni 99,9 % v měsíčním průměru. Plánované odstávky pro údržbu budou klientovi oznámeny alespoň 24 hodin předem.
+    </p>
+    <p data-cs="Rozsah služby (počet hovorů, kanálů, integrace) je stanoven individuální dohodou. Při překročení sjednaného rozsahu si poskytovatel vyhrazuje právo naúčtovat dodatečné poplatky nebo omezit kapacitu." data-en="The scope of service (number of calls, channels, integrations) is set by individual agreement. If the agreed scope is exceeded, the provider reserves the right to charge additional fees or limit capacity.">
+      Rozsah služby (počet hovorů, kanálů, integrace) je stanoven individuální dohodou.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 5 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="5. Povinnosti klienta" data-en="5. Client obligations">5. Povinnosti klienta</h2>
+    <p data-cs="Klient se zavazuje:" data-en="The client undertakes to:">
+      Klient se zavazuje:
+    </p>
+    <ul>
+      <li data-cs="Poskytnout pravdivé a úplné informace potřebné pro nastavení a provoz služby" data-en="Provide accurate and complete information required for service setup and operation">Poskytnout pravdivé a úplné informace potřebné pro nastavení a provoz služby</li>
+      <li data-cs="Využívat službu výhradně v souladu s platnými právními předpisy" data-en="Use the service exclusively in accordance with applicable laws">Využívat službu výhradně v souladu s platnými právními předpisy</li>
+      <li data-cs="Informovat poskytovatele o podstatných změnách provozu, které by mohly ovlivnit nastavení AI" data-en="Inform the provider of significant operational changes that may affect AI configuration">Informovat poskytovatele o podstatných změnách provozu</li>
+      <li data-cs="Zajistit, aby jeho zákazníci byli srozumitelně informováni o tom, že komunikují s AI systémem (je-li to vyžadováno legislativou)" data-en="Ensure that its customers are clearly informed that they are communicating with an AI system (where required by law)">Zajistit informovanost zákazníků o komunikaci s AI systémem, vyžaduje-li to legislativa</li>
+    </ul>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 6 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="6. Zrušení smlouvy" data-en="6. Cancellation">6. Zrušení smlouvy</h2>
+    <div class="legal-highlight">
+      <p data-cs="Klient může smlouvu zrušit kdykoli, bez výpovědní lhůty a bez sankcí. Stačí nás kontaktovat e-mailem nebo telefonicky. Přerušení provozu provedeme do 5 pracovních dnů od obdržení žádosti." data-en="The client may cancel the agreement at any time, without notice period and without penalties. Simply contact us by email or phone. Service termination will be completed within 5 business days of receiving the request.">
+        Klient může smlouvu zrušit kdykoli, bez výpovědní lhůty a bez sankcí. Stačí nás kontaktovat e-mailem nebo telefonicky.
+      </p>
+    </div>
+    <p data-cs="Poskytovatel může smlouvu vypovědět s 30denní výpovědní lhůtou, nebo okamžitě v případě závažného porušení těchto podmínek ze strany klienta. Přeplatek za měsíční poplatek bude vrácen poměrně." data-en="The provider may terminate the agreement with 30 days' notice, or immediately in the event of a material breach by the client. Any overpayment of the monthly fee will be refunded on a pro-rata basis.">
+      Poskytovatel může smlouvu vypovědět s 30denní výpovědní lhůtou, nebo okamžitě v případě závažného porušení těchto podmínek. Přeplatek za měsíční poplatek bude vrácen poměrně.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 7 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="7. Odpovědnost a omezení" data-en="7. Liability and limitations">7. Odpovědnost a omezení</h2>
+    <p data-cs="Poskytovatel nenese odpovědnost za nepřímé škody, ušlý zisk nebo ztrátu dat vzniklé v důsledku přerušení nebo nefunkčnosti služby způsobené okolnostmi mimo jeho kontrolu (vyšší moc, výpadky infrastruktury třetích stran, útoky)." data-en="The provider is not liable for indirect damages, lost profits, or data loss arising from service interruption or malfunction caused by circumstances beyond its control (force majeure, third-party infrastructure outages, attacks).">
+      Poskytovatel nenese odpovědnost za nepřímé škody, ušlý zisk nebo ztrátu dat vzniklé v důsledku přerušení nebo nefunkčnosti služby způsobené okolnostmi mimo jeho kontrolu.
+    </p>
+    <p data-cs="Celková odpovědnost poskytovatele vůči klientovi za jakékoli nároky vyplývající ze smlouvy je omezena na výši měsíčního poplatku za měsíc, ve kterém škoda vznikla." data-en="The provider's total liability to the client for any claims arising from the agreement is limited to the amount of the monthly fee for the month in which the damage occurred.">
+      Celková odpovědnost poskytovatele je omezena na výši měsíčního poplatku za měsíc, ve kterém škoda vznikla.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 8 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="8. Ochrana osobních údajů" data-en="8. Data protection">8. Ochrana osobních údajů</h2>
+    <p data-cs="Zpracování osobních údajů v rámci využívání služby se řídí Zásadami ochrany osobních údajů, které jsou dostupné na privacy.html." data-en="The processing of personal data within the use of the service is governed by the Privacy Policy, available at privacy.html.">
+      Zpracování osobních údajů se řídí <a href="privacy.html" data-cs="Zásadami ochrany osobních údajů" data-en="the Privacy Policy">Zásadami ochrany osobních údajů</a>.
+    </p>
+    <p data-cs="Při poskytování služby vystupuje poskytovatel jako zpracovatel osobních údajů zákazníků klienta. Klient nese odpovědnost za zákonný základ zpracování vůči svým zákazníkům." data-en="In providing the service, the provider acts as a data processor for the client's customer data. The client is responsible for the lawful basis of processing vis-à-vis their customers.">
+      Při poskytování služby vystupuje poskytovatel jako zpracovatel osobních údajů zákazníků klienta. Klient nese odpovědnost za zákonný základ zpracování vůči svým zákazníkům.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 9 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="9. Důvěrnost" data-en="9. Confidentiality">9. Důvěrnost</h2>
+    <p data-cs="Obě strany se zavazují zachovávat mlčenlivost o důvěrných informacích druhé strany, zejména o obchodních tajemstvích a zákaznicích. Tato povinnost trvá i po skončení smluvního vztahu." data-en="Both parties undertake to keep the other party's confidential information confidential, in particular trade secrets and customer data. This obligation continues after the end of the contractual relationship.">
+      Obě strany se zavazují zachovávat mlčenlivost o důvěrných informacích druhé strany. Tato povinnost trvá i po skončení smluvního vztahu.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 10 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="10. Rozhodné právo a řešení sporů" data-en="10. Governing law and dispute resolution">10. Rozhodné právo a řešení sporů</h2>
+    <p data-cs="Tyto obchodní podmínky a veškeré spory z nich vzniklé se řídí právem České republiky. Strany se zavazují řešit spory přednostně mimosoudní cestou. Nepodaří-li se spor vyřešit dohodou, je k jeho rozhodování příslušný věcně a místně příslušný soud v České republice." data-en="These terms and conditions and any disputes arising from them are governed by Czech law. The parties undertake to resolve disputes by out-of-court means as a priority. If a dispute cannot be resolved by agreement, it shall be decided by the competent court in the Czech Republic.">
+      Tyto obchodní podmínky se řídí právem České republiky. Strany se zavazují řešit spory přednostně mimosoudní cestou. V případě neúspěchu je příslušný věcně a místně příslušný soud v České republice.
+    </p>
+  </div>
+
+  <hr class="legal-divider" />
+
+  <!-- 11 -->
+  <div class="legal-section reveal">
+    <h2 data-cs="11. Závěrečná ustanovení" data-en="11. Final provisions">11. Závěrečná ustanovení</h2>
+    <p data-cs="Poskytovatel si vyhrazuje právo tyto podmínky měnit. O změnách bude klient informován e-mailem nejméně 14 dní před jejich účinností. Pokračováním v používání služby po datu účinnosti klient změny přijímá." data-en="The provider reserves the right to amend these terms. Clients will be informed by email at least 14 days before the changes take effect. By continuing to use the service after the effective date, the client accepts the changes.">
+      Poskytovatel si vyhrazuje právo tyto podmínky měnit. O změnách bude klient informován e-mailem nejméně 14 dní před jejich účinností.
+    </p>
+    <p data-cs="Tyto podmínky jsou platné a účinné od 1. ledna 2025 a nahrazují veškerá předchozí ujednání." data-en="These terms are valid and effective from 1 January 2025 and supersede all previous agreements.">
+      Tyto podmínky jsou platné a účinné od 1. ledna 2025 a nahrazují veškerá předchozí ujednání.
+    </p>
+  </div>
+
+  <div class="legal-contact-box reveal">
+    <h3 data-cs="Kontakt" data-en="Contact">Kontakt</h3>
+    <p data-cs="Máte-li dotazy k těmto podmínkám, kontaktujte nás: vojanmatyas@gmail.com · +420 732 839 892" data-en="If you have questions about these terms, contact us: vojanmatyas@gmail.com · +420 732 839 892">
+      Máte-li dotazy k těmto podmínkám, kontaktujte nás:<br>
+      <a href="mailto:vojanmatyas@gmail.com">vojanmatyas@gmail.com</a> · <a href="tel:+420732839892">+420 732 839 892</a>
+    </p>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <span class="brand-name">recepce</span><span class="brand-tld">.tech</span>
+        </div>
+        <p data-cs="AI recepční pro moderní byznys." data-en="AI receptionist for modern business.">AI recepční pro moderní byznys.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Stránky" data-en="Pages">Stránky</h4>
+        <ul>
+          <li><a href="index.html" data-cs="Domů" data-en="Home">Domů</a></li>
+          <li><a href="profese.html" data-cs="Pro koho" data-en="For who">Pro koho</a></li>
+          <li><a href="faq.html">Q&amp;A</a></li>
+          <li><a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Právní" data-en="Legal">Právní</h4>
+        <ul>
+          <li><a href="privacy.html" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
+          <li><a href="terms.html" class="active" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 recepce.tech</span>
+      <span data-cs="Vytvořeno v České republice" data-en="Made in the Czech Republic">Vytvořeno v České republice</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const burger  = document.getElementById('burger');
+const overlay = document.getElementById('menu-overlay');
+function toggleMenu(open) {
+  document.body.classList.toggle('menu-open', open);
+  overlay.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+  overlay.setAttribute('aria-hidden', String(!open));
+}
+burger.addEventListener('click', () => toggleMenu(!overlay.classList.contains('open')));
+overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleMenu(false); });
+
+const prog = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+}, { passive: true });
+
+const obs = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('visible')),
+  { threshold: .08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+let lang = localStorage.getItem('rt-lang') || 'cs';
+function setLang(l) {
+  lang = l; localStorage.setItem('rt-lang', l);
+  document.getElementById('btn-cs').classList.toggle('active', l === 'cs');
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  document.querySelectorAll('[data-cs][data-en]').forEach(el => el.innerHTML = el.getAttribute('data-' + l));
+}
+setLang(lang);
+</script>
+</body>
+</html>

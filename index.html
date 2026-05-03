@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="cs">
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>recepce.tech — AI recepční pro váš byznys</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<script src="nav.js" defer></script>
 </head>
 <body>
 
@@ -16,7 +17,7 @@
 <!-- NAV: logo + burger only -->
 <nav class="nav" id="nav">
   <a href="index.html" class="brand">
-    <span class="brand-name">recepce</span><span class="brand-tld">.tech</span>
+    <span class="brand-full"><span class="brand-name">recepce</span><span class="brand-tld">.tech</span></span><span class="brand-short">RT</span>
   </a>
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
     <span class="burger-line"></span>
@@ -159,12 +160,12 @@
 <section class="cta-strip snap-section" id="s-cta">
   <div class="cta-inner reveal">
     <h2 data-cs="Začněte ještě dnes.<br>Zítra bude plnější kalendář." data-en="Start today.<br>Tomorrow your calendar will be fuller.">Začněte ještě dnes.<br>Zítra bude plnější kalendář.</h2>
-    <p data-cs="Bezplatné demo, nastavení do 24 hodin, bez závazků." data-en="Free demo, setup within 24 hours, no commitment.">Bezplatné demo, nastavení do 24 hodin, bez závazků.</p>
+    <p data-cs="Bezplatné demo, bez závazků." data-en="Free demo, no commitment.">Bezplatné demo, bez závazků.</p>
     <a href="kontakt.html" class="btn-primary mag-btn">
       <svg viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 7l6 4 6-4"/></svg>
       <span data-cs="Kontaktujte nás" data-en="Contact us">Kontaktujte nás</span>
     </a>
-    <div class="cta-note" data-cs="Žádná kreditní karta · Nastavení do 24 h · Zrušení kdykoliv" data-en="No credit card · Setup in 24h · Cancel anytime">Žádná kreditní karta · Nastavení do 24 h · Zrušení kdykoliv</div>
+    <div class="cta-note" data-cs="Žádná kreditní karta · Zrušení kdykoliv" data-en="No credit card · Cancel anytime">Žádná kreditní karta · Zrušení kdykoliv</div>
   </div>
 </section>
 
@@ -190,8 +191,8 @@
     <div class="footer-col">
       <h4 data-cs="Právní" data-en="Legal">Právní</h4>
       <ul>
-        <li><a href="#" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
-        <li><a href="#" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
+        <li><a href="privacy.html" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
+        <li><a href="terms.html" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
       </ul>
     </div>
   </div>

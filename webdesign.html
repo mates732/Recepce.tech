@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Webdesign — recepce.tech</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -218,6 +218,7 @@ body { min-height: 100vh; }
   margin-top: 18px; font-size: 12px; color: var(--fg-mute); font-family: var(--mono); letter-spacing: .04em;
 }
 </style>
+<script src="nav.js" defer></script>
 </head>
 <body>
 
@@ -225,7 +226,7 @@ body { min-height: 100vh; }
 
 <nav class="nav" id="nav">
   <a href="index.html" class="brand">
-    <span class="brand-name">recepce</span><span class="brand-tld">.tech</span>
+    <span class="brand-full"><span class="brand-name">recepce</span><span class="brand-tld">.tech</span></span><span class="brand-short">RT</span>
   </a>
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
     <span class="burger-line"></span>
@@ -421,7 +422,7 @@ body { min-height: 100vh; }
       <svg viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 7l6 4 6-4"/></svg>
       <span data-cs="Kontaktujte mě" data-en="Contact me">Kontaktujte mě</span>
     </a>
-    <div class="cta-note" data-cs="Odpověď do 24 hodin · Konzultace bez závazků" data-en="Reply within 24 hours · No-obligation consultation">Odpověď do 24 hodin · Konzultace bez závazků</div>
+    <div class="cta-note" data-cs="Konzultace bez závazků" data-en="No-obligation consultation">Konzultace bez závazků</div>
   </div>
 </section>
 
@@ -447,8 +448,8 @@ body { min-height: 100vh; }
       <div class="footer-col">
         <h4 data-cs="Právní" data-en="Legal">Právní</h4>
         <ul>
-          <li><a href="#" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
-          <li><a href="#" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
+          <li><a href="privacy.html" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
+          <li><a href="terms.html" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
         </ul>
       </div>
     </div>

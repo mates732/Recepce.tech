@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Barbershop — recepce.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+
+body { min-height: 100vh; }
+
+.page-hero {
+  padding: 148px clamp(24px,5vw,64px) 72px;
+  text-align: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 120%; height: 80%;
+  background: radial-gradient(ellipse 60% 50% at 50% 10%,
+    rgba(74,124,89,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.page-hero > * { position: relative; z-index: 1; }
+.page-hero .wrap { position: relative; z-index: 1; }
+.page-hero .label { animation: fadein .7s var(--ease) both; }
+.page-hero h1 {
+  font-size: clamp(36px,5.5vw,72px); font-weight: 500;
+  letter-spacing: -.04em; line-height: 1.05; margin-bottom: 16px; text-wrap: balance;
+  animation: fadein .8s .1s var(--ease) both;
+}
+.page-hero h1 em { font-style: italic; font-weight: 400; color: var(--fg-mute); }
+.page-hero p {
+  font-size: clamp(15px,1.2vw,18px); color: var(--fg-dim);
+  max-width: 48ch; margin: 0 auto 36px;
+  animation: fadein .8s .2s var(--ease) both;
+}
+.page-hero .hero-ctas {
+  animation: fadein .8s .32s var(--ease) both;
+}
+
+/* ── Feature grid ── */
+.features-section {
+  padding: clamp(72px,9vw,112px) clamp(24px,5vw,64px);
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+}
+.features-inner { max-width: 1100px; margin: 0 auto; }
+.features-head { margin-bottom: 52px; }
+.features-grid {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden;
+}
+@media (max-width:640px) { .features-grid { grid-template-columns: 1fr; } }
+.feature-card {
+  background: var(--bg-2); padding: 32px 28px;
+  transition: background .2s;
+}
+.feature-card:hover { background: var(--bg-3); }
+.feature-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--bg-3);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+}
+.feature-icon svg {
+  width: 16px; height: 16px; stroke: var(--fg-dim); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.feature-card h3 { font-size: 16px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 8px; }
+.feature-card p { font-size: 13px; color: var(--fg-dim); line-height: 1.65; }
+
+/* ── Demo section: phone + text ── */
+.demo-section {
+  padding: clamp(72px,9vw,112px) clamp(24px,5vw,64px);
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+.demo-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px,7vw,96px);
+  align-items: center;
+}
+@media (max-width:820px) { .demo-inner { grid-template-columns: 1fr; gap: 56px; } }
+
+.demo-info { }
+.demo-info .label { margin-bottom: 16px; }
+.demo-info h2 {
+  font-size: clamp(26px,3.5vw,44px); font-weight: 500;
+  letter-spacing: -.04em; line-height: 1.1; margin-bottom: 20px;
+}
+.demo-info p { font-size: 15px; color: var(--fg-dim); line-height: 1.75; margin-bottom: 32px; max-width: 44ch; }
+
+.demo-steps { display: flex; flex-direction: column; gap: 16px; margin-bottom: 36px; }
+.demo-step {
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.demo-step-num {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+  color: var(--fg-mute); padding-top: 3px; flex-shrink: 0; width: 20px;
+}
+.demo-step-text { font-size: 14px; color: var(--fg-dim); line-height: 1.6; }
+.demo-step-text strong { color: var(--fg); font-weight: 500; }
+
+/* ── iPhone mockup ── */
+.iphone-wrap {
+  display: flex; justify-content: center; align-items: center;
+  perspective: 1200px;
+}
+.iphone {
+  width: 272px;
+  height: 572px;
+  border-radius: 46px;
+  background: #0c0905;
+  border: 2px solid rgba(240,237,232,0.12);
+  box-shadow:
+    0 60px 120px rgba(0,0,0,0.85),
+    0 20px 48px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    inset 0 -1px 0 rgba(0,0,0,0.5);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  transform: perspective(1200px) rotateY(6deg) rotateX(-3deg);
+  transition: transform .6s var(--ease), box-shadow .6s var(--ease);
+}
+.iphone:hover {
+  transform: perspective(1200px) rotateY(2deg) rotateX(-1deg);
+  box-shadow:
+    0 80px 160px rgba(0,0,0,0.9),
+    0 24px 60px rgba(0,0,0,0.65),
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    inset 0 -1px 0 rgba(0,0,0,0.5);
+}
+
+.iphone-top {
+  display: flex; justify-content: center; align-items: center;
+  height: 52px; padding-top: 12px; position: relative; z-index: 2;
+}
+.iphone-island {
+  width: 112px; height: 30px;
+  background: #000;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.call-screen {
+  height: calc(100% - 52px);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: space-between;
+  padding: 12px 22px 36px;
+  background: linear-gradient(160deg, #0d1a0f 0%, #0a1209 40%, #060808 100%);
+  position: relative;
+}
+
+.call-header { text-align: center; width: 100%; }
+.call-ai-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .1em;
+  color: rgba(255,255,255,0.35); text-transform: uppercase;
+  display: block; margin-bottom: 8px;
+}
+.call-name {
+  font-size: 24px; font-weight: 300; color: #fff; letter-spacing: -.03em; margin-bottom: 8px;
+}
+.call-duration {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; color: rgba(255,255,255,0.5); font-family: var(--mono);
+}
+.call-live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #4A7C59;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.call-avatar-area {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 130px; height: 130px;
+}
+.call-ripple-1,
+.call-ripple-2 {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(74,124,89,0.25);
+}
+.call-ripple-1 {
+  width: 120px; height: 120px;
+  animation: rippleOut 2.8s ease-out infinite;
+}
+.call-ripple-2 {
+  width: 96px; height: 96px;
+  animation: rippleOut 2.8s ease-out infinite .55s;
+}
+@keyframes rippleOut {
+  0%   { transform: scale(.82); opacity: .8; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+.call-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #162516; border: 2px solid rgba(74,124,89,0.5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 600; color: #4A7C59;
+  position: relative; z-index: 2;
+  font-family: var(--mono);
+}
+
+.call-controls { display: flex; gap: 22px; align-items: flex-end; }
+.call-btn-item {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+}
+.call-btn-circle {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(240,237,232,0.1);
+  border: 1px solid rgba(240,237,232,0.12);
+  display: flex; align-items: center; justify-content: center;
+}
+.call-btn-circle.end { background: #c0392b; border-color: #c0392b; }
+.call-btn-circle svg {
+  width: 20px; height: 20px; stroke: rgba(255,255,255,0.75); fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+.call-btn-circle.end svg { stroke: #fff; }
+.call-btn-label {
+  font-size: 9px; color: rgba(255,255,255,0.35);
+  font-family: var(--mono); letter-spacing: .04em;
+}
+
+/* ── Booking example ── */
+.booking-section {
+  padding: clamp(72px,9vw,112px) clamp(24px,5vw,64px);
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+}
+.booking-inner { max-width: 1100px; margin: 0 auto; }
+.booking-head { margin-bottom: 52px; }
+.booking-timeline {
+  display: flex; flex-direction: column; gap: 0;
+  max-width: 620px;
+}
+.booking-step {
+  display: flex; gap: 20px; position: relative;
+  padding-bottom: 32px;
+}
+.booking-step:last-child { padding-bottom: 0; }
+.booking-step-left {
+  display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
+}
+.booking-step-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--bg-3); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-family: var(--mono); color: var(--fg-mute); letter-spacing: .06em;
+  flex-shrink: 0; position: relative; z-index: 1;
+}
+.booking-step:not(:last-child) .booking-step-left::after {
+  content: ''; flex: 1; width: 1px; background: var(--line);
+  margin: 6px 0; min-height: 24px;
+}
+.booking-step-content { padding-top: 6px; }
+.booking-step-content h4 { font-size: 15px; font-weight: 500; letter-spacing: -.01em; margin-bottom: 4px; }
+.booking-step-content p { font-size: 13px; color: var(--fg-dim); line-height: 1.65; }
+
+/* ── Final CTA ── */
+.barber-cta {
+  padding: clamp(80px,9vw,120px) clamp(24px,5vw,64px);
+  text-align: center; background: var(--bg-3); border-top: 1px solid var(--line);
+}
+.barber-cta h2 {
+  font-size: clamp(28px,4vw,52px); font-weight: 500;
+  letter-spacing: -.04em; line-height: 1.05; margin-bottom: 18px;
+}
+.barber-cta p { font-size: 16px; color: var(--fg-dim); margin-bottom: 40px; }
+.barber-cta .cta-note {
+  margin-top: 20px; font-size: 12px; color: var(--fg-mute);
+  font-family: var(--mono); letter-spacing: .04em;
+}
+
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="brand">
+    <span class="brand-name">recepce</span><span class="brand-tld">.tech</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+  </button>
+</nav>
+
+<div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+  <nav class="menu-nav">
+    <a href="index.html" data-cs="Domů" data-en="Home">Domů</a>
+    <a href="profese.html" data-cs="Pro koho" data-en="For who">Pro koho</a>
+    <a href="webdesign.html" data-cs="Webdesign" data-en="Webdesign">Webdesign</a>
+    <a href="faq.html" data-cs="Q&amp;A" data-en="Q&amp;A">Q&amp;A</a>
+    <a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a>
+  </nav>
+  <div class="menu-lang">
+    <button id="btn-cs" class="active" onclick="setLang('cs')">CS</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<main>
+
+<!-- HERO -->
+<section class="page-hero snap-page-section">
+  <div class="wrap">
+    <span class="label" data-cs="Barbershop & holičství" data-en="Barbershop">Barbershop & holičství</span>
+    <h1 data-cs="AI recepční pro <em>váš barbershop</em>" data-en="AI receptionist for <em>your barbershop</em>">AI recepční pro <em>váš barbershop</em></h1>
+    <p data-cs="Zmeškaný hovor = prázdné křeslo. Váš AI recepční přijme každou rezervaci — přes den, večer, o víkendu. Vy se soustředíte na holení." data-en="A missed call = an empty chair. Your AI receptionist handles every booking — day, evening, weekends. You focus on the cut.">
+      Zmeškaný hovor = prázdné křeslo. Váš AI recepční přijme každou rezervaci — přes den, večer, o víkendu. Vy se soustředíte na holení.
+    </p>
+    <div class="hero-ctas">
+      <a href="#ai-assist-demo" class="demo-jump">
+        <span class="demo-jump-text" data-cs="Přejít na demo" data-en="Go to demo">Přejít na demo</span>
+        <span class="demo-jump-arrows" aria-hidden="true">
+          <svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4"/></svg>
+          <svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section snap-page-section">
+  <div class="features-inner">
+    <div class="features-head reveal">
+      <span class="label" data-cs="Co získáte" data-en="What you get">Co získáte</span>
+      <h2 class="section-title" data-cs="Přesně to, co barbershop potřebuje." data-en="Exactly what a barbershop needs.">Přesně to, co barbershop potřebuje.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3 data-cs="Rezervace 24/7" data-en="Bookings 24/7">Rezervace 24/7</h3>
+        <p data-cs="AI přijme hovor a okamžitě zarezervuje termín — i v neděli ve 22:00. Žádná zmeškaná příležitost." data-en="AI answers and instantly books an appointment — even Sunday at 10 PM. No missed opportunity.">AI přijme hovor a okamžitě zarezervuje termín — i v neděli ve 22:00. Žádná zmeškaná příležitost.</p>
+      </div>
+      <div class="feature-card reveal d2">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.21 12 19.79 19.79 0 0 1 1.14 3.38 2 2 0 0 1 3.12 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <h3 data-cs="Přirozený hlas" data-en="Natural voice">Přirozený hlas</h3>
+        <p data-cs="Zákazníci hovoří s hlasem, který zní jako člověk. Tón, tempo a styl přizpůsobujeme vaší značce." data-en="Customers talk to a voice that sounds human. Tone, pace, and style tailored to your brand.">Zákazníci hovoří s hlasem, který zní jako člověk. Tón, tempo a styl přizpůsobujeme vaší značce.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3 data-cs="SMS připomínky" data-en="SMS reminders">SMS připomínky</h3>
+        <p data-cs="Automatické SMS den před termínem eliminuje no-show zákazníky. Prázdné křeslo = ztracené peníze." data-en="Automatic SMS the day before eliminates no-shows. An empty chair is lost money.">Automatické SMS den před termínem eliminuje no-show zákazníky. Prázdné křeslo = ztracené peníze.</p>
+      </div>
+      <div class="feature-card reveal d2">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 data-cs="Přehled v reálném čase" data-en="Real-time overview">Přehled v reálném čase</h3>
+        <p data-cs="Všechny hovory, rezervace a zákazníci v jednom přehledu. Vždy víte, co se děje — bez papírování." data-en="All calls, bookings, and customers in one dashboard. Always know what's happening — no paperwork.">Všechny hovory, rezervace a zákazníci v jednom přehledu. Vždy víte, co se děje — bez papírování.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO: PHONE + TEXT -->
+<section class="demo-section snap-page-section" id="ai-assist-demo">
+  <div class="demo-inner">
+
+    <div class="demo-info reveal">
+      <span class="label" data-cs="Živá ukázka" data-en="Live demo">Živá ukázka</span>
+      <h2 data-cs="Tak to zní<br>ve skutečnosti" data-en="This is how it<br>sounds for real">Tak to zní<br>ve skutečnosti</h2>
+      <p data-cs="Zákazník zavolá — AI okamžitě zvedne, přirozeně odpoví a rezervaci zapíše do vašeho kalendáře. Celý hovor trvá méně než 90 sekund." data-en="Customer calls — AI picks up instantly, responds naturally, and logs the booking to your calendar. The entire call takes under 90 seconds.">
+        Zákazník zavolá — AI okamžitě zvedne, přirozeně odpoví a rezervaci zapíše do vašeho kalendáře. Celý hovor trvá méně než 90 sekund.
+      </p>
+
+      <div class="demo-steps">
+        <div class="demo-step">
+          <span class="demo-step-num">01</span>
+          <span class="demo-step-text"><strong data-cs="Stiskněte tlačítko" data-en="Press the button">Stiskněte tlačítko</strong> — <span data-cs="spusťte AI asistenta" data-en="activate the AI assistant">spusťte AI asistenta</span></span>
+        </div>
+        <div class="demo-step">
+          <span class="demo-step-num">02</span>
+          <span class="demo-step-text"><strong data-cs="AI se představí" data-en="AI introduces itself">AI se představí</strong> — <span data-cs="vaším jménem, vaším stylem" data-en="with your name, your style">vaším jménem, vaším stylem</span></span>
+        </div>
+        <div class="demo-step">
+          <span class="demo-step-num">03</span>
+          <span class="demo-step-text"><strong data-cs="Termín dohodnut" data-en="Appointment agreed">Termín dohodnut</strong> — <span data-cs="automaticky uložen do kalendáře" data-en="automatically saved to your calendar">automaticky uložen do kalendáře</span></span>
+        </div>
+        <div class="demo-step">
+          <span class="demo-step-num">04</span>
+          <span class="demo-step-text"><strong data-cs="SMS potvrzení" data-en="SMS confirmation">SMS potvrzení</strong> — <span data-cs="zákazník dostane potvrzení do 30 sekund" data-en="customer gets confirmation within 30 seconds">zákazník dostane potvrzení do 30 sekund</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="iphone-wrap reveal d2">
+      <div class="iphone">
+        <div class="iphone-top">
+          <div class="iphone-island"></div>
+        </div>
+        <div class="call-screen">
+
+          <div class="call-header">
+            <span class="call-ai-label">recepce.tech AI</span>
+            <div class="call-name" data-cs="Zákazník" data-en="Customer">Zákazník</div>
+            <div class="call-duration">
+              <span class="call-live-dot"></span>
+              <span id="call-timer">0:00</span>
+            </div>
+          </div>
+
+          <div class="call-avatar-area">
+            <div class="call-ripple-1"></div>
+            <div class="call-ripple-2"></div>
+            <div class="call-avatar">Z</div>
+          </div>
+
+          <div class="call-controls" style="justify-content:center;">
+            <div class="demo-mic-wrap" id="demo-mic-wrap">
+              <button class="demo-mic-btn" id="demo-mic-btn" aria-label="Spustit demo">
+                <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="21" x2="12" y2="17"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+              </button>
+              <span class="demo-mic-label" data-cs="Spustit demo" data-en="Start demo">Spustit demo</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BOOKING EXAMPLE -->
+<section class="booking-section snap-page-section">
+  <div class="booking-inner">
+    <div class="booking-head reveal">
+      <span class="label" data-cs="Průběh rezervace" data-en="Booking flow">Průběh rezervace</span>
+      <h2 class="section-title" data-cs="Od hovoru k potvrzené rezervaci za 90 sekund." data-en="From call to confirmed booking in 90 seconds.">Od hovoru k potvrzené rezervaci za 90 sekund.</h2>
+    </div>
+    <div class="booking-timeline reveal d2">
+      <div class="booking-step">
+        <div class="booking-step-left">
+          <div class="booking-step-dot">01</div>
+        </div>
+        <div class="booking-step-content">
+          <h4 data-cs="Zákazník zavolá" data-en="Customer calls">Zákazník zavolá</h4>
+          <p data-cs="Kdykoli — přes den, večer, o víkendu, o svátku. AI okamžitě zvedne hovor." data-en="Anytime — day, evening, weekend, holiday. AI picks up instantly.">Kdykoli — přes den, večer, o víkendu, o svátku. AI okamžitě zvedne hovor.</p>
+        </div>
+      </div>
+      <div class="booking-step">
+        <div class="booking-step-left">
+          <div class="booking-step-dot">02</div>
+        </div>
+        <div class="booking-step-content">
+          <h4 data-cs="AI zjistí potřeby" data-en="AI identifies needs">AI zjistí potřeby</h4>
+          <p data-cs="Přirozenou konverzací AI zjistí typ střihu, preferovaný termín a případně barbiéra." data-en="Through natural conversation, AI identifies the cut type, preferred time, and barber if needed.">Přirozenou konverzací AI zjistí typ střihu, preferovaný termín a případně barbiéra.</p>
+        </div>
+      </div>
+      <div class="booking-step">
+        <div class="booking-step-left">
+          <div class="booking-step-dot">03</div>
+        </div>
+        <div class="booking-step-content">
+          <h4 data-cs="Termín zarezervován" data-en="Appointment booked">Termín zarezervován</h4>
+          <p data-cs="AI zkontroluje dostupnost v kalendáři a termín okamžitě zarezervuje. Bez čekání, bez omylů." data-en="AI checks calendar availability and books the slot instantly. No delays, no errors.">AI zkontroluje dostupnost v kalendáři a termín okamžitě zarezervuje. Bez čekání, bez omylů.</p>
+        </div>
+      </div>
+      <div class="booking-step">
+        <div class="booking-step-left">
+          <div class="booking-step-dot">04</div>
+        </div>
+        <div class="booking-step-content">
+          <h4 data-cs="Potvrzení + připomínka" data-en="Confirmation + reminder">Potvrzení + připomínka</h4>
+          <p data-cs="Zákazník dostane SMS potvrzení. Den před termínem automatická připomínka — žádný no-show." data-en="Customer gets SMS confirmation. Day before, automatic reminder — no no-shows.">Zákazník dostane SMS potvrzení. Den před termínem automatická připomínka — žádný no-show.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="barber-cta snap-page-section">
+  <div class="wrap reveal">
+    <h2 data-cs="Připraveni přijmout každý hovor?" data-en="Ready to answer every call?">Připraveni přijmout každý hovor?</h2>
+    <p data-cs="Nastavení do 24 hodin. 14 dní zdarma. Bez závazků." data-en="Setup within 24 hours. 14 days free. No commitment.">Nastavení do 24 hodin. 14 dní zdarma. Bez závazků.</p>
+    <div class="cta-note" data-cs="+420 732 839 892 · vojanmatyas@gmail.com" data-en="+420 732 839 892 · vojanmatyas@gmail.com">+420 732 839 892 · vojanmatyas@gmail.com</div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <span class="brand-name">recepce</span><span class="brand-tld">.tech</span>
+        </div>
+        <p data-cs="AI recepční pro moderní byznys." data-en="AI receptionist for modern business.">AI recepční pro moderní byznys.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Stránky" data-en="Pages">Stránky</h4>
+        <ul>
+          <li><a href="index.html" data-cs="Domů" data-en="Home">Domů</a></li>
+          <li><a href="profese.html" data-cs="Pro koho" data-en="For who">Pro koho</a></li>
+          <li><a href="faq.html">Q&amp;A</a></li>
+          <li><a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Právní" data-en="Legal">Právní</h4>
+        <ul>
+          <li><a href="#" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
+          <li><a href="#" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 recepce.tech</span>
+      <span data-cs="Vytvořeno v České republice" data-en="Made in the Czech Republic">Vytvořeno v České republice</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const burger  = document.getElementById('burger');
+const overlay = document.getElementById('menu-overlay');
+function toggleMenu(open) {
+  document.body.classList.toggle('menu-open', open);
+  overlay.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+  overlay.setAttribute('aria-hidden', String(!open));
+}
+burger.addEventListener('click', () => toggleMenu(!overlay.classList.contains('open')));
+overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleMenu(false); });
+
+const prog = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+}, {passive:true});
+
+// Reveal on scroll
+const obs = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')), {threshold:.1, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Spotlight card effect
+document.querySelectorAll('.benefit-card,.feature-card,.step').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  });
+});
+
+// Call timer + mic button
+let seconds = 0, timerInterval = null;
+const timerEl = document.getElementById('call-timer');
+function formatTime(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}` }
+
+const micBtn = document.getElementById('demo-mic-btn');
+const micWrap = document.getElementById('demo-mic-wrap');
+const micLabel = micWrap?.querySelector('.demo-mic-label');
+if (micBtn) {
+  micBtn.addEventListener('click', () => {
+    const isActive = micBtn.classList.toggle('active');
+    micWrap.classList.toggle('active', isActive);
+    if (isActive) {
+      timerInterval = setInterval(() => { seconds++; if (timerEl) timerEl.textContent = formatTime(seconds); }, 1000);
+    } else {
+      clearInterval(timerInterval); seconds = 0;
+      if (timerEl) timerEl.textContent = '0:00';
+    }
+    const l = localStorage.getItem('rt-lang') || 'cs';
+    if (micLabel) micLabel.textContent = isActive ? (l==='cs'?'Ukončit hovor':'End call') : (l==='cs'?'Spustit demo':'Start demo');
+  });
+}
+
+// Language
+let lang = localStorage.getItem('rt-lang') || 'cs';
+function setLang(l) {
+  lang = l; localStorage.setItem('rt-lang', l);
+  document.getElementById('btn-cs').classList.toggle('active', l==='cs');
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  document.querySelectorAll('[data-cs][data-en]').forEach(el => el.innerHTML = el.getAttribute('data-'+l));
+}
+setLang(lang);
+</script>
+</body>
+</html>

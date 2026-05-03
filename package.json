@@ -1,0 +1,14 @@
+{
+  "name": "recepce-tech",
+  "version": "1.0.0",
+  "description": "Simple static website for Recepce.tech",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}

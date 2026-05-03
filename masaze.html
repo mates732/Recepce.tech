@@ -1,0 +1,316 @@
+﻿<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Masáže & wellness — recepce.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+body { min-height: 100vh; }
+.page-hero { padding: 148px clamp(24px,5vw,64px) 72px; text-align: center; background: var(--bg); position: relative; overflow: hidden; }
+.page-hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120%; height: 80%; background: radial-gradient(ellipse 60% 50% at 50% 10%, rgba(74,124,89,.06) 0%, transparent 65%); pointer-events: none; }
+.page-hero > * { position: relative; z-index: 1; }
+.page-hero .wrap { position: relative; z-index: 1; }
+.page-hero .label { animation: fadein .7s var(--ease) both; }
+.page-hero h1 { font-size: clamp(36px,5.5vw,72px); font-weight: 500; letter-spacing: -.04em; line-height: 1.05; margin-bottom: 16px; text-wrap: balance; animation: fadein .8s .1s var(--ease) both; }
+.page-hero h1 em { font-style: italic; font-weight: 400; color: var(--fg-mute); }
+.page-hero p { font-size: clamp(15px,1.2vw,18px); color: var(--fg-dim); max-width: 48ch; margin: 0 auto 36px; animation: fadein .8s .2s var(--ease) both; }
+.page-hero .hero-ctas { animation: fadein .8s .32s var(--ease) both; }
+.features-section { padding: clamp(72px,9vw,112px) clamp(24px,5vw,64px); background: var(--bg-2); border-top: 1px solid var(--line); }
+.features-inner { max-width: 1100px; margin: 0 auto; }
+.features-head { margin-bottom: 52px; }
+.features-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; }
+@media (max-width:640px) { .features-grid { grid-template-columns: 1fr; } }
+.feature-card { background: var(--bg-2); padding: 32px 28px; transition: background .2s; }
+.feature-card:hover { background: var(--bg-3); }
+.feature-icon { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-3); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+.feature-icon svg { width: 16px; height: 16px; stroke: var(--fg-dim); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.feature-card h3 { font-size: 16px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 8px; }
+.feature-card p { font-size: 13px; color: var(--fg-dim); line-height: 1.65; }
+.demo-section { padding: clamp(72px,9vw,112px) clamp(24px,5vw,64px); background: var(--bg); border-top: 1px solid var(--line); }
+.demo-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px,7vw,96px); align-items: center; }
+@media (max-width:820px) { .demo-inner { grid-template-columns: 1fr; gap: 56px; } }
+.demo-info .label { margin-bottom: 16px; }
+.demo-info h2 { font-size: clamp(26px,3.5vw,44px); font-weight: 500; letter-spacing: -.04em; line-height: 1.1; margin-bottom: 20px; }
+.demo-info p { font-size: 15px; color: var(--fg-dim); line-height: 1.75; margin-bottom: 32px; max-width: 44ch; }
+.demo-steps { display: flex; flex-direction: column; gap: 16px; }
+.demo-step { display: flex; align-items: flex-start; gap: 14px; }
+.demo-step-num { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: var(--fg-mute); padding-top: 3px; flex-shrink: 0; width: 20px; }
+.demo-step-text { font-size: 14px; color: var(--fg-dim); line-height: 1.6; }
+.demo-step-text strong { color: var(--fg); font-weight: 500; }
+.booking-section { padding: clamp(72px,9vw,112px) clamp(24px,5vw,64px); background: var(--bg-2); border-top: 1px solid var(--line); }
+.booking-inner { max-width: 1100px; margin: 0 auto; }
+.booking-head { margin-bottom: 52px; }
+.booking-timeline { display: flex; flex-direction: column; gap: 0; max-width: 620px; }
+.booking-step { display: flex; gap: 20px; position: relative; padding-bottom: 32px; }
+.booking-step:last-child { padding-bottom: 0; }
+.booking-step-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.booking-step-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-3); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 11px; font-family: var(--mono); color: var(--fg-mute); letter-spacing: .06em; flex-shrink: 0; position: relative; z-index: 1; }
+.booking-step:not(:last-child) .booking-step-left::after { content: ''; flex: 1; width: 1px; background: var(--line); margin: 6px 0; min-height: 24px; }
+.booking-step-content { padding-top: 6px; }
+.booking-step-content h4 { font-size: 15px; font-weight: 500; letter-spacing: -.01em; margin-bottom: 4px; }
+.booking-step-content p { font-size: 13px; color: var(--fg-dim); line-height: 1.65; }
+.barber-cta { padding: clamp(80px,9vw,120px) clamp(24px,5vw,64px); text-align: center; background: var(--bg-3); border-top: 1px solid var(--line); }
+.barber-cta h2 { font-size: clamp(28px,4vw,52px); font-weight: 500; letter-spacing: -.04em; line-height: 1.05; margin-bottom: 18px; }
+.barber-cta p { font-size: 16px; color: var(--fg-dim); margin-bottom: 40px; }
+.barber-cta .cta-note { margin-top: 20px; font-size: 12px; color: var(--fg-mute); font-family: var(--mono); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<nav class="nav" id="nav">
+  <a href="index.html" class="brand"><span class="brand-name">recepce</span><span class="brand-tld">.tech</span></a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+    <span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span>
+  </button>
+</nav>
+<div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+  <nav class="menu-nav">
+    <a href="index.html" data-cs="Domů" data-en="Home">Domů</a>
+    <a href="profese.html" class="active" data-cs="Pro koho" data-en="For who">Pro koho</a>
+    <a href="webdesign.html" data-cs="Webdesign" data-en="Webdesign">Webdesign</a>
+    <a href="faq.html" data-cs="Q&amp;A" data-en="Q&amp;A">Q&amp;A</a>
+    <a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a>
+  </nav>
+  <div class="menu-lang">
+    <button id="btn-cs" class="active" onclick="setLang('cs')">CS</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<main>
+
+<section class="page-hero snap-page-section">
+  <div class="wrap">
+    <span class="label" data-cs="Masáže & wellness" data-en="Massage & wellness">Masáže & wellness</span>
+    <h1 data-cs="AI recepční pro váš <em>wellness</em>" data-en="AI receptionist for your <em>wellness</em>">AI recepční pro váš <em>wellness</em></h1>
+    <p data-cs="Klienti hledají klid od prvního kontaktu. Váš AI recepční zarezervuje proceduru, pošle instrukce k přípravě a připomene termín — vše automaticky." data-en="Clients seek calm from the first contact. Your AI receptionist books procedures, sends prep instructions, and reminds about appointments — all automatically.">
+      Klienti hledají klid od prvního kontaktu. Váš AI recepční zarezervuje proceduru, pošle instrukce k přípravě a připomene termín — vše automaticky.
+    </p>
+    <div class="hero-ctas">
+      <a href="#ai-assist-demo" class="demo-jump">
+        <span class="demo-jump-text" data-cs="Přejít na demo" data-en="Go to demo">Přejít na demo</span>
+        <span class="demo-jump-arrows" aria-hidden="true">
+          <svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4"/></svg>
+          <svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="features-section snap-page-section">
+  <div class="features-inner">
+    <div class="features-head reveal">
+      <span class="label" data-cs="Co získáte" data-en="What you get">Co získáte</span>
+      <h2 class="section-title" data-cs="Přesně to, co wellness studio potřebuje." data-en="Exactly what a wellness studio needs.">Přesně to, co wellness studio potřebuje.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+        <h3 data-cs="Klidná rezervace" data-en="Calm booking">Klidná rezervace</h3>
+        <p data-cs="AI přijme rezervaci procedury kdykoli — v tónu, který navozuje klid a pohodu. Klienti přijdou relaxovaní ještě před první masáží." data-en="AI books procedures anytime — in a tone that evokes calm. Clients arrive relaxed before the first massage even starts.">AI přijme rezervaci procedury kdykoli — v tónu, který navozuje klid a pohodu. Klienti přijdou relaxovaní ještě před první masáží.</p>
+      </div>
+      <div class="feature-card reveal d2">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3 data-cs="Výběr terapeuta" data-en="Therapist selection">Výběr terapeuta</h3>
+        <p data-cs="Klienti si vyberou oblíbeného terapeuta — AI zkontroluje dostupnost a potvrdí termín přesně k němu. Žádné nedorozumění." data-en="Clients pick their preferred therapist — AI checks availability and confirms the slot. No misunderstandings.">Klienti si vyberou oblíbeného terapeuta — AI zkontroluje dostupnost a potvrdí termín přesně k němu. Žádné nedorozumění.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <h3 data-cs="Přípravné instrukce" data-en="Prep instructions">Přípravné instrukce</h3>
+        <p data-cs="Automatická SMS s pokyny k přípravě. Klienti přijdou připraveni, seze proběhne plynule a efektivněji." data-en="Automatic SMS with prep instructions. Clients arrive prepared, sessions run smoothly and more effectively.">Automatická SMS s pokyny k přípravě. Klienti přijdou připraveni, seze proběhne plynule a efektivněji.</p>
+      </div>
+      <div class="feature-card reveal d2">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3 data-cs="SMS připomínky" data-en="SMS reminders">SMS připomínky</h3>
+        <p data-cs="Připomínka den před termínem eliminuje no-show. Prázdné místo = ztracený příjem. AI se postará, abyste ho nikdy neměli." data-en="Reminder the day before eliminates no-shows. Empty slot = lost revenue. AI ensures you never have one.">Připomínka den před termínem eliminuje no-show. Prázdné místo = ztracený příjem. AI se postará, abyste ho nikdy neměli.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="demo-section snap-page-section" id="ai-assist-demo">
+  <div class="demo-inner">
+    <div class="demo-info reveal">
+      <span class="label" data-cs="Jak to funguje" data-en="How it works">Jak to funguje</span>
+      <h2 data-cs="Klient zavolá.<br>Vy relaxujete." data-en="Client calls.<br>You relax.">Klient zavolá.<br>Vy relaxujete.</h2>
+      <p data-cs="AI přijme hovor v klidném tónu vaší značky, zjistí typ procedury a preferovaného terapeuta, zarezervuje termín a odešle instrukce k přípravě." data-en="AI takes the call in your brand's calm tone, identifies procedure type and preferred therapist, books the slot, and sends prep instructions.">
+        AI přijme hovor v klidném tónu vaší značky, zjistí typ procedury a preferovaného terapeuta, zarezervuje termín a odešle instrukce k přípravě.
+      </p>
+      <div class="demo-steps">
+        <div class="demo-step">
+          <span class="demo-step-num">01</span>
+          <span class="demo-step-text"><strong data-cs="Stiskněte tlačítko" data-en="Press the button">Stiskněte tlačítko</strong> — <span data-cs="spusťte AI asistenta" data-en="activate the AI assistant">spusťte AI asistenta</span></span>
+        </div>
+        <div class="demo-step">
+          <span class="demo-step-num">02</span>
+          <span class="demo-step-text"><strong data-cs="Výběr procedury" data-en="Procedure selected">Výběr procedury</strong> — <span data-cs="a preferovaného terapeuta" data-en="and preferred therapist">a preferovaného terapeuta</span></span>
+        </div>
+        <div class="demo-step">
+          <span class="demo-step-num">03</span>
+          <span class="demo-step-text"><strong data-cs="Termín potvrzen" data-en="Slot confirmed">Termín potvrzen</strong> — <span data-cs="uložen do kalendáře terapeuta" data-en="saved to therapist's calendar">uložen do kalendáře terapeuta</span></span>
+        </div>
+        <div class="demo-step">
+          <span class="demo-step-num">04</span>
+          <span class="demo-step-text"><strong data-cs="SMS s instrukcemi" data-en="SMS with instructions">SMS s instrukcemi</strong> — <span data-cs="klient ví, jak se připravit" data-en="client knows how to prepare">klient ví, jak se připravit</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="mic-demo-wrap reveal d2">
+      <div class="mic-visual">
+        <div class="mic-ring r1"></div><div class="mic-ring r2"></div><div class="mic-ring r3"></div>
+        <div class="demo-mic-wrap" id="demo-mic-wrap">
+          <button class="demo-mic-btn" id="demo-mic-btn" aria-label="Spustit demo">
+            <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="21" x2="12" y2="17"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+          </button>
+          <span class="demo-mic-label" data-cs="Spustit demo" data-en="Start demo">Spustit demo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="booking-section snap-page-section">
+  <div class="booking-inner">
+    <div class="booking-head reveal">
+      <span class="label" data-cs="Průběh rezervace" data-en="Booking flow">Průběh rezervace</span>
+      <h2 class="section-title" data-cs="Od hovoru k potvrzené proceduře za 90 sekund." data-en="From call to confirmed procedure in 90 seconds.">Od hovoru k potvrzené proceduře za 90 sekund.</h2>
+    </div>
+    <div class="booking-timeline reveal d2">
+      <div class="booking-step">
+        <div class="booking-step-left"><div class="booking-step-dot">01</div></div>
+        <div class="booking-step-content">
+          <h4 data-cs="Klient zavolá" data-en="Client calls">Klient zavolá</h4>
+          <p data-cs="Kdykoli — přes den nebo večer. AI okamžitě zvedne klidným, přátelským pozdravem vašeho studia." data-en="Anytime — day or evening. AI picks up with your studio's calm, friendly greeting.">Kdykoli — přes den nebo večer. AI okamžitě zvedne klidným, přátelským pozdravem vašeho studia.</p>
+        </div>
+      </div>
+      <div class="booking-step">
+        <div class="booking-step-left"><div class="booking-step-dot">02</div></div>
+        <div class="booking-step-content">
+          <h4 data-cs="AI zjistí přání" data-en="AI identifies wishes">AI zjistí přání</h4>
+          <p data-cs="Přirozenou konverzací AI zjistí typ procedury, preferovaného terapeuta a ideální termín." data-en="Through natural conversation AI identifies procedure type, preferred therapist, and ideal time.">Přirozenou konverzací AI zjistí typ procedury, preferovaného terapeuta a ideální termín.</p>
+        </div>
+      </div>
+      <div class="booking-step">
+        <div class="booking-step-left"><div class="booking-step-dot">03</div></div>
+        <div class="booking-step-content">
+          <h4 data-cs="Termín zarezervován" data-en="Appointment booked">Termín zarezervován</h4>
+          <p data-cs="AI zkontroluje dostupnost a termín okamžitě zarezervuje u správného terapeuta. Bez omylů." data-en="AI checks availability and books instantly with the right therapist. No errors.">AI zkontroluje dostupnost a termín okamžitě zarezervuje u správného terapeuta. Bez omylů.</p>
+        </div>
+      </div>
+      <div class="booking-step">
+        <div class="booking-step-left"><div class="booking-step-dot">04</div></div>
+        <div class="booking-step-content">
+          <h4 data-cs="SMS + instrukce" data-en="SMS + instructions">SMS + instrukce</h4>
+          <p data-cs="Klient dostane SMS potvrzení s pokyny k přípravě. Přijde připraven a zážitek bude dokonalý." data-en="Client gets SMS confirmation with prep instructions. They'll arrive ready for a perfect experience.">Klient dostane SMS potvrzení s pokyny k přípravě. Přijde připraven a zážitek bude dokonalý.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="barber-cta snap-page-section">
+  <div class="wrap reveal">
+    <h2 data-cs="Připraveni nabídnout klientům klid od prvního hovoru?" data-en="Ready to offer clients calm from the very first call?">Připraveni nabídnout klientům klid od prvního hovoru?</h2>
+    <p data-cs="Nastavení do 24 hodin. 14 dní zdarma. Bez závazků." data-en="Setup within 24 hours. 14 days free. No commitment.">Nastavení do 24 hodin. 14 dní zdarma. Bez závazků.</p>
+    <a href="tel:+420732839892" class="btn-mic-call">
+      <svg viewBox="0 0 24 24"><path d="M12 2c-1.7 0-3 1.3-3 3v6c0 1.7 1.3 3 3 3s3-1.3 3-3V5c0-1.7-1.3-3-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="18" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span data-cs="Zavolat a vyzkoušet" data-en="Call and try it">Zavolat a vyzkoušet</span>
+    </a>
+    <div class="cta-note">+420 732 839 892 · vojanmatyas@gmail.com</div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand"><span class="brand-name">recepce</span><span class="brand-tld">.tech</span></div>
+        <p data-cs="AI recepční pro moderní byznys." data-en="AI receptionist for modern business.">AI recepční pro moderní byznys.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Stránky" data-en="Pages">Stránky</h4>
+        <ul>
+          <li><a href="index.html" data-cs="Domů" data-en="Home">Domů</a></li>
+          <li><a href="profese.html" data-cs="Pro koho" data-en="For who">Pro koho</a></li>
+          <li><a href="faq.html">Q&amp;A</a></li>
+          <li><a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Právní" data-en="Legal">Právní</h4>
+        <ul>
+          <li><a href="#" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
+          <li><a href="#" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 recepce.tech</span>
+      <span data-cs="Vytvořeno v České republice" data-en="Made in the Czech Republic">Vytvořeno v České republice</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const burger = document.getElementById('burger');
+const overlay = document.getElementById('menu-overlay');
+function toggleMenu(open) {
+  document.body.classList.toggle('menu-open', open);
+  overlay.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+  overlay.setAttribute('aria-hidden', String(!open));
+}
+burger.addEventListener('click', () => toggleMenu(!overlay.classList.contains('open')));
+overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleMenu(false); });
+
+const prog = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+}, { passive: true });
+
+const obs = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')), { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+document.querySelectorAll('.feature-card,.step').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  });
+});
+
+let lang = localStorage.getItem('rt-lang') || 'cs';
+function setLang(l) {
+  lang = l; localStorage.setItem('rt-lang', l);
+  document.getElementById('btn-cs').classList.toggle('active', l === 'cs');
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  document.querySelectorAll('[data-cs][data-en]').forEach(el => el.innerHTML = el.getAttribute('data-' + l));
+}
+setLang(lang);
+
+const micBtn = document.getElementById('demo-mic-btn');
+const micWrap = document.getElementById('demo-mic-wrap');
+const micLabel = micWrap?.querySelector('.demo-mic-label');
+if (micBtn) {
+  micBtn.addEventListener('click', () => {
+    const isActive = micBtn.classList.toggle('active');
+    micWrap.classList.toggle('active', isActive);
+    const l = localStorage.getItem('rt-lang') || 'cs';
+    if (micLabel) micLabel.textContent = isActive ? (l==='cs'?'Ukončit hovor':'End call') : (l==='cs'?'Spustit demo':'Start demo');
+  });
+}
+</script>
+</body>
+</html>
+

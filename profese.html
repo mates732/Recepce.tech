@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pro koho — recepce.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+
+/*
+  Page-level overrides:
+  - Disable scroll-snap (this page uses custom scroll-driven sticky logic)
+  - Allow body to grow naturally with the 700vh scroll section
+*/
+html { scroll-snap-type: none !important; }
+body { min-height: 100vh; }
+
+/* ── Page hero ── */
+.page-hero {
+  padding: 148px clamp(24px,5vw,64px) 72px;
+  text-align: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 120%; height: 80%;
+  background: radial-gradient(ellipse 60% 50% at 50% 10%,
+    rgba(74,124,89,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.page-hero > * { position: relative; z-index: 1; }
+
+.page-hero .label { animation: fadein .7s var(--ease) both; }
+.page-hero h1 {
+  font-size: clamp(36px,5.5vw,72px); font-weight: 500;
+  letter-spacing: -.04em; line-height: 1.05; margin-bottom: 16px; text-wrap: balance;
+  animation: fadein .8s .1s var(--ease) both;
+}
+.page-hero h1 em { font-style: italic; font-weight: 400; color: var(--fg-mute); }
+.page-hero p {
+  font-size: clamp(15px,1.2vw,18px); color: var(--fg-dim);
+  max-width: 50ch; margin: 0 auto;
+  animation: fadein .8s .2s var(--ease) both;
+}
+
+/* ─────────────────────────────────────────
+   SCROLL-DRIVEN PROFESSIONS SECTION
+
+   Outer section is 7×100vh tall.
+   Inner sticky container is 100vh.
+   As user scrolls through the outer section,
+   JS maps progress → active profession index.
+───────────────────────────────────────── */
+.prof-scroll-section {
+  position: relative;
+  /* Fallback for browsers that don't support calc() multiplication */
+  height: 700vh;
+  height: calc(7 * 100vh);
+  background: var(--bg);
+}
+
+.prof-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  /* No hard top border — avoids leftover lines during sticky exit */
+  border-top: none;
+}
+
+/* ── Left: profession names ── */
+.prof-names-col {
+  width: clamp(150px, 21vw, 250px);
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(20px, 3.5vw, 40px);
+  flex-shrink: 0;
+}
+
+.prof-names-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.prof-name-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 0;
+  text-decoration: none;
+  color: var(--fg);
+  opacity: 0.52;
+  transform: scale(0.9);
+  transform-origin: left center;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  will-change: transform, opacity;
+}
+.prof-name-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--line), transparent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.prof-name-item.active {
+  opacity: 1;
+  transform: scale(1.14);
+}
+.prof-name-item:hover { opacity: 0.75; }
+
+.pni-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  color: var(--fg-mute);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.pni-text {
+  font-size: clamp(12px, 1.15vw, 15px);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+}
+
+/* ── Vertical divider ── */
+.prof-v-line {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--line), transparent);
+  flex-shrink: 0;
+  align-self: stretch;
+  margin: 48px 0;
+}
+
+/* ── Right: display window + detail ── */
+.prof-main-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 clamp(28px, 6vw, 80px);
+  min-width: 0;
+}
+
+/* Active display: clickable large name */
+.prof-display-block {
+  display: block;
+  text-decoration: none;
+  color: var(--fg);
+  padding-bottom: 22px;
+  border-bottom: none;
+  margin-bottom: 26px;
+  cursor: pointer;
+  /* No overflow:hidden here — was clipping content */
+  position: relative;
+}
+.prof-display-block::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--line), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.prof-display-block:hover .prof-disp-name { transform: translateX(5px); }
+.prof-display-block:hover .prof-disp-hint { color: var(--fg); }
+.prof-display-block:hover .prof-disp-hint-arrow { transform: translateX(4px); }
+
+.prof-disp-num {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: var(--fg-mute);
+  margin-bottom: 8px;
+}
+
+.prof-disp-name {
+  font-size: clamp(36px, 7.5vw, 92px);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: .95;
+  margin: 0 0 16px;
+  /* CSS transition handles the per-profession swap animation */
+  transition: transform 0.35s var(--ease), opacity 0.22s ease-in-out;
+}
+
+.prof-disp-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-family: var(--mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  transition: color 0.22s ease-in-out;
+}
+.prof-disp-hint-arrow {
+  width: 13px; height: 13px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round;
+  transition: transform 0.22s var(--ease);
+  display: inline-block; vertical-align: middle;
+  /* Use inline SVG via CSS so it inherits currentColor */
+  flex-shrink: 0;
+}
+
+/* Detail panel — fades in per profession */
+.prof-detail-wrap {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.prof-detail-wrap.visible {
+  opacity: 1;
+  transform: none;
+}
+
+.prof-detail-desc {
+  font-size: clamp(13px, 1.05vw, 15px);
+  color: var(--fg-dim);
+  line-height: 1.75;
+  max-width: 52ch;
+  margin-bottom: 16px;
+}
+
+.prof-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.prof-detail-tag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(240,237,232,0.03);
+  font-size: 11px;
+  color: var(--fg-mute);
+  letter-spacing: .02em;
+}
+
+.prof-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-family: var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  opacity: 0.45;
+}
+.prof-scroll-hint svg {
+  width: 10px; height: 10px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round;
+  animation: arrowBounce 2.2s ease-in-out infinite;
+}
+
+/* ── Mobile: stack layout ── */
+@media (max-width: 600px) {
+  .prof-names-col { display: none; }
+  .prof-v-line { display: none; }
+  .prof-main-col { padding: 0 clamp(24px, 5vw, 36px); }
+  .prof-disp-name { font-size: clamp(32px, 11vw, 58px); }
+  /* Keep 1 profession = ~100vh scroll segment */
+  .prof-scroll-section { height: 700vh; height: calc(7 * 100vh); }
+}
+
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="brand">
+    <span class="brand-name">recepce</span><span class="brand-tld">.tech</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+  </button>
+</nav>
+
+<div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+  <nav class="menu-nav">
+    <a href="index.html" data-cs="Domů" data-en="Home">Domů</a>
+    <a href="profese.html" class="active" data-cs="Pro koho" data-en="For who">Pro koho</a>
+    <a href="webdesign.html" data-cs="Webdesign" data-en="Webdesign">Webdesign</a>
+    <a href="faq.html" data-cs="Q&amp;A" data-en="Q&amp;A">Q&amp;A</a>
+    <a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a>
+  </nav>
+  <div class="menu-lang">
+    <button id="btn-cs" class="active" onclick="setLang('cs')">CS</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<main>
+
+<section class="page-hero">
+  <div class="wrap">
+    <span class="label" data-cs="Pro vaše odvětví" data-en="For your industry">Pro vaše odvětví</span>
+    <h1 data-cs="Vyberte svou <em>profesi</em>" data-en="Choose your <em>profession</em>">Vyberte svou <em>profesi</em></h1>
+    <p data-cs="Každé odvětví má vlastní scénáře a zákazníky. Projděte si, jak AI recepční pracuje přesně pro vás." data-en="Every industry has its own scenarios and customers. See exactly how the AI receptionist works for you.">Každé odvětví má vlastní scénáře a zákazníky. Projděte si, jak AI recepční pracuje přesně pro vás.</p>
+  </div>
+</section>
+
+<!-- ── Scroll-driven professions ── -->
+<section class="prof-scroll-section" id="professions">
+  <div class="prof-sticky">
+
+    <div class="prof-names-col">
+      <div id="prof-names" class="prof-names-list">
+        <!-- Fallback (no-JS): keeps the list visible & navigable -->
+        <a href="barbershop.html" class="prof-name-item active" data-idx="0">
+          <span class="pni-num">01</span>
+          <span class="pni-text">Barbershop</span>
+        </a>
+        <a href="estetika.html" class="prof-name-item" data-idx="1">
+          <span class="pni-num">02</span>
+          <span class="pni-text">Estetická klinika</span>
+        </a>
+        <a href="kadernictvi.html" class="prof-name-item" data-idx="2">
+          <span class="pni-num">03</span>
+          <span class="pni-text">Kadeřnický salon</span>
+        </a>
+        <a href="stomatologie.html" class="prof-name-item" data-idx="3">
+          <span class="pni-num">04</span>
+          <span class="pni-text">Stomatologie</span>
+        </a>
+        <a href="masaze.html" class="prof-name-item" data-idx="4">
+          <span class="pni-num">05</span>
+          <span class="pni-text">Masáže &amp; wellness</span>
+        </a>
+        <a href="fitness.html" class="prof-name-item" data-idx="5">
+          <span class="pni-num">06</span>
+          <span class="pni-text">Fitness &amp; PT</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="prof-v-line"></div>
+
+    <div class="prof-main-col">
+
+      <a id="prof-display-link" href="barbershop.html" class="prof-display-block">
+        <span id="prof-disp-num" class="prof-disp-num">01</span>
+        <h2 id="prof-disp-name" class="prof-disp-name">Barbershop</h2>
+        <span class="prof-disp-hint">
+          <span id="prof-disp-hint-text" data-cs="Zobrazit detail" data-en="View detail">Zobrazit detail</span>
+          <svg class="prof-disp-hint-arrow" viewBox="0 0 14 14"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+        </span>
+      </a>
+
+      <div id="prof-detail" class="prof-detail-wrap">
+        <p id="prof-detail-desc" class="prof-detail-desc"></p>
+        <div id="prof-detail-tags" class="prof-detail-tags"></div>
+        <div class="prof-scroll-hint">
+          <svg viewBox="0 0 14 14"><path d="M7 2v10M3 8l4 4 4-4"/></svg>
+          <span id="prof-scroll-hint-text" data-cs="skrolujte pro další" data-en="scroll for more">skrolujte pro další</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Not listed card ── -->
+<section class="not-listed-section">
+  <div class="not-listed-inner reveal">
+    <p class="not-listed-title" data-cs="Není vaše odvětví na seznamu? Kontaktujte nás." data-en="Your industry not listed? Contact us.">Není vaše odvětví na seznamu? Kontaktujte nás.</p>
+    <div class="not-listed-contacts">
+      <a href="tel:+420732839892" class="not-listed-link">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.4 19a19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3-8.82A2 2 0 0 1 4.18 2H7.2a2 2 0 0 1 2 1.72c.1.81.28 1.6.54 2.37a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6 6l1.71-1.71a2 2 0 0 1 2.11-.45c.77.26 1.56.44 2.37.54A2 2 0 0 1 22 16.92z"/></svg>
+        +420 732 839 892
+      </a>
+      <a href="mailto:vojanmatyas@gmail.com" class="not-listed-link">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        vojanmatyas@gmail.com
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <span class="brand-name">recepce</span><span class="brand-tld">.tech</span>
+        </div>
+        <p data-cs="AI recepční pro moderní byznys." data-en="AI receptionist for modern business.">AI recepční pro moderní byznys.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Stránky" data-en="Pages">Stránky</h4>
+        <ul>
+          <li><a href="index.html" data-cs="Domů" data-en="Home">Domů</a></li>
+          <li><a href="profese.html" data-cs="Pro koho" data-en="For who">Pro koho</a></li>
+          <li><a href="faq.html">Q&amp;A</a></li>
+          <li><a href="kontakt.html" data-cs="Kontakt" data-en="Contact">Kontakt</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-cs="Právní" data-en="Legal">Právní</h4>
+        <ul>
+          <li><a href="#" data-cs="Ochrana soukromí" data-en="Privacy policy">Ochrana soukromí</a></li>
+          <li><a href="#" data-cs="Obchodní podmínky" data-en="Terms of service">Obchodní podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 recepce.tech</span>
+      <span data-cs="Vytvořeno v České republice" data-en="Made in the Czech Republic">Vytvořeno v České republice</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Menu ── */
+const burger  = document.getElementById('burger');
+const overlay = document.getElementById('menu-overlay');
+function toggleMenu(open) {
+  document.body.classList.toggle('menu-open', open);
+  overlay.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+  overlay.setAttribute('aria-hidden', String(!open));
+}
+burger.addEventListener('click', () => toggleMenu(!overlay.classList.contains('open')));
+overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleMenu(false); });
+
+/* ── Scroll progress bar ── */
+const prog = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+}, { passive: true });
+
+/* ── Magnetic buttons ── */
+document.querySelectorAll('.mag-btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.15;
+    const y = (e.clientY - r.top - r.height / 2) * 0.15;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+/* ── Profession data ── */
+const DATA = {
+  cs: [
+    { id:'barber',     num:'01', name:'Barbershop',        route:'barbershop.html',
+      desc:'Zmeškaný hovor = prázdné křeslo. AI přijme rezervaci i ve chvíli, kdy holíte zákazníka — bez přerušení, bez stresu.',
+      tags:['Rezervace termínů','Připomínky no-show','SMS potvrzení','Víkendové hovory'] },
+    { id:'klinika',    num:'02', name:'Estetická klinika', route:'estetika.html',
+      desc:'Pacienti si zaslouží diskrétní, okamžitou odpověď. AI zajistí profesionální komunikaci a vyplní kapacitu na maximum.',
+      tags:['Diskrétní rezervace','Dotazy na procedury','Konzultační termíny','Urgentní hovory'] },
+    { id:'salon',      num:'03', name:'Kadeřnický salon',  route:'kadernictvi.html',
+      desc:'Salon plný zákazníků = ruce plné práce. AI zajistí, že žádná rezervace neuteče, a přiřadí správného stylistu.',
+      tags:['Online rezervace','Výběr stylisty','SMS připomínky','Storno management'] },
+    { id:'stomatolog', num:'04', name:'Stomatologie',      route:'stomatologie.html',
+      desc:'Pacienti hledají rychlou odpověď — zvlášť při urgentní bolesti. AI odpoví okamžitě a zorganizuje termín.',
+      tags:['Urgentní rezervace','Připomínky kontrol','Dotazy k pojišťovně','Noční urgence'] },
+    { id:'masaze',     num:'05', name:'Masáže & wellness', route:'masaze.html',
+      desc:'Klienti hledají klid od prvního kontaktu. AI zarezervuje proceduru a pošle instrukce k přípravě — vše automaticky.',
+      tags:['Rezervace procedur','Výběr terapeuta','Přípravné instrukce','SMS připomínky'] },
+    { id:'fitness',    num:'06', name:'Fitness & PT',      route:'fitness.html',
+      desc:'Trenéři mají ruce plné práce. AI přijme rezervaci tréninku, hlídá kapacitu skupinových hodin a posílá připomínky.',
+      tags:['Rezervace tréninků','Skupinové hodiny','Kapacita studia','Motivační připomínky'] },
+  ],
+  en: [
+    { id:'barber',     num:'01', name:'Barbershop',        route:'barbershop.html',
+      desc:"A missed call = an empty chair. AI books appointments even while you're cutting — no interruptions, no stress.",
+      tags:['Appointment booking','No-show reminders','SMS confirmation','Weekend calls'] },
+    { id:'klinika',    num:'02', name:'Aesthetic clinic',  route:'estetika.html',
+      desc:'Patients deserve discreet, instant responses. AI ensures professional communication and maximizes clinic capacity.',
+      tags:['Discreet booking','Procedure inquiries','Consultation slots','Urgent calls'] },
+    { id:'salon',      num:'03', name:'Hair salon',        route:'kadernictvi.html',
+      desc:"A full salon means your hands are busy. AI ensures no booking escapes and assigns the right stylist.",
+      tags:['Online booking','Stylist selection','SMS reminders','Cancellation management'] },
+    { id:'stomatolog', num:'04', name:'Dentistry',         route:'stomatologie.html',
+      desc:'Patients need fast answers — especially in urgent pain. AI responds instantly and arranges appointments.',
+      tags:['Urgent booking','Check-up reminders','Insurance queries','After-hours urgency'] },
+    { id:'masaze',     num:'05', name:'Massage & wellness',route:'masaze.html',
+      desc:'Clients seek calm from the very first contact. AI books procedures and sends prep instructions automatically.',
+      tags:['Procedure booking','Therapist selection','Prep instructions','SMS reminders'] },
+    { id:'fitness',    num:'06', name:'Fitness & PT',      route:'fitness.html',
+      desc:"Trainers have their hands full. AI books sessions, manages group class capacity, and sends motivational reminders.",
+      tags:['Session booking','Group classes','Studio capacity','Motivational reminders'] },
+  ]
+};
+
+let lang = localStorage.getItem('rt-lang') || 'cs';
+let lastIdx = -1;
+let hasInitialized = false;
+let detailRaf = 0;
+
+/* ── Render side name list ── */
+function renderNames() {
+  const profs = DATA[lang];
+  document.getElementById('prof-names').innerHTML = profs.map((p, i) => `
+    <a href="${p.route}" class="prof-name-item${i === 0 ? ' active' : ''}" data-idx="${i}">
+      <span class="pni-num">${p.num}</span>
+      <span class="pni-text">${p.name}</span>
+    </a>
+  `).join('');
+}
+
+/* ── Update active profession display ── */
+function updateDisplay(idx) {
+  const profs = DATA[lang];
+  const prof  = profs[idx];
+
+  /* Update side list */
+  document.querySelectorAll('.prof-name-item').forEach((item, i) => {
+    item.classList.toggle('active', i === idx);
+  });
+
+  const dispName   = document.getElementById('prof-disp-name');
+  const dispNum    = document.getElementById('prof-disp-num');
+  const dispLink   = document.getElementById('prof-display-link');
+  const detail     = document.getElementById('prof-detail');
+  const detailDesc = document.getElementById('prof-detail-desc');
+  const detailTags = document.getElementById('prof-detail-tags');
+
+  /* Update content immediately (no lag) */
+  dispNum.textContent    = prof.num;
+  dispName.textContent   = prof.name;
+  dispLink.href          = prof.route;
+  detailDesc.textContent = prof.desc;
+  detailTags.innerHTML   = prof.tags.map(t =>
+    `<span class="prof-detail-tag">${t}</span>`
+  ).join('');
+
+  /* First paint: avoid flashing/fading from empty */
+  if (!hasInitialized) {
+    hasInitialized = true;
+    detail.classList.add('visible');
+    return;
+  }
+
+  /* Smooth transitions */
+  detail.classList.remove('visible');
+
+  // Fade/slide in the updated headline (no delayed swap)
+  dispName.style.transition = 'none';
+  dispName.style.opacity = '0';
+  dispName.style.transform = 'translateY(8px)';
+  // Force the start state to apply before transitioning back
+  dispName.offsetHeight;
+  dispName.style.transition = '';
+  requestAnimationFrame(() => {
+    dispName.style.opacity = '';
+    dispName.style.transform = '';
+  });
+
+  if (detailRaf) cancelAnimationFrame(detailRaf);
+  detailRaf = requestAnimationFrame(() => detail.classList.add('visible'));
+}
+
+/*
+  ── Scroll driver ──
+
+  Critical: use getBoundingClientRect() + scrollY to get the
+  absolute document-top offset of the section. offsetTop alone
+  is relative to the nearest positioned ancestor (<main>) and
+  can be inaccurate when body/html have height constraints.
+*/
+const section = document.getElementById('professions');
+
+function syncScrollHeight() {
+  if (!section) return;
+  const numProfs = (DATA[lang] || []).length;
+  if (!numProfs) return;
+  // N professions → (N + 1) × 100vh gives N segments of scroll.
+  section.style.height = `${(numProfs + 1) * 100}vh`;
+}
+
+/* ── Smooth scroll helper (slower, ease-in-out) ── */
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function smoothScrollToElement(el, durationMs = 700) {
+  const startY = window.scrollY;
+  const targetY = el.getBoundingClientRect().top + window.scrollY;
+  const dist = targetY - startY;
+  const start = performance.now();
+
+  function step(now) {
+    const p = Math.min((now - start) / durationMs, 1);
+    const eased = easeInOutCubic(p);
+    window.scrollTo(0, startY + dist * eased);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function smoothScrollToY(targetY, durationMs = 700, onDone) {
+  const startY = window.scrollY;
+  const dist = targetY - startY;
+  const start = performance.now();
+
+  function step(now) {
+    const p = Math.min((now - start) / durationMs, 1);
+    const eased = easeInOutCubic(p);
+    window.scrollTo(0, startY + dist * eased);
+    if (p < 1) requestAnimationFrame(step);
+    else if (typeof onDone === 'function') onDone();
+  }
+  requestAnimationFrame(step);
+}
+
+/* If we were redirected here and asked to scroll, do it immediately on load. */
+function maybeScrollFromRedirect() {
+  let id = null;
+  try { id = sessionStorage.getItem('rt-scrollTo'); } catch {}
+  if (!id) return;
+  try { sessionStorage.removeItem('rt-scrollTo'); } catch {}
+
+  const target = document.getElementById(id);
+  if (!target) return;
+  smoothScrollToElement(target, 700);
+}
+
+let scrollRaf = 0;
+let isSnapping = false;
+let lastSnapTime = 0;
+const SNAP_COOLDOWN = 650; // Reduced from 820ms for snappier feel
+
+function getProfScrollMetrics() {
+  const viewportH = window.innerHeight;
+  const sectionHeight = section.offsetHeight;
+  const maxScroll = sectionHeight - viewportH;
+  const rect = section.getBoundingClientRect();
+  const scrolledWithin = Math.max(0, Math.min(maxScroll, -rect.top));
+  const numProfs = DATA[lang].length;
+  const segment = numProfs > 0 ? (maxScroll / numProfs) : 0;
+  const sectionTopAbs = rect.top + window.scrollY;
+
+  return { viewportH, sectionHeight, maxScroll, rect, scrolledWithin, numProfs, segment, sectionTopAbs };
+}
+
+function isStickyActive() {
+  if (!section) return false;
+  const r = section.getBoundingClientRect();
+  const vh = window.innerHeight;
+  // Active when the professions section fully covers the viewport.
+  return r.top <= 0 && r.bottom >= vh;
+}
+
+function scrollToProfessionIndex(idx, durationMs = 400, onDone) {
+  if (!section) return;
+  const m = getProfScrollMetrics();
+  if (m.numProfs <= 0 || m.segment <= 0) return;
+
+  const clamped = Math.max(0, Math.min(m.numProfs - 1, idx));
+  const targetY = Math.round(m.sectionTopAbs + clamped * m.segment);
+
+  smoothScrollToY(targetY, durationMs, () => {
+    onScroll();
+    if (typeof onDone === 'function') onDone();
+  });
+}
+function scheduleScrollUpdate() {
+  if (scrollRaf) return;
+  scrollRaf = requestAnimationFrame(() => {
+    scrollRaf = 0;
+    onScroll();
+  });
+}
+
+function onScroll() {
+  if (!section) return;
+
+  const { maxScroll, scrolledWithin, numProfs, segment } = getProfScrollMetrics();
+  if (maxScroll <= 0 || numProfs <= 0 || segment <= 0) return;
+
+  // Choose active profession when its segment is near viewport center.
+  const activeIdx = Math.min(
+    Math.floor((scrolledWithin + segment / 2) / segment),
+    numProfs - 1
+  );
+
+  if (activeIdx !== lastIdx) {
+    lastIdx = activeIdx;
+    updateDisplay(activeIdx);
+  }
+}
+
+window.addEventListener('scroll', scheduleScrollUpdate, { passive: true });
+
+// One wheel tick = one profession (snap-scroll with cooldown)
+window.addEventListener('wheel', (e) => {
+  if (!section) return;
+  if (!isStickyActive()) return;
+
+  const m = getProfScrollMetrics();
+  if (m.numProfs <= 0) return;
+
+  // Block all input while animation is running.
+  if (isSnapping) {
+    e.preventDefault();
+    return;
+  }
+
+  const currentIdx = Math.min(
+    Math.floor((m.scrolledWithin + m.segment / 2) / m.segment),
+    m.numProfs - 1
+  );
+
+  const dir = e.deltaY > 0 ? 1 : -1;
+  const nextIdx = currentIdx + dir;
+
+  // At section boundaries: let native scroll handle exit/entry (no preventDefault).
+  if (nextIdx < 0 || nextIdx >= m.numProfs) return;
+
+  // Inside section: prevent native scroll.
+  e.preventDefault();
+
+  const now = Date.now();
+  if (now - lastSnapTime < SNAP_COOLDOWN) return;
+
+  lastSnapTime = now;
+  isSnapping = true;
+  scrollToProfessionIndex(nextIdx, 500, () => { isSnapping = false; });
+}, { passive: false });
+window.addEventListener('resize', () => {
+  syncScrollHeight();
+  scheduleScrollUpdate();
+});
+window.addEventListener('load', () => {
+  syncScrollHeight();
+  scheduleScrollUpdate();
+});
+
+// Click-to-jump in the professions menu (keeps scroll + active state in sync)
+document.getElementById('prof-names')?.addEventListener('click', (e) => {
+  const a = e.target?.closest?.('.prof-name-item');
+  if (!a) return;
+  const idx = Number(a.getAttribute('data-idx'));
+  if (!Number.isFinite(idx)) return;
+  e.preventDefault();
+  scrollToProfessionIndex(idx, 520);
+});
+
+/* ── Spotlight card effect ── */
+document.querySelectorAll('.benefit-card,.feature-card,.step').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  });
+});
+
+/* ── Reveal observer ── */
+const cObs = new IntersectionObserver(
+  entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')),
+  { threshold: 0.08 }
+);
+document.querySelectorAll('.reveal').forEach(el => cObs.observe(el));
+
+/* ── Language switching ── */
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('rt-lang', l);
+  document.getElementById('btn-cs').classList.toggle('active', l === 'cs');
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  document.querySelectorAll('[data-cs][data-en]').forEach(el => {
+    el.innerHTML = el.getAttribute('data-' + l);
+  });
+  hasInitialized = false;
+  lastIdx = -1;
+  renderNames();
+  syncScrollHeight();
+  scheduleScrollUpdate();
+}
+
+/* ── Init ── */
+setLang(lang);
+maybeScrollFromRedirect();
+
+// Force initial display update
+requestAnimationFrame(() => {
+  onScroll();
+});
+</script>
+</body>
+</html>

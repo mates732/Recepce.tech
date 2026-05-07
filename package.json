@@ -4,7 +4,8 @@
   "description": "Simple static website for Recepce.tech",
   "main": "index.js",
   "scripts": {
-    "start": "npx serve ."
+    "build": "rm -rf dist && mkdir -p dist && find . -maxdepth 1 -type f \\( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name 'CNAME' \\) -exec cp {} dist/ \\; && if [ -d api ]; then cp -R api dist/api; fi",
+    "start": "node ./node_modules/serve/build/main.js ."
   },
   "author": "",
   "license": "ISC",

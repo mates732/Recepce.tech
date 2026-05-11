@@ -41,28 +41,145 @@
 
 <main>
 
-<!-- ── HERO ── -->
-<section class="hero snap-section" id="s-hero">
-  <div class="hero-badge">
-    <span class="badge-dot"></span>
-    <span data-cs="AI concierge stack · Voice, chat a rezervace" data-en="AI concierge stack · Voice, chat &amp; booking">AI concierge stack · Voice, chat a rezervace</span>
+<!-- ── CINEMATIC HERO ── -->
+<section class="hero cinematic-hero snap-section" id="s-hero">
+  <div class="hero-bg-elements">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-noise"></div>
   </div>
 
-  <h1 id="hero-h1"
-    data-cs="AI recepční, která<br>zvedá telefon za vás."
-    data-en="AI receptionist that<br>answers the phone for you.">
-    <span class="h1-line" style="animation-delay:.10s">AI recepční, která</span>
-    <span class="h1-line" style="animation-delay:.22s">zvedá telefon za vás.</span>
-  </h1>
+  <div class="wrap hero-wrap">
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span class="badge-dot"></span>
+        <span data-cs="AI Receptionist Platform" data-en="AI Receptionist Platform">AI Receptionist Platform</span>
+      </div>
 
-  <p class="hero-sub"
-    data-cs="Nikdy nezmeškejte zákazníka. Automatická AI recepční pro firmy, ordinace, salony i služby."
-    data-en="Never miss a customer. Automatic AI receptionist for companies, clinics, salons and services.">
-    Nikdy nezmeškejte zákazníka. Automatická AI recepční pro firmy, ordinace, salony i služby.
-  </p>
+      <h1 id="hero-h1" class="reveal cinematic-h1"
+        data-cs="Vaše firma už nikdy<br>nevezme zmeškaný hovor."
+        data-en="Your business will never<br>take a missed call again.">
+        Vaše firma už nikdy<br>nevezme zmeškaný hovor.
+      </h1>
 
-  <div class="hero-ctas">
-    <a href="kontakt.html" class="btn-hero"><span data-cs="Rezervovat demo" data-en="Book a demo">Rezervovat demo</span></a>
+      <p class="hero-sub reveal"
+        data-cs="AI recepční odpovídá zákazníkům 24/7, rezervuje termíny a předává důležité informace během několika sekund."
+        data-en="AI receptionist answers customers 24/7, books appointments and passes important information in seconds.">
+        AI recepční odpovídá zákazníkům 24/7, rezervuje termíny a předává důležité informace během několika sekund.
+      </p>
+
+      <div class="hero-ctas reveal">
+        <a href="kontakt.html" class="btn-primary btn-glow"><span data-cs="Vyzkoušet demo" data-en="Try demo">Vyzkoušet demo</span></a>
+        <a href="#s-cta" class="btn-secondary btn-glass"><span data-cs="Jak to funguje" data-en="How it works">Jak to funguje</span></a>
+      </div>
+
+      <div class="hero-trust reveal">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" class="trust-icon"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span data-cs="24/7 dostupnost" data-en="24/7 availability">24/7 dostupnost</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" class="trust-icon"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-10.6 8.38 8.38 0 0 1 3.8.9L21 3z"/></svg>
+          <span data-cs="Okamžité odpovědi" data-en="Instant answers">Okamžité odpovědi</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" class="trust-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span data-cs="Automatické rezervace" data-en="Automatic bookings">Automatické rezervace</span>
+        </div>
+      </div>
+
+      <div class="hero-social-proof reveal">
+        <span class="proof-logo">CLINICS</span>
+        <span class="proof-logo">SALONS</span>
+        <span class="proof-logo">RESTAURANTS</span>
+        <span class="proof-logo">LEGAL</span>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal">
+      <div class="dashboard-mockup">
+        <!-- Active Call Card -->
+        <div class="db-card active-call-card">
+          <div class="call-card-header">
+            <div class="caller-avatar"></div>
+            <div class="caller-info">
+              <div class="caller-name">Jan Novák</div>
+              <div class="call-status">In-call • 00:42</div>
+            </div>
+          </div>
+          <div class="call-waveform">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="call-ai-indicator">
+            <div class="ai-dot"></div>
+            <span>AI Speaking</span>
+          </div>
+        </div>
+
+        <!-- Transcript Panel -->
+        <div class="db-card transcript-panel">
+          <div class="db-card-label">AI TRANSCRIPT</div>
+          <div class="transcript-content">
+            <div class="msg user">“Dobrý den, rád bych rezervaci na zítřek...”</div>
+            <div class="msg ai">“Samozřejmě, pane Nováku. Máme volno v 10:00 nebo 14:30. Který čas vám vyhovuje?”</div>
+            <div class="typing-cursor"></div>
+          </div>
+        </div>
+
+        <!-- Booking Panel -->
+        <div class="db-card booking-panel">
+          <div class="db-card-label">CONFIRMED BOOKING</div>
+          <div class="booking-status confirmed">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Rezervace potvrzena</span>
+          </div>
+          <div class="booking-details">
+            <div>14. Listopad, 10:00</div>
+            <div class="booking-type">Dentální hygiena</div>
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="db-card analytics-panel">
+          <div class="db-card-label">PERFORMANCE</div>
+          <div class="charts-row">
+            <div class="chart-item">
+              <div class="chart-value">98%</div>
+              <div class="chart-label">Answered</div>
+            </div>
+            <div class="chart-item">
+              <div class="chart-value">-85%</div>
+              <div class="chart-label">Missed calls</div>
+            </div>
+          </div>
+          <div class="mini-bar-chart">
+            <div class="bar" style="height: 60%"></div>
+            <div class="bar" style="height: 80%"></div>
+            <div class="bar" style="height: 40%"></div>
+            <div class="bar" style="height: 90%"></div>
+          </div>
+        </div>
+
+        <!-- AI Status Panel -->
+        <div class="db-card status-panel">
+          <div class="status-row">
+            <div class="status-tag online">AI ONLINE</div>
+            <div class="status-stat">Latency: 120ms</div>
+          </div>
+          <div class="status-row">
+            <div class="status-stat">Confidence: 99.4%</div>
+          </div>
+        </div>
+
+        <!-- Floating Notification -->
+        <div class="floating-popup">
+          <div class="popup-icon">🔔</div>
+          <div class="popup-text">New booking added</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="scroll-cue" aria-hidden="true">
@@ -157,6 +274,34 @@ const snapSections = document.querySelectorAll('.snap-section');
 // Opacity animation fires via IntersectionObserver
 snapSections[0].classList.add('in-view');
 
+// Staggered reveal for cinematic hero
+setTimeout(() => {
+  const heroReveals = document.querySelectorAll('.cinematic-hero .reveal');
+  heroReveals.forEach((el, i) => {
+    setTimeout(() => {
+      el.classList.add('visible');
+    }, i * 150);
+  });
+}, 100);
+
+// Mouse parallax for hero visual
+document.addEventListener('mousemove', (e) => {
+  const visual = document.querySelector('.hero-visual');
+  if (!visual) return;
+
+  const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+  const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+
+  visual.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+
+  const mockup = visual.querySelector('.dashboard-mockup');
+  if (mockup) {
+    const rotateX = 5 - (e.clientY / window.innerHeight) * 10;
+    const rotateY = -10 + (e.clientX / window.innerWidth) * 20;
+    mockup.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+  }
+});
+
 const secObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     // Trigger at low threshold — fire as soon as section enters viewport
@@ -183,11 +328,9 @@ function setLang(l) {
 
   // Re-render hero h1 lines
   const h1 = document.getElementById('hero-h1');
-  const raw = h1.getAttribute('data-' + l);
-  const parts = raw.split('<br>');
-  h1.innerHTML = parts.map((p, i) =>
-    `<span class="h1-line" style="animation-delay:${.10 + i*.12}s">${p}</span>`
-  ).join('');
+  if (h1 && !h1.classList.contains('cinematic-h1')) { // Skip if it's the new cinematic h1 which handles its own line breaks or is styled differently
+     h1.innerHTML = h1.getAttribute('data-' + l);
+  }
 
 }
 setLang(lang);

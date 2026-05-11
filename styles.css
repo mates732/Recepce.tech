@@ -1219,17 +1219,17 @@ footer, footer.snap-section {
    2026 DESIGN SYSTEM REFRESH
 ═══════════════════════════════════════════════════ */
 :root {
-  --bg: #06101c;
-  --bg-2: #0b1526;
-  --bg-3: #101d31;
-  --panel: rgba(10, 20, 35, 0.72);
-  --panel-strong: rgba(10, 20, 35, 0.86);
-  --fg: #f3f7ff;
-  --fg-dim: #a5b4ca;
-  --fg-mute: #71839e;
-  --line: rgba(255,255,255,0.10);
-  --line-2: rgba(255,255,255,0.05);
-  --line-hi: rgba(255,255,255,0.18);
+  --bg: #000000;
+  --bg-2: #050505;
+  --bg-3: #0a0a0a;
+  --panel: rgba(15, 15, 15, 0.72);
+  --panel-strong: rgba(10, 10, 10, 0.86);
+  --fg: #ffffff;
+  --fg-dim: #999999;
+  --fg-mute: #666666;
+  --line: rgba(255,255,255,0.03);
+  --line-2: rgba(255,255,255,0.02);
+  --line-hi: rgba(255,255,255,0.08);
   --accent-bg: rgba(124,156,255,0.12);
   --accent: #8aa4ff;
   --accent-2: #6ce5d6;
@@ -1241,35 +1241,31 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(138,164,255,0.20), transparent 28%),
-    radial-gradient(circle at 82% 12%, rgba(108,229,214,0.14), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(91,74,255,0.16), transparent 28%),
-    linear-gradient(180deg, #050d18 0%, #08111f 38%, #06101c 100%);
+  background: #000;
   position: relative;
 }
 
-body::before,
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(255,255,255,0.02), transparent 30%);
+}
+
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-}
-
-body::before {
-  background:
-    radial-gradient(circle at 20% 18%, rgba(138,164,255,0.10), transparent 18%),
-    radial-gradient(circle at 78% 24%, rgba(108,229,214,0.08), transparent 18%);
-  filter: blur(16px);
-}
-
-body::after {
   background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 120px 120px;
-  opacity: 0.18;
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.65), transparent 90%);
+  background-size: 100px 100px;
+  opacity: 0.1;
+  mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
 }
 
 body.menu-open {
@@ -1413,16 +1409,15 @@ footer.snap-section {
 }
 
 .hero {
-  padding-top: clamp(128px, 16vh, 170px);
-  padding-bottom: 76px;
+  padding: clamp(160px, 20vh, 240px) 0 120px;
 }
 
 .hero::before {
-  width: min(1100px, 100%);
-  height: 82%;
-  top: -12%;
-  background: radial-gradient(ellipse 70% 60% at 50% 24%, rgba(138,164,255,0.24) 0%, rgba(108,229,214,0.12) 32%, transparent 72%);
-  filter: blur(4px);
+  width: min(1200px, 100%);
+  height: 100%;
+  top: -15%;
+  background: radial-gradient(ellipse 70% 60% at 50% 24%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 40%, transparent 80%);
+  filter: blur(8px);
 }
 
 .hero::after {
@@ -1456,9 +1451,9 @@ footer.snap-section {
 }
 
 h1 {
-  max-width: 12ch;
-  font-size: clamp(56px, 10vw, 120px);
-  letter-spacing: -0.06em;
+  max-width: 14ch;
+  font-size: clamp(48px, 8vw, 96px);
+  letter-spacing: -0.04em;
 }
 
 h1 em,
@@ -1630,9 +1625,13 @@ h1 em,
   border-color: rgba(138,164,255,0.30);
 }
 
+.cta-strip {
+  padding: 160px 0;
+}
+
 .cta-inner {
-  padding: clamp(32px, 6vw, 56px);
-  border-radius: 32px;
+  padding: clamp(64px, 8vw, 120px);
+  border-radius: 48px;
 }
 
 .footer-grid,

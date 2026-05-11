@@ -1241,7 +1241,7 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, #222831 0%, #1A1A1D 50%, #1A120B 100%);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
   background-attachment: fixed;
   position: relative;
 }

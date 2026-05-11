@@ -1,11 +1,11 @@
 ﻿/* ─── recepce.tech – premium dark ─── */
 :root {
-  --bg:          #222020;
-  --bg-2:        #222020;
-  --bg-3:        #222020;
+  --bg:          #222831;
+  --bg-2:        #1A1A1D;
+  --bg-3:        #1A120B;
 
-  --fg:          #E5E4E2;
-  --fg-dim:      #A89F96;
+  --fg:          #FFFAF0;
+  --fg-dim:      #F6F3EB;
   --fg-mute:     #6B635D;
 
   --line:        rgba(229,228,226,0.07);
@@ -499,7 +499,7 @@ h1 em { font-style: italic; font-weight: 400; color: var(--fg-mute); }
   position: absolute; top: 0; left: 50%; transform: translateX(-50%);
   width: 100%; height: 100%;
   background: radial-gradient(ellipse 60% 50% at 50% 50%,
-    rgba(74,124,89,0.06) 0%, transparent 65%);
+    rgba(30, 62, 98, 0.1) 0%, transparent 65%);
   pointer-events: none;
 }
 .cta-strip > * { position: relative; z-index: 1; }
@@ -1219,13 +1219,13 @@ footer, footer.snap-section {
    2026 DESIGN SYSTEM REFRESH
 ═══════════════════════════════════════════════════ */
 :root {
-  --bg: #000000;
-  --bg-2: #050505;
-  --bg-3: #0a0a0a;
-  --panel: rgba(15, 15, 15, 0.72);
-  --panel-strong: rgba(10, 10, 10, 0.86);
-  --fg: #ffffff;
-  --fg-dim: #999999;
+  --bg: #222831;
+  --bg-2: #1A1A1D;
+  --bg-3: #1A120B;
+  --panel: rgba(26, 26, 29, 0.72);
+  --panel-strong: rgba(26, 18, 11, 0.86);
+  --fg: #FFFAF0;
+  --fg-dim: #F6F3EB;
   --fg-mute: #666666;
   --line: rgba(255,255,255,0.03);
   --line-2: rgba(255,255,255,0.02);
@@ -1241,7 +1241,8 @@ html {
 }
 
 body {
-  background: #000;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+  background-attachment: fixed;
   position: relative;
 }
 
@@ -1252,8 +1253,8 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 50%),
-    radial-gradient(circle at 100% 0%, rgba(255,255,255,0.02), transparent 30%);
+    radial-gradient(circle at 50% 0%, rgba(30, 62, 98, 0.1), transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(26, 54, 54, 0.05), transparent 30%);
 }
 
 body::after {
@@ -1366,7 +1367,7 @@ textarea:focus-visible {
 
 .btn-primary,
 .btn-hero {
-  background: linear-gradient(135deg, #ffffff 0%, #dce7ff 100%);
+  background: linear-gradient(135deg, #FFFBF1 0%, #FCF8F8 100%);
   color: #071120;
   border-color: rgba(255,255,255,0.82);
   box-shadow: 0 16px 40px rgba(0,0,0,0.34), 0 0 38px rgba(138,164,255,0.20);
@@ -1416,7 +1417,7 @@ footer.snap-section {
   width: min(1200px, 100%);
   height: 100%;
   top: -15%;
-  background: radial-gradient(ellipse 70% 60% at 50% 24%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 40%, transparent 80%);
+  background: radial-gradient(ellipse 70% 60% at 50% 24%, rgba(30, 62, 98, 0.15) 0%, rgba(26, 54, 54, 0.05) 40%, transparent 80%);
   filter: blur(8px);
 }
 
@@ -1552,7 +1553,7 @@ h1 em,
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top center, rgba(138,164,255,0.14), transparent 36%);
+  background: radial-gradient(circle at top center, rgba(30, 62, 98, 0.2), transparent 36%);
   pointer-events: none;
 }
 

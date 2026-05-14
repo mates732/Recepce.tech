@@ -12,6 +12,10 @@ js/vapi-config.js
 node_modules/
 dist/
 
+# Next.js
+.next/
+out/
+
 # OS files
 .DS_Store
 Thumbs.db

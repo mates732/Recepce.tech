@@ -18,7 +18,7 @@
   --r:           10px;
   --r-lg:        16px;
   --r-xl:        24px;
-  --font:        "Inter Tight", system-ui, sans-serif;
+  --font:        "Satoshi", system-ui, sans-serif;
   --mono:        "JetBrains Mono", monospace;
   --ease:        cubic-bezier(.22,.8,.2,1);
   --ease-out:    cubic-bezier(.0,.0,.2,1);
@@ -93,7 +93,11 @@ main { position: relative; z-index: 2; }
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   box-shadow: none;
+  cursor: default;
+  text-decoration: none;
   transition: opacity .2s ease-in-out;
+  font: inherit;
+  color: inherit;
 }
 .nav .brand:hover { opacity: .84; }
 .nav .brand { position: relative; }
@@ -941,7 +945,7 @@ main { animation: mainSlideIn .5s var(--ease) both; }
   border-radius: 54px;
   padding: 10px;
   background:
-    linear-gradient(135deg, #050505 0%, #151515 18%, #020202 46%, #2a2a2a 74%, #070707 100%);
+    linear-gradient(135deg, #08080A 0%, #151515 18%, #020202 46%, #2a2a2a 74%, #070707 100%);
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow:
     0 60px 120px rgba(0,0,0,0.85),
@@ -957,7 +961,7 @@ main { animation: mainSlideIn .5s var(--ease) both; }
   content: '';
   position: absolute;
   border-radius: 8px;
-  background: linear-gradient(180deg, #171717, #050505);
+  background: linear-gradient(180deg, #171717, #08080A);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
 }
 .iphone::before { left: -4px; top: 118px; width: 4px; height: 88px; }
@@ -989,7 +993,7 @@ main { animation: mainSlideIn .5s var(--ease) both; }
   padding: 18px 18px 24px;
   background:
     radial-gradient(circle at 50% 18%, rgba(255,255,255,0.13), transparent 28%),
-    linear-gradient(180deg, #282828 0%, #171717 45%, #050505 100%);
+    linear-gradient(180deg, #282828 0%, #171717 45%, #08080A 100%);
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(0,0,0,0.82);

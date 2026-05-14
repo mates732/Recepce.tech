@@ -1,15 +1,27 @@
 {
   "name": "recepce-tech",
-  "version": "1.0.0",
-  "description": "Simple static website for Recepce.tech",
-  "main": "index.js",
+  "version": "2.0.0",
+  "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && find . -maxdepth 1 -type f \\( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name 'CNAME' \\) -exec cp {} dist/ \\; && if [ -d api ]; then cp -R api dist/api; fi",
-    "start": "node ./node_modules/serve/build/main.js ."
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "serve": "^14.2.0"
+    "@vapi-ai/web": "^2.5.2",
+    "framer-motion": "^12.6.0",
+    "motion": "^12.38.0",
+    "next": "^15.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.3",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.3",
+    "typescript": "^5.8.3"
   }
 }

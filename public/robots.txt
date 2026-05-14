@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://recepce.tech/sitemap.xml

@@ -3,10 +3,14 @@
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
 import PageTransition from "@/components/PageTransition";
+import { useState, useRef, type FormEvent } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
   locale: Locale;
 }
+
+type FormStatus = "idle" | "loading" | "success" | "error";
 
 const phone = "+420 732 839 892";
 const email = "vojanmatyas@gmail.com";
@@ -14,6 +18,14 @@ const whatsapp = "+420 732 839 892";
 
 export default function ContactContent({ locale }: Props) {
   const isCs = locale === "cs";
+  const hpRef = useRef<HTMLInputElement>(null);
+
+  const [name, setName] = useState("");
+  const [emailVal, setEmailVal] = useState("");
+  const [phoneVal, setPhoneVal] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const promises = [
     t(locale, "contact.promise1"),
@@ -27,6 +39,108 @@ export default function ContactContent({ locale }: Props) {
     { label: t(locale, "contact.email"), value: email, href: `mailto:${email}`, icon: "mail" },
     { label: "WhatsApp", value: whatsapp, href: `https://wa.me/${whatsapp.replace(/\s/g, "").replace("+", "")}`, icon: "chat" },
   ];
+
+  function getButtonText() {
+    if (status === "loading") return t(locale, "contact.formSending");
+    if (status === "success") return t(locale, "contact.formSuccess");
+    return t(locale, "contact.formSend");
+  }
+
+  function getButtonColor() {
+    if (status === "success") return "rgba(52,211,153,0.8)";
+    if (status === "loading") return "rgba(255,255,255,0.3)";
+    return "rgba(0,194,255,0.6)";
+  }
+
+  function validate(): string | null {
+    const trimmed = {
+      name: name.trim(),
+      email: emailVal.trim(),
+      message: message.trim(),
+    };
+    if (!trimmed.name || !trimmed.email || !trimmed.message) {
+      return isCs ? "Prosím vyplňte všechna povinná pole." : "Please fill in all required fields.";
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed.email)) {
+      return isCs ? "Zadejte prosím platný e-mail." : "Please enter a valid email address.";
+    }
+    if (trimmed.message.length < 10) {
+      return isCs ? "Zpráva musí mít alespoň 10 znaků." : "Message must be at least 10 characters.";
+    }
+    return null;
+  }
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    const error = validate();
+    if (error) {
+      setStatus("error");
+      setErrorMsg(error);
+      return;
+    }
+
+    const hp = hpRef.current?.value ?? "";
+    if (hp) {
+      setStatus("success");
+      resetForm();
+      setTimeout(() => setStatus("idle"), 5000);
+      return;
+    }
+
+    setStatus("loading");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: emailVal.trim(),
+          phone: phoneVal.trim(),
+          message: message.trim(),
+          _hp: hp,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error ?? (isCs ? "Něco se pokazilo. Zkuste to prosím znovu." : "Something went wrong. Please try again."));
+      }
+
+      setStatus("success");
+      resetForm();
+      setTimeout(() => setStatus("idle"), 6000);
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : (isCs ? "Něco se pokazilo." : "Something went wrong."));
+    }
+  }
+
+  function resetForm() {
+    setName("");
+    setEmailVal("");
+    setPhoneVal("");
+    setMessage("");
+  }
+
+  function handleInputFocus(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    e.currentTarget.style.borderColor = "rgba(0,194,255,0.3)";
+    if (!e.currentTarget.closest("textarea")) {
+      (e.currentTarget as HTMLInputElement).style.background = "rgba(8,8,10,0.6)";
+    }
+  }
+
+  function handleInputBlur(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+    if (!e.currentTarget.closest("textarea")) {
+      (e.currentTarget as HTMLInputElement).style.background = "rgba(8,8,10,0.4)";
+    }
+  }
+
+  const isLoading = status === "loading";
+  const isDisabled = isLoading || status === "success";
 
   return (
     <PageTransition>
@@ -151,21 +265,25 @@ export default function ContactContent({ locale }: Props) {
             </div>
 
             <div>
-              <form
-                action="https://formsubmit.co/vojanmatyas@gmail.com"
-                method="POST"
-                className="flex flex-col gap-4"
-              >
-                <input type="hidden" name="_subject" value="recepce.tech — Nová poptávka z webu" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_next" value={`https://recepce.tech/${locale}/contact`} />
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+                <input
+                  ref={hpRef}
+                  type="text"
+                  name="_hp"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
+                  aria-hidden="true"
+                />
 
                 <div className="flex flex-col gap-1.5">
                   <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#B7BCC7" }}>
                     {t(locale, "contact.formName")}
                   </label>
                   <input
-                    name="name"
+                    value={name}
+                    onChange={(e) => { setName(e.target.value); if (status === "error") setStatus("idle"); }}
+                    disabled={isLoading}
                     required
                     className="w-full text-[14px] outline-none"
                     style={{
@@ -174,7 +292,8 @@ export default function ContactContent({ locale }: Props) {
                       borderBottom: "1px solid rgba(255,255,255,0.08)",
                       color: "#F3F4F6",
                       padding: "8px 0",
-                      transition: "border-color 0.3s ease-out",
+                      transition: "border-color 0.3s ease-out, opacity 0.3s ease",
+                      opacity: isLoading ? 0.4 : 1,
                     }}
                     onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.3)"; }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
@@ -187,7 +306,9 @@ export default function ContactContent({ locale }: Props) {
                   </label>
                   <input
                     type="email"
-                    name="email"
+                    value={emailVal}
+                    onChange={(e) => { setEmailVal(e.target.value); if (status === "error") setStatus("idle"); }}
+                    disabled={isLoading}
                     required
                     className="w-full text-[14px] outline-none"
                     style={{
@@ -196,7 +317,8 @@ export default function ContactContent({ locale }: Props) {
                       borderBottom: "1px solid rgba(255,255,255,0.08)",
                       color: "#F3F4F6",
                       padding: "8px 0",
-                      transition: "border-color 0.3s ease-out",
+                      transition: "border-color 0.3s ease-out, opacity 0.3s ease",
+                      opacity: isLoading ? 0.4 : 1,
                     }}
                     onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.3)"; }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
@@ -209,12 +331,15 @@ export default function ContactContent({ locale }: Props) {
                   </label>
                   <input
                     type="tel"
-                    name="phone"
+                    value={phoneVal}
+                    onChange={(e) => setPhoneVal(e.target.value)}
+                    disabled={isLoading}
                     className="w-full px-3.5 py-3 rounded-xl text-[14px] outline-none transition-all duration-200"
                     style={{
-                      background: "rgba(8,8,10,0.4)",
+                      background: isLoading ? "rgba(8,8,10,0.2)" : "rgba(8,8,10,0.4)",
                       border: "1px solid rgba(255,255,255,0.06)",
                       color: "#F3F4F6",
+                      opacity: isLoading ? 0.4 : 1,
                     }}
                     onFocus={(e) => {
                       e.currentTarget.style.borderColor = "rgba(0,194,255,0.15)";
@@ -222,7 +347,7 @@ export default function ContactContent({ locale }: Props) {
                     }}
                     onBlur={(e) => {
                       e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-                      e.currentTarget.style.background = "rgba(8,8,10,0.4)";
+                      e.currentTarget.style.background = isLoading ? "rgba(8,8,10,0.2)" : "rgba(8,8,10,0.4)";
                     }}
                   />
                 </div>
@@ -232,14 +357,17 @@ export default function ContactContent({ locale }: Props) {
                     {t(locale, "contact.formMessage")}
                   </label>
                   <textarea
-                    name="message"
+                    value={message}
+                    onChange={(e) => { setMessage(e.target.value); if (status === "error") setStatus("idle"); }}
+                    disabled={isLoading}
                     rows={4}
                     className="w-full px-3.5 py-3 rounded-xl text-[14px] outline-none transition-all duration-200 resize-vertical"
                     style={{
-                      background: "rgba(8,8,10,0.4)",
+                      background: isLoading ? "rgba(8,8,10,0.2)" : "rgba(8,8,10,0.4)",
                       border: "1px solid rgba(255,255,255,0.06)",
                       color: "#F3F4F6",
                       lineHeight: "1.5",
+                      opacity: isLoading ? 0.4 : 1,
                     }}
                     onFocus={(e) => {
                       e.currentTarget.style.borderColor = "rgba(0,194,255,0.15)";
@@ -247,26 +375,74 @@ export default function ContactContent({ locale }: Props) {
                     }}
                     onBlur={(e) => {
                       e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-                      e.currentTarget.style.background = "rgba(8,8,10,0.4)";
+                      e.currentTarget.style.background = isLoading ? "rgba(8,8,10,0.2)" : "rgba(8,8,10,0.4)";
                     }}
                   />
                 </div>
 
                 <button
                   type="submit"
+                  disabled={isDisabled}
                   className="font-body text-[14px] font-medium tracking-[-0.01em] mt-6"
-                  style={{ color: "rgba(0,194,255,0.6)", transition: "color 0.5s ease-out, text-shadow 0.5s ease-out" }}
+                  style={{
+                    color: getButtonColor(),
+                    transition: "color 0.4s ease-out, text-shadow 0.4s ease-out",
+                    cursor: isDisabled ? "default" : "pointer",
+                  }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "rgba(0,194,255,0.9)";
-                    e.currentTarget.style.textShadow = "0 0 24px rgba(0,194,255,0.08)";
+                    if (!isDisabled) {
+                      e.currentTarget.style.color = "rgba(0,194,255,0.9)";
+                      e.currentTarget.style.textShadow = "0 0 24px rgba(0,194,255,0.08)";
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "rgba(0,194,255,0.6)";
+                    e.currentTarget.style.color = getButtonColor();
                     e.currentTarget.style.textShadow = "none";
                   }}
                 >
-                  {t(locale, "contact.formSend")}
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={status}
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {getButtonText()}
+                    </motion.span>
+                  </AnimatePresence>
                 </button>
+
+                <AnimatePresence mode="wait">
+                  {status === "success" && (
+                    <motion.div
+                      key="success"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-center"
+                    >
+                      <span className="font-body text-[13px]" style={{ color: "rgba(52,211,153,0.8)" }}>
+                        {isCs ? "Děkujeme! Vaše zpráva byla odeslána." : "Thank you! Your message has been sent."}
+                      </span>
+                    </motion.div>
+                  )}
+                  {status === "error" && (
+                    <motion.div
+                      key="error"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-center"
+                    >
+                      <span className="font-body text-[13px]" style={{ color: "rgba(248,113,113,0.8)" }}>
+                        {errorMsg}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <div className="font-body text-[11px] text-center mt-1" style={{ color: "rgba(126,132,146,0.8)" }}>
                   {t(locale, "contact.note")}

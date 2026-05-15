@@ -68,6 +68,8 @@ export type TranslationKey =
   | "contact.formPhone"
   | "contact.formMessage"
   | "contact.formSend"
+  | "contact.formSending"
+  | "contact.formSuccess"
   | "contact.note"
   | "footer.tagline"
   | "footer.pages"

@@ -78,6 +78,8 @@ export const translations: Translations = {
     "contact.formPhone": "Telefon",
     "contact.formMessage": "Zpráva",
     "contact.formSend": "Odeslat poptávku",
+    "contact.formSending": "Odesílání…",
+    "contact.formSuccess": "Odesláno ✓",
     "contact.note": "Zrušení kdykoliv · Žádný závazek",
 
     "footer.tagline": "AI concierge infrastructure pro moderní byznys.",
@@ -165,6 +167,8 @@ export const translations: Translations = {
     "contact.formPhone": "Phone",
     "contact.formMessage": "Message",
     "contact.formSend": "Send inquiry",
+    "contact.formSending": "Sending…",
+    "contact.formSuccess": "Sent ✓",
     "contact.note": "Cancel anytime · No commitment",
 
     "footer.tagline": "AI concierge infrastructure for modern business.",

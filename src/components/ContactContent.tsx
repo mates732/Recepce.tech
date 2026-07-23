@@ -2,7 +2,6 @@
 
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
-import PageTransition from "@/components/PageTransition";
 import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -143,8 +142,7 @@ export default function ContactContent({ locale }: Props) {
   const isDisabled = isLoading || status === "success";
 
   return (
-    <PageTransition>
-      <section className="relative w-full pt-[clamp(140px,20vh,200px)] pb-24 px-[clamp(24px,5vw,64px)] min-h-screen">
+    <section className="relative w-full pt-[clamp(140px,20vh,200px)] pb-24 px-[clamp(24px,5vw,64px)] min-h-screen">
         <div className="mx-auto relative z-10" style={{ maxWidth: "960px" }}>
           <div className="text-center mb-16">
             <div
@@ -452,6 +450,5 @@ export default function ContactContent({ locale }: Props) {
           </div>
         </div>
       </section>
-    </PageTransition>
   );
 }

@@ -23,7 +23,7 @@ export default function Footer({ locale }: FooterProps) {
         <div
           className="footer-grid grid mb-10"
           style={{
-            gridTemplateColumns: "1fr auto auto",
+            gridTemplateColumns: "1fr auto",
             gap: "48px",
             alignItems: "start",
           }}
@@ -51,24 +51,6 @@ export default function Footer({ locale }: FooterProps) {
             <ul className="flex flex-col gap-2.5 list-none">
               <li>
                 <Link
-                  href={`/${locale}`}
-                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
-                  style={{ color: "#A0A0A0" }}
-                >
-                  {t(locale, "nav.home")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}#work`}
-                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
-                  style={{ color: "#A0A0A0" }}
-                >
-                  {t(locale, "nav.projects")}
-                </Link>
-              </li>
-              <li>
-                <Link
                   href={`/${locale}/ai-receptionist`}
                   className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
                   style={{ color: "#A0A0A0" }}
@@ -78,11 +60,11 @@ export default function Footer({ locale }: FooterProps) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}#about`}
+                  href={`/${locale}/profese`}
                   className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
                   style={{ color: "#A0A0A0" }}
                 >
-                  {t(locale, "nav.about")}
+                  {t(locale, "nav.profese")}
                 </Link>
               </li>
               <li>
@@ -92,35 +74,6 @@ export default function Footer({ locale }: FooterProps) {
                   style={{ color: "#A0A0A0" }}
                 >
                   {t(locale, "nav.contact")}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4
-              className="text-[11px] font-semibold tracking-[0.08em] uppercase mb-3.5"
-              style={{ color: "#A0A0A0" }}
-            >
-              {t(locale, "footer.legal")}
-            </h4>
-            <ul className="flex flex-col gap-2.5 list-none">
-              <li>
-                <Link
-                  href={`/${locale}/privacy`}
-                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
-                  style={{ color: "#A0A0A0" }}
-                >
-                  {t(locale, "footer.privacy")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/terms`}
-                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
-                  style={{ color: "#A0A0A0" }}
-                >
-                  {t(locale, "footer.terms")}
                 </Link>
               </li>
             </ul>

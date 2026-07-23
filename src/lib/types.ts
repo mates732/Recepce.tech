@@ -7,6 +7,7 @@ export type TranslationKey =
   | "nav.home"
   | "nav.projects"
   | "nav.aiReceptionist"
+  | "nav.profese"
   | "nav.howItWorks"
   | "nav.pricing"
   | "nav.faq"

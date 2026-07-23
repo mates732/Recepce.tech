@@ -49,7 +49,7 @@ export default function ContactContent({ locale }: Props) {
   function getButtonColor() {
     if (status === "success") return "rgba(52,211,153,0.8)";
     if (status === "loading") return "rgba(255,255,255,0.3)";
-    return "rgba(0,194,255,0.6)";
+    return "rgba(237,237,237,0.6)";
   }
 
   function validate(): string | null {
@@ -126,7 +126,7 @@ export default function ContactContent({ locale }: Props) {
   }
 
   function handleInputFocus(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    e.currentTarget.style.borderColor = "rgba(0,194,255,0.3)";
+    e.currentTarget.style.borderColor = "rgba(237,237,237,0.3)";
     if (!e.currentTarget.closest("textarea")) {
       (e.currentTarget as HTMLInputElement).style.background = "rgba(8,8,10,0.6)";
     }
@@ -150,17 +150,17 @@ export default function ContactContent({ locale }: Props) {
             <div
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-8"
               style={{
-                background: "rgba(0,194,255,0.06)",
-                border: "1px solid rgba(0,194,255,0.1)",
-                color: "rgba(0,194,255,0.5)",
+                background: "rgba(237,237,237,0.06)",
+                border: "1px solid rgba(237,237,237,0.1)",
+                color: "rgba(237,237,237,0.5)",
               }}
             >
               <span
                 className="w-1.5 h-1.5 rounded-full"
                 style={{
-                  background: "#00C2FF",
+                  background: "#EDEDED",
                   animation: "pulse-dot 2.8s ease-in-out infinite",
-                  boxShadow: "0 0 0 3px rgba(0,194,255,0.12)",
+                  boxShadow: "0 0 0 3px rgba(237,237,237,0.12)",
                 }}
               />
               <span className="font-body text-[10px] tracking-[0.08em]">{t(locale, "contact.badge")}</span>
@@ -178,7 +178,7 @@ export default function ContactContent({ locale }: Props) {
 
             <p
               className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[48ch] mx-auto"
-              style={{ color: "#B7BCC7" }}
+              style={{ color: "#A0A0A0" }}
             >
               {t(locale, "contact.subtitle")}
             </p>
@@ -192,7 +192,7 @@ export default function ContactContent({ locale }: Props) {
               <h2 className="font-heading text-[clamp(20px,2.5vw,28px)] font-medium mb-3">
                 {t(locale, "contact.formTitle")}
               </h2>
-              <p className="font-body text-[14px] leading-relaxed mb-8" style={{ color: "#B7BCC7" }}>
+              <p className="font-body text-[14px] leading-relaxed mb-8" style={{ color: "#A0A0A0" }}>
                 {t(locale, "contact.formSub")}
               </p>
 
@@ -204,12 +204,12 @@ export default function ContactContent({ locale }: Props) {
                     target={c.href.startsWith("http") ? "_blank" : undefined}
                     rel={c.href.startsWith("http") ? "noopener" : undefined}
                     className="group flex items-center gap-4"
-                    style={{ color: "rgba(183,188,199,0.6)", transition: "color 0.5s ease-out" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#F3F4F6"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(183,188,199,0.6)"; }}
+                    style={{ color: "rgba(160,160,160,0.6)", transition: "color 0.5s ease-out" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "#FAFAFA"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(160,160,160,0.6)"; }}
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="font-body text-[10px] tracking-[0.08em] uppercase" style={{ color: "rgba(0,194,255,0.35)" }}>
+                      <div className="font-body text-[10px] tracking-[0.08em] uppercase" style={{ color: "rgba(237,237,237,0.35)" }}>
                         {c.label}
                       </div>
                       <div className="font-body text-[15px] font-medium truncate">{c.value}</div>
@@ -230,31 +230,31 @@ export default function ContactContent({ locale }: Props) {
                   <div
                     key={i}
                     className="flex items-center gap-2.5 font-body text-[13px] transition-all duration-300"
-                    style={{ color: "#B7BCC7" }}
+                    style={{ color: "#A0A0A0" }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#F3F4F6";
+                      e.currentTarget.style.color = "#FAFAFA";
                       const svg = e.currentTarget.querySelector("svg");
                       if (svg) svg.style.opacity = "1";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "#B7BCC7";
+                      e.currentTarget.style.color = "#A0A0A0";
                       const svg = e.currentTarget.querySelector("svg");
                       if (svg) svg.style.opacity = "0.6";
                     }}
                   >
                     <div
                       className="w-[18px] h-[18px] rounded-[5px] flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                      style={{ background: "rgba(0,194,255,0.06)", border: "1px solid rgba(0,194,255,0.1)" }}
+                      style={{ background: "rgba(237,237,237,0.06)", border: "1px solid rgba(237,237,237,0.1)" }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = "rgba(0,194,255,0.25)";
-                        e.currentTarget.style.background = "rgba(0,194,255,0.12)";
+                        e.currentTarget.style.borderColor = "rgba(237,237,237,0.25)";
+                        e.currentTarget.style.background = "rgba(237,237,237,0.12)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = "rgba(0,194,255,0.1)";
-                        e.currentTarget.style.background = "rgba(0,194,255,0.06)";
+                        e.currentTarget.style.borderColor = "rgba(237,237,237,0.1)";
+                        e.currentTarget.style.background = "rgba(237,237,237,0.06)";
                       }}
                     >
-                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#00C2FF" strokeWidth="2.5" strokeLinecap="round" style={{ opacity: 0.6, transition: "opacity 0.3s ease" }}>
+                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#EDEDED" strokeWidth="2.5" strokeLinecap="round" style={{ opacity: 0.6, transition: "opacity 0.3s ease" }}>
                         <path d="M2 5l2.5 2.5 3.5-4" />
                       </svg>
                     </div>
@@ -277,7 +277,7 @@ export default function ContactContent({ locale }: Props) {
                 />
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#B7BCC7" }}>
+                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#A0A0A0" }}>
                     {t(locale, "contact.formName")}
                   </label>
                   <input
@@ -290,18 +290,18 @@ export default function ContactContent({ locale }: Props) {
                       background: "transparent",
                       border: "none",
                       borderBottom: "1px solid rgba(255,255,255,0.08)",
-                      color: "#F3F4F6",
+                      color: "#FAFAFA",
                       padding: "8px 0",
                       transition: "border-color 0.3s ease-out, opacity 0.3s ease",
                       opacity: isLoading ? 0.4 : 1,
                     }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.3)"; }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(237,237,237,0.3)"; }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#B7BCC7" }}>
+                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#A0A0A0" }}>
                     {t(locale, "contact.formEmail")}
                   </label>
                   <input
@@ -315,18 +315,18 @@ export default function ContactContent({ locale }: Props) {
                       background: "transparent",
                       border: "none",
                       borderBottom: "1px solid rgba(255,255,255,0.08)",
-                      color: "#F3F4F6",
+                      color: "#FAFAFA",
                       padding: "8px 0",
                       transition: "border-color 0.3s ease-out, opacity 0.3s ease",
                       opacity: isLoading ? 0.4 : 1,
                     }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.3)"; }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(237,237,237,0.3)"; }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#B7BCC7" }}>
+                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#A0A0A0" }}>
                     {t(locale, "contact.formPhone")}
                   </label>
                   <input
@@ -338,11 +338,11 @@ export default function ContactContent({ locale }: Props) {
                     style={{
                       background: isLoading ? "rgba(8,8,10,0.2)" : "rgba(8,8,10,0.4)",
                       border: "1px solid rgba(255,255,255,0.06)",
-                      color: "#F3F4F6",
+                      color: "#FAFAFA",
                       opacity: isLoading ? 0.4 : 1,
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "rgba(0,194,255,0.15)";
+                      e.currentTarget.style.borderColor = "rgba(237,237,237,0.15)";
                       e.currentTarget.style.background = "rgba(8,8,10,0.6)";
                     }}
                     onBlur={(e) => {
@@ -353,7 +353,7 @@ export default function ContactContent({ locale }: Props) {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#B7BCC7" }}>
+                  <label className="font-body text-[11px] tracking-[0.06em]" style={{ color: "#A0A0A0" }}>
                     {t(locale, "contact.formMessage")}
                   </label>
                   <textarea
@@ -365,12 +365,12 @@ export default function ContactContent({ locale }: Props) {
                     style={{
                       background: isLoading ? "rgba(8,8,10,0.2)" : "rgba(8,8,10,0.4)",
                       border: "1px solid rgba(255,255,255,0.06)",
-                      color: "#F3F4F6",
+                      color: "#FAFAFA",
                       lineHeight: "1.5",
                       opacity: isLoading ? 0.4 : 1,
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "rgba(0,194,255,0.15)";
+                      e.currentTarget.style.borderColor = "rgba(237,237,237,0.15)";
                       e.currentTarget.style.background = "rgba(8,8,10,0.6)";
                     }}
                     onBlur={(e) => {
@@ -391,8 +391,8 @@ export default function ContactContent({ locale }: Props) {
                   }}
                   onMouseEnter={(e) => {
                     if (!isDisabled) {
-                      e.currentTarget.style.color = "rgba(0,194,255,0.9)";
-                      e.currentTarget.style.textShadow = "0 0 24px rgba(0,194,255,0.08)";
+                      e.currentTarget.style.color = "rgba(237,237,237,0.9)";
+                      e.currentTarget.style.textShadow = "0 0 24px rgba(237,237,237,0.08)";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -444,7 +444,7 @@ export default function ContactContent({ locale }: Props) {
                   )}
                 </AnimatePresence>
 
-                <div className="font-body text-[11px] text-center mt-1" style={{ color: "rgba(126,132,146,0.8)" }}>
+                <div className="font-body text-[11px] text-center mt-1" style={{ color: "rgba(102,102,102,0.8)" }}>
                   {t(locale, "contact.note")}
                 </div>
               </form>

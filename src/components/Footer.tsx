@@ -1,20 +1,18 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import type { Locale } from "@/lib/types";
-import { t, switchLocalePath } from "@/lib/utils";
+import { t } from "@/lib/utils";
 
 interface FooterProps {
   locale: Locale;
 }
 
 export default function Footer({ locale }: FooterProps) {
-  const pathname = usePathname();
-
   return (
     <footer
       className="relative z-10 border-t"
+      role="contentinfo"
       style={{
         borderColor: "rgba(255,255,255,0.06)",
         padding: "64px clamp(24px,5vw,64px) 40px",
@@ -23,7 +21,7 @@ export default function Footer({ locale }: FooterProps) {
     >
       <div className="mx-auto" style={{ maxWidth: "1100px" }}>
         <div
-          className="grid mb-10"
+          className="footer-grid grid mb-10"
           style={{
             gridTemplateColumns: "1fr auto auto",
             gap: "48px",
@@ -33,11 +31,11 @@ export default function Footer({ locale }: FooterProps) {
           <div>
             <div className="flex items-center gap-1.5 text-[15px] tracking-[-0.02em]">
               <span className="font-bold">recepce</span>
-              <span style={{ color: "rgba(183,188,199,0.7)", fontWeight: 400 }}>.tech</span>
+              <span style={{ color: "rgba(160,160,160,0.7)", fontWeight: 400 }}>.tech</span>
             </div>
             <p
               className="mt-2.5 text-sm leading-relaxed"
-              style={{ color: "#B7BCC7", maxWidth: "30ch" }}
+              style={{ color: "#A0A0A0", maxWidth: "30ch" }}
             >
               {t(locale, "footer.tagline")}
             </p>
@@ -45,10 +43,8 @@ export default function Footer({ locale }: FooterProps) {
 
           <div>
             <h4
-              className="text-[11px] font-semibold tracking-[0.08em] uppercase mb-3.5 transition-all duration-300"
-              style={{ color: "#B7BCC7" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#F3F4F6"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "#B7BCC7"; }}
+              className="text-[11px] font-semibold tracking-[0.08em] uppercase mb-3.5"
+              style={{ color: "#A0A0A0" }}
             >
               {t(locale, "footer.pages")}
             </h4>
@@ -56,45 +52,46 @@ export default function Footer({ locale }: FooterProps) {
               <li>
                 <Link
                   href={`/${locale}`}
-                  className="text-sm transition-colors duration-200"
-                  style={{ color: "#B7BCC7" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#F3F4F6"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#B7BCC7"}
+                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
+                  style={{ color: "#A0A0A0" }}
                 >
                   {t(locale, "nav.home")}
                 </Link>
               </li>
               <li>
                 <Link
-                  href={`/${locale}/intelligence`}
-                  className="text-sm transition-colors duration-200"
-                  style={{ color: "#B7BCC7" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#F3F4F6"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#B7BCC7"}
+                  href={`/${locale}#work`}
+                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
+                  style={{ color: "#A0A0A0" }}
                 >
-                  {t(locale, "nav.intelligence")}
+                  {t(locale, "nav.projects")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${locale}/ai-receptionist`}
+                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
+                  style={{ color: "#A0A0A0" }}
+                >
+                  {t(locale, "nav.aiReceptionist")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${locale}#about`}
+                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
+                  style={{ color: "#A0A0A0" }}
+                >
+                  {t(locale, "nav.about")}
                 </Link>
               </li>
               <li>
                 <Link
                   href={`/${locale}/contact`}
-                  className="text-sm transition-colors duration-200"
-                  style={{ color: "#B7BCC7" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#F3F4F6"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#B7BCC7"}
+                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
+                  style={{ color: "#A0A0A0" }}
                 >
                   {t(locale, "nav.contact")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/status`}
-                  className="text-sm transition-colors duration-200"
-                  style={{ color: "#B7BCC7" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#F3F4F6"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#B7BCC7"}
-                >
-                  {t(locale, "nav.status")}
                 </Link>
               </li>
             </ul>
@@ -102,10 +99,8 @@ export default function Footer({ locale }: FooterProps) {
 
           <div>
             <h4
-              className="text-[11px] font-semibold tracking-[0.08em] uppercase mb-3.5 transition-all duration-300"
-              style={{ color: "#B7BCC7" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#F3F4F6"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "#B7BCC7"; }}
+              className="text-[11px] font-semibold tracking-[0.08em] uppercase mb-3.5"
+              style={{ color: "#A0A0A0" }}
             >
               {t(locale, "footer.legal")}
             </h4>
@@ -113,10 +108,8 @@ export default function Footer({ locale }: FooterProps) {
               <li>
                 <Link
                   href={`/${locale}/privacy`}
-                  className="text-sm transition-colors duration-200"
-                  style={{ color: "#B7BCC7" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#F3F4F6"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#B7BCC7"}
+                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
+                  style={{ color: "#A0A0A0" }}
                 >
                   {t(locale, "footer.privacy")}
                 </Link>
@@ -124,10 +117,8 @@ export default function Footer({ locale }: FooterProps) {
               <li>
                 <Link
                   href={`/${locale}/terms`}
-                  className="text-sm transition-colors duration-200"
-                  style={{ color: "#B7BCC7" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#F3F4F6"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#B7BCC7"}
+                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
+                  style={{ color: "#A0A0A0" }}
                 >
                   {t(locale, "footer.terms")}
                 </Link>
@@ -140,13 +131,22 @@ export default function Footer({ locale }: FooterProps) {
           className="flex flex-wrap items-center justify-between gap-2 pt-6 border-t text-xs font-mono tracking-[0.02em]"
           style={{
             borderColor: "rgba(255,255,255,0.06)",
-            color: "rgba(183,188,199,0.6)",
+            color: "rgba(160,160,160,0.6)",
           }}
         >
           <span>{t(locale, "footer.copyright")}</span>
           <span>{t(locale, "footer.madeIn")}</span>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 }

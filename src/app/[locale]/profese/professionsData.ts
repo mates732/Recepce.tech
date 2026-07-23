@@ -44,7 +44,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "dentalni-hygiena",
-    colors: { accent: "#00C2FF", glow1: "rgba(0,194,255,0.07)", glow2: "rgba(0,153,204,0.05)" },
+    colors: { accent: "#EDEDED", glow1: "rgba(237,237,237,0.07)", glow2: "rgba(0,153,204,0.05)" },
     cs: {
       name: "Dentální hygiena",
       desc: "Okamžitá odpověď pro vaše pacienty. Diskrétní rezervace a správa konzultačních termínů bez čekání.",

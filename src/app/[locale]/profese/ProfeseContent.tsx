@@ -96,7 +96,7 @@ export default function ProfeseContent({ locale }: Props) {
     ? scrollState.activeIdx - 1 : -1;
 
   return (
-    <div className="relative h-screen overflow-hidden" style={{ background: "#020308" }}>
+    <div className="relative h-screen overflow-hidden" style={{ background: "#090909" }}>
       <div className="fixed inset-0 pointer-events-none z-[1]" aria-hidden="true">
         <div
           className="absolute top-[8%] left-[12%] w-[700px] h-[700px] rounded-full"
@@ -144,16 +144,16 @@ export default function ProfeseContent({ locale }: Props) {
           className="fixed bottom-14 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-3 pointer-events-none select-none"
           style={{ animation: "fade-in 1.2s ease 1s both" }}
         >
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase" style={{ color: "#7E8492" }}>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase" style={{ color: "#666666" }}>
             {isCs ? "Pokračujte" : "Scroll"}
           </span>
-          <div className="relative w-px h-10" style={{ background: "rgba(126,132,146,0.18)", boxShadow: "0 0 8px rgba(126,132,146,0.07)" }}>
+          <div className="relative w-px h-10" style={{ background: "rgba(102,102,102,0.18)", boxShadow: "0 0 8px rgba(102,102,102,0.07)" }}>
             <div
               className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-[2px] rounded-full"
               style={{
-                background: "rgba(183,188,199,0.7)",
+                background: "rgba(160,160,160,0.7)",
                 animation: "scroll-dot 2.4s ease-in-out infinite",
-                boxShadow: "0 0 6px rgba(126,132,146,0.35)",
+                boxShadow: "0 0 6px rgba(102,102,102,0.35)",
               }}
             />
           </div>
@@ -161,7 +161,7 @@ export default function ProfeseContent({ locale }: Props) {
       )}
 
       <aside className="fixed left-0 top-0 z-20 flex-col justify-center h-screen hidden sm:flex" style={{ padding: "120px 0 60px clamp(12px,2vw,48px)", width: "clamp(48px,8vw,80px)" }}>
-        <div className="font-mono text-[9px] tracking-[0.18em] uppercase mb-8 select-none" style={{ color: "rgba(126,132,146,0.28)" }}>
+        <div className="font-mono text-[9px] tracking-[0.18em] uppercase mb-8 select-none" style={{ color: "rgba(102,102,102,0.28)" }}>
           {t(locale, "profese.industries")}
         </div>
         <nav className="flex flex-col items-start">
@@ -185,12 +185,12 @@ export default function ProfeseContent({ locale }: Props) {
               />
               <span
                 className="font-mono text-[10px] tracking-[0.12em] flex-shrink-0"
-                style={{ color: i === sIdx ? p.colors.accent : "rgba(126,132,146,0.55)" }}
+                style={{ color: i === sIdx ? p.colors.accent : "rgba(102,102,102,0.55)" }}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span
-                className="font-heading font-medium tracking-[-0.02em] text-[#F3F4F6] leading-tight truncate hidden lg:inline"
+                className="font-heading font-medium tracking-[-0.02em] text-[#FAFAFA] leading-tight truncate hidden lg:inline"
                 style={{ fontSize: "clamp(11px,0.75vw,13px)", opacity: i === sIdx ? 1 : 0.5 }}
               >
                 {isCs ? p.cs.name : p.en.name}
@@ -207,7 +207,7 @@ export default function ProfeseContent({ locale }: Props) {
             onClick={() => scrollTo(i)}
             className="font-mono text-[9px] tracking-[0.1em]"
             style={{
-              color: i === sIdx ? p.colors.accent : "rgba(126,132,146,0.55)",
+              color: i === sIdx ? p.colors.accent : "rgba(102,102,102,0.55)",
               transform: i === sIdx ? "scale(1.15)" : "scale(1)",
               transition: "transform 300ms ease, color 300ms ease",
             }}
@@ -240,7 +240,7 @@ export default function ProfeseContent({ locale }: Props) {
               backfaceVisibility: "hidden",
             }}
           >
-            <div className="font-mono text-[10px] tracking-[0.15em] uppercase mb-6" style={{ color: "rgba(126,132,146,0.35)", transition: "color 0.4s ease, text-shadow 0.4s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(126,132,146,0.55)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(126,132,146,0.35)"; }}>00.</div>
+            <div className="font-mono text-[10px] tracking-[0.15em] uppercase mb-6" style={{ color: "rgba(102,102,102,0.35)", transition: "color 0.4s ease, text-shadow 0.4s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(102,102,102,0.55)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(102,102,102,0.35)"; }}>00.</div>
             <p
               className="font-heading"
               style={{
@@ -248,7 +248,7 @@ export default function ProfeseContent({ locale }: Props) {
                 lineHeight: 1.35,
                 fontWeight: 400,
                 letterSpacing: "-0.03em",
-                color: "rgba(183,188,199,0.7)",
+                color: "rgba(160,160,160,0.7)",
               }}
             >
               {t(locale, "profese.intro")}
@@ -306,8 +306,8 @@ export default function ProfeseContent({ locale }: Props) {
                       lineHeight: 1.0,
                       fontWeight: 500,
                       letterSpacing: "-0.04em",
-                      color: "#F3F4F6",
-                      textShadow: w > 0.7 ? "0 0 80px rgba(126,132,146,0.14)" : "0 0 0 transparent",
+                      color: "#FAFAFA",
+                      textShadow: w > 0.7 ? "0 0 80px rgba(102,102,102,0.14)" : "0 0 0 transparent",
                       backfaceVisibility: "hidden",
                       transition: "color 0.4s ease, text-shadow 0.4s ease",
                     }}
@@ -316,8 +316,8 @@ export default function ProfeseContent({ locale }: Props) {
                       e.currentTarget.style.textShadow = `0 0 60px ${p.colors.accent}25`;
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "#F3F4F6";
-                      e.currentTarget.style.textShadow = w > 0.7 ? "0 0 80px rgba(126,132,146,0.14)" : "0 0 0 transparent";
+                      e.currentTarget.style.color = "#FAFAFA";
+                      e.currentTarget.style.textShadow = w > 0.7 ? "0 0 80px rgba(102,102,102,0.14)" : "0 0 0 transparent";
                     }}
                   >
                     {d.name}
@@ -328,7 +328,7 @@ export default function ProfeseContent({ locale }: Props) {
                   style={{
                     fontSize: "clamp(15px, 1.15vw, 17px)",
                     lineHeight: 1.7,
-                    color: "#B7BCC7",
+                    color: "#A0A0A0",
                     maxWidth: "46ch",
                     marginBottom: w > 0.5 ? "24px" : "0",
                     opacity: Math.min(1, Math.max(0, w * 2 - 0.5)),
@@ -416,7 +416,7 @@ export default function ProfeseContent({ locale }: Props) {
                   lineHeight: 1.25,
                   fontWeight: 400,
                   letterSpacing: "-0.03em",
-                  color: "rgba(183,188,199,0.6)",
+                  color: "rgba(160,160,160,0.6)",
                 }}
               >
                 {t(locale, "profese.ctaTitle")}
@@ -424,9 +424,9 @@ export default function ProfeseContent({ locale }: Props) {
               <Link
                 href={`/${locale}/contact`}
                 className="group inline-flex items-center gap-2.5 text-[14px] font-medium tracking-[-0.01em] no-underline transition-all duration-500 ease-out"
-                style={{ color: "rgba(0,194,255,0.6)" }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.9)"; e.currentTarget.style.textShadow = "0 0 20px rgba(0,194,255,0.15)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.6)"; e.currentTarget.style.textShadow = "none"; }}
+                style={{ color: "rgba(237,237,237,0.6)" }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.9)"; e.currentTarget.style.textShadow = "0 0 20px rgba(237,237,237,0.15)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.6)"; e.currentTarget.style.textShadow = "none"; }}
               >
                 <span>{t(locale, "profese.contactUs")}</span>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="transition-transform duration-500 ease-out group-hover:translate-x-1">
@@ -442,7 +442,7 @@ export default function ProfeseContent({ locale }: Props) {
                 fontSize: "clamp(11px, 0.85vw, 13px)",
                 fontWeight: 400,
                 letterSpacing: "0.06em",
-                color: "rgba(126,132,146,0.35)",
+                color: "rgba(102,102,102,0.35)",
               }}
             >
               {t(locale, "profese.footer")}

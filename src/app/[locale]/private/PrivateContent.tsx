@@ -62,19 +62,19 @@ export default function PrivateContent({ locale }: Props) {
             <div
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-8 transition-all duration-300"
               style={{
-                background: "rgba(126,132,146,0.1)",
-                border: "1px solid rgba(126,132,146,0.18)",
-                color: "rgba(183,188,199,0.6)",
+                background: "rgba(102,102,102,0.1)",
+                border: "1px solid rgba(102,102,102,0.18)",
+                color: "rgba(160,160,160,0.6)",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(183,188,199,0.25)"; e.currentTarget.style.background = "rgba(126,132,146,0.16)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(126,132,146,0.18)"; e.currentTarget.style.background = "rgba(126,132,146,0.1)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(160,160,160,0.25)"; e.currentTarget.style.background = "rgba(102,102,102,0.16)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(102,102,102,0.18)"; e.currentTarget.style.background = "rgba(102,102,102,0.1)"; }}
             >
               <span
                 className="w-1.5 h-1.5 rounded-full"
                 style={{
-                  background: "#F3F4F6",
+                  background: "#FAFAFA",
                   animation: "pulse-dot 2.8s ease-in-out infinite",
-                  boxShadow: "0 0 0 3px rgba(126,132,146,0.18)",
+                  boxShadow: "0 0 0 3px rgba(102,102,102,0.18)",
                 }}
               />
               <span className="font-body text-[10px] tracking-[0.08em]">{t(locale, "private.badge")}</span>
@@ -90,7 +90,7 @@ export default function PrivateContent({ locale }: Props) {
               dangerouslySetInnerHTML={{ __html: t(locale, "private.title") }}
             />
 
-            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch]" style={{ color: "#B7BCC7" }}>
+            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch]" style={{ color: "#A0A0A0" }}>
               {t(locale, "private.subtitle")}
             </p>
           </div>
@@ -105,16 +105,16 @@ export default function PrivateContent({ locale }: Props) {
               <div key={i} className="text-center group">
                 <div
                   className="font-body text-[13px] font-medium mb-1 transition-all duration-300"
-                  style={{ color: "rgba(126,132,146,0.8)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(183,188,199,0.8)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(126,132,146,0.8)"; }}
+                  style={{ color: "rgba(102,102,102,0.8)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(160,160,160,0.8)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(102,102,102,0.8)"; }}
                 >
                   {spec.feature}
                 </div>
                 <div
                   className="font-heading text-[clamp(16px,1.8vw,22px)] font-medium transition-all duration-300"
                   style={{ fontVariantNumeric: "tabular-nums" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.textShadow = "0 0 20px rgba(183,188,199,0.1)"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.textShadow = "0 0 20px rgba(160,160,160,0.1)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.textShadow = "none"; }}
                 >
                   {spec.value}
@@ -126,9 +126,9 @@ export default function PrivateContent({ locale }: Props) {
           <div className="mb-6">
             <span
               className="font-body text-[10px] tracking-[0.2em] uppercase transition-all duration-300"
-              style={{ color: "rgba(126,132,146,0.35)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(183,188,199,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(183,188,199,0.1)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(126,132,146,0.35)"; e.currentTarget.style.textShadow = "none"; }}
+              style={{ color: "rgba(102,102,102,0.35)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(160,160,160,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(160,160,160,0.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(102,102,102,0.35)"; e.currentTarget.style.textShadow = "none"; }}
             >
               &mdash; enterprise features
             </span>
@@ -142,13 +142,13 @@ export default function PrivateContent({ locale }: Props) {
               <div key={i}>
                 <div
                   className="font-body text-[11px] tracking-[0.08em] uppercase mb-2 transition-all duration-300"
-                  style={{ color: "rgba(126,132,146,0.55)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(183,188,199,0.65)"; e.currentTarget.style.textShadow = "0 0 12px rgba(183,188,199,0.1)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(126,132,146,0.55)"; e.currentTarget.style.textShadow = "none"; }}
+                  style={{ color: "rgba(102,102,102,0.55)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(160,160,160,0.65)"; e.currentTarget.style.textShadow = "0 0 12px rgba(160,160,160,0.1)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(102,102,102,0.55)"; e.currentTarget.style.textShadow = "none"; }}
                 >
                   {item.label}
                 </div>
-                <p className="font-body text-[13px] leading-relaxed" style={{ color: "#B7BCC7" }}>
+                <p className="font-body text-[13px] leading-relaxed" style={{ color: "#A0A0A0" }}>
                   {isCs ? item.descCs : item.descEn}
                 </p>
               </div>
@@ -159,13 +159,13 @@ export default function PrivateContent({ locale }: Props) {
             <Link
               href={`/${locale}/contact`}
               className="group inline-flex items-center gap-2.5 font-body"
-              style={{ color: "rgba(183,188,199,0.6)", transition: "color 0.5s ease-out, text-shadow 0.5s ease-out" }}
+              style={{ color: "rgba(160,160,160,0.6)", transition: "color 0.5s ease-out, text-shadow 0.5s ease-out" }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "#F3F4F6";
-                e.currentTarget.style.textShadow = "0 0 24px rgba(126,132,146,0.14)";
+                e.currentTarget.style.color = "#FAFAFA";
+                e.currentTarget.style.textShadow = "0 0 24px rgba(102,102,102,0.14)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "rgba(183,188,199,0.6)";
+                e.currentTarget.style.color = "rgba(160,160,160,0.6)";
                 e.currentTarget.style.textShadow = "none";
               }}
             >

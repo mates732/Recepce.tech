@@ -12,7 +12,7 @@ export const VAPI_ASSISTANTS: Record<string, VapiAssistantConfig> = {
     assistantId: "e7a23310-d13b-463e-ad41-68620a609b34",
     apiKey: "ba1d1d22-bb87-4206-baaa-63b4e1871e26",
   },
-  "esteticka-klinika": {
+  estetika: {
     assistantId: "586304c3-6eab-489a-9efe-e71f8c05f29b",
     apiKey: "c2aba488-b8d1-45b7-8962-30930ca57f57",
   },
@@ -20,7 +20,7 @@ export const VAPI_ASSISTANTS: Record<string, VapiAssistantConfig> = {
     assistantId: "7782faee-5e40-436e-a4ff-6b4a65578d1e",
     apiKey: "84232e9d-72de-4265-943e-4fc4a6794d5e",
   },
-  kaderstvi: {
+  kadernictvi: {
     assistantId: "ee61d280-74ad-42b1-8148-a530b4af4bc7",
     apiKey: "5b6584ac-b22c-4d0f-8a32-ae093cbe1b5c",
   },

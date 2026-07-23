@@ -68,19 +68,19 @@ export default function ConciergeContent({ locale }: Props) {
             <div
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-8 transition-all duration-300"
               style={{
-                background: "rgba(0,194,255,0.08)",
-                border: "1px solid rgba(0,194,255,0.12)",
-                color: "rgba(0,194,255,0.55)",
+                background: "rgba(237,237,237,0.08)",
+                border: "1px solid rgba(237,237,237,0.12)",
+                color: "rgba(237,237,237,0.55)",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.25)"; e.currentTarget.style.background = "rgba(0,194,255,0.12)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.12)"; e.currentTarget.style.background = "rgba(0,194,255,0.08)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(237,237,237,0.25)"; e.currentTarget.style.background = "rgba(237,237,237,0.12)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(237,237,237,0.12)"; e.currentTarget.style.background = "rgba(237,237,237,0.08)"; }}
             >
               <span
                 className="w-1.5 h-1.5 rounded-full"
                 style={{
-                  background: "#00C2FF",
+                  background: "#EDEDED",
                   animation: "pulse-dot 2.8s ease-in-out infinite",
-                  boxShadow: "0 0 0 3px rgba(0,194,255,0.12)",
+                  boxShadow: "0 0 0 3px rgba(237,237,237,0.12)",
                 }}
               />
               <span className="font-body text-[10px] tracking-[0.08em]">{t(locale, "concierge.badge")}</span>
@@ -96,7 +96,7 @@ export default function ConciergeContent({ locale }: Props) {
               dangerouslySetInnerHTML={{ __html: t(locale, "concierge.title") }}
             />
 
-            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch]" style={{ color: "#B7BCC7" }}>
+            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch]" style={{ color: "#A0A0A0" }}>
               {t(locale, "concierge.subtitle")}
             </p>
           </div>
@@ -104,9 +104,9 @@ export default function ConciergeContent({ locale }: Props) {
           <div className="mb-16">
             <span
               className="font-body text-[10px] tracking-[0.2em] uppercase mb-6 block transition-all duration-300"
-              style={{ color: "rgba(0,194,255,0.25)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(0,194,255,0.1)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.25)"; e.currentTarget.style.textShadow = "none"; }}
+              style={{ color: "rgba(237,237,237,0.25)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(237,237,237,0.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.25)"; e.currentTarget.style.textShadow = "none"; }}
             >
               &mdash; service flow
             </span>
@@ -115,15 +115,15 @@ export default function ConciergeContent({ locale }: Props) {
                 <div key={i} className="text-center group">
                   <div
                     className="font-body text-[11px] transition-all duration-300"
-                    style={{ color: "rgba(0,194,255,0.35)" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.6)"; e.currentTarget.style.textShadow = "0 0 12px rgba(0,194,255,0.12)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.35)"; e.currentTarget.style.textShadow = "none"; }}
+                    style={{ color: "rgba(237,237,237,0.35)" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.6)"; e.currentTarget.style.textShadow = "0 0 12px rgba(237,237,237,0.12)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.35)"; e.currentTarget.style.textShadow = "none"; }}
                   >
                     {item.step}
                   </div>
                   <div className="font-body text-[13px] font-medium mt-1 transition-all duration-300"
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#F3F4F6"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#F3F4F6"; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "#FAFAFA"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "#FAFAFA"; }}
                   >
                     {isCs ? item.labelCs : item.labelEn}
                   </div>
@@ -135,9 +135,9 @@ export default function ConciergeContent({ locale }: Props) {
           <div className="mb-6">
             <span
               className="font-body text-[10px] tracking-[0.2em] uppercase transition-all duration-300"
-              style={{ color: "rgba(0,194,255,0.25)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(0,194,255,0.1)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.25)"; e.currentTarget.style.textShadow = "none"; }}
+              style={{ color: "rgba(237,237,237,0.25)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(237,237,237,0.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.25)"; e.currentTarget.style.textShadow = "none"; }}
             >
               &mdash; capabilities
             </span>
@@ -151,20 +151,20 @@ export default function ConciergeContent({ locale }: Props) {
               <div key={i}>
                 <div
                   className="font-body text-[10px] tracking-[0.12em] mb-3 transition-all duration-300"
-                  style={{ color: "rgba(0,194,255,0.25)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.5)"; e.currentTarget.style.textShadow = "0 0 12px rgba(0,194,255,0.1)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.25)"; e.currentTarget.style.textShadow = "none"; }}
+                  style={{ color: "rgba(237,237,237,0.25)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.5)"; e.currentTarget.style.textShadow = "0 0 12px rgba(237,237,237,0.1)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.25)"; e.currentTarget.style.textShadow = "none"; }}
                 >
                   {(i + 1).toString().padStart(2, "0")}
                 </div>
                 <h3
                   className="font-heading text-[15px] font-medium mb-1.5 transition-all duration-300"
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.8)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "#F3F4F6"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.8)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "#FAFAFA"; }}
                 >
                   {isCs ? item.titleCs : item.titleEn}
                 </h3>
-                <p className="font-body text-[13px] leading-relaxed" style={{ color: "#B7BCC7" }}>
+                <p className="font-body text-[13px] leading-relaxed" style={{ color: "#A0A0A0" }}>
                   {isCs ? item.descCs : item.descEn}
                 </p>
               </div>
@@ -175,13 +175,13 @@ export default function ConciergeContent({ locale }: Props) {
             <Link
               href={`/${locale}/contact`}
               className="group inline-flex items-center gap-2.5 font-body"
-              style={{ color: "rgba(0,194,255,0.55)", transition: "color 0.5s ease-out, text-shadow 0.5s ease-out" }}
+              style={{ color: "rgba(237,237,237,0.55)", transition: "color 0.5s ease-out, text-shadow 0.5s ease-out" }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "rgba(0,194,255,0.9)";
-                e.currentTarget.style.textShadow = "0 0 24px rgba(0,194,255,0.08)";
+                e.currentTarget.style.color = "rgba(237,237,237,0.9)";
+                e.currentTarget.style.textShadow = "0 0 24px rgba(237,237,237,0.08)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "rgba(0,194,255,0.55)";
+                e.currentTarget.style.color = "rgba(237,237,237,0.55)";
                 e.currentTarget.style.textShadow = "none";
               }}
             >

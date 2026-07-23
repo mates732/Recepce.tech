@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PageTransitionProvider from "@/components/PageTransitionProvider";
+import LocaleHtmlLang from "@/components/LocaleHtmlLang";
 
 export default async function LocaleLayout({
   children,
@@ -16,6 +17,7 @@ export default async function LocaleLayout({
 
   return (
     <>
+      <LocaleHtmlLang locale={loc} />
       <Navbar locale={loc} />
       <main className="relative z-10 min-h-screen">
         <ErrorBoundary>

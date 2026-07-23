@@ -72,19 +72,19 @@ export default function StatusContent({ locale }: Props) {
             <div
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-8 transition-all duration-300"
               style={{
-                background: "rgba(0,194,255,0.06)",
-                border: "1px solid rgba(0,194,255,0.1)",
-                color: "rgba(0,194,255,0.5)",
+                background: "rgba(237,237,237,0.06)",
+                border: "1px solid rgba(237,237,237,0.1)",
+                color: "rgba(237,237,237,0.5)",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.25)"; e.currentTarget.style.background = "rgba(0,194,255,0.1)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,194,255,0.1)"; e.currentTarget.style.background = "rgba(0,194,255,0.06)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(237,237,237,0.25)"; e.currentTarget.style.background = "rgba(237,237,237,0.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(237,237,237,0.1)"; e.currentTarget.style.background = "rgba(237,237,237,0.06)"; }}
             >
               <span
                 className="w-1.5 h-1.5 rounded-full"
                 style={{
-                  background: "#00C2FF",
+                  background: "#EDEDED",
                   animation: "pulse-dot 2.8s ease-in-out infinite",
-                  boxShadow: "0 0 0 3px rgba(0,194,255,0.12)",
+                  boxShadow: "0 0 0 3px rgba(237,237,237,0.12)",
                 }}
               />
               <span className="font-body text-[10px] tracking-[0.08em]">{t(locale, "status.badge")}</span>
@@ -102,12 +102,12 @@ export default function StatusContent({ locale }: Props) {
 
             <p
               className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[48ch] mx-auto"
-              style={{ color: "#B7BCC7" }}
+              style={{ color: "#A0A0A0" }}
             >
               {t(locale, "status.subtitle")}
             </p>
 
-            <div className="mt-6 font-body text-[10px] tracking-[0.08em]" style={{ color: "rgba(0,194,255,0.25)" }}>
+            <div className="mt-6 font-body text-[10px] tracking-[0.08em]" style={{ color: "rgba(237,237,237,0.25)" }}>
               sync: {time}
             </div>
           </div>
@@ -123,16 +123,16 @@ export default function StatusContent({ locale }: Props) {
                 <div
                   className="font-heading text-[clamp(28px,3vw,40px)] font-medium leading-none mb-1 transition-all duration-300"
                   style={{ fontVariantNumeric: "tabular-nums" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.textShadow = "0 0 20px rgba(0,194,255,0.1)"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.textShadow = "0 0 20px rgba(237,237,237,0.1)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.textShadow = "none"; }}
                 >
                   {m.value}
                 </div>
                 <div
                   className="font-body text-[10px] tracking-[0.06em] transition-all duration-300"
-                  style={{ color: "rgba(0,194,255,0.35)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.55)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.35)"; }}
+                  style={{ color: "rgba(237,237,237,0.35)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.55)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.35)"; }}
                 >
                   {m.label}
                 </div>
@@ -143,9 +143,9 @@ export default function StatusContent({ locale }: Props) {
           <div className="mb-4">
             <span
               className="font-body text-[10px] tracking-[0.2em] uppercase transition-all duration-300"
-              style={{ color: "rgba(0,194,255,0.25)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(0,194,255,0.1)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.25)"; e.currentTarget.style.textShadow = "none"; }}
+              style={{ color: "rgba(237,237,237,0.25)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.45)"; e.currentTarget.style.textShadow = "0 0 12px rgba(237,237,237,0.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.25)"; e.currentTarget.style.textShadow = "none"; }}
             >
               &mdash; system health
             </span>
@@ -162,12 +162,12 @@ export default function StatusContent({ locale }: Props) {
                 <div>
                   <div
                     className="font-body text-[13px] font-medium tracking-[-0.01em] transition-all duration-300"
-                    onMouseEnter={(e) => { e.currentTarget.style.textShadow = "0 0 12px rgba(0,194,255,0.1)"; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.textShadow = "0 0 12px rgba(237,237,237,0.1)"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.textShadow = "none"; }}
                   >
                     {item.label}
                   </div>
-                  <div className="font-body text-[10px] mt-0.5" style={{ color: "rgba(126,132,146,0.65)" }}>
+                  <div className="font-body text-[10px] mt-0.5" style={{ color: "rgba(102,102,102,0.65)" }}>
                     uptime {item.uptime}
                   </div>
                 </div>
@@ -175,16 +175,16 @@ export default function StatusContent({ locale }: Props) {
                   <span
                     className="w-1.5 h-1.5 rounded-full"
                     style={{
-                      background: "#00C2FF",
+                      background: "#EDEDED",
                       animation: "pulse-dot 2.8s ease-in-out infinite",
-                      boxShadow: "0 0 0 3px rgba(0,194,255,0.1)",
+                      boxShadow: "0 0 0 3px rgba(237,237,237,0.1)",
                     }}
                   />
                   <span
                     className="font-body text-[11px] tracking-[0.04em] transition-all duration-300"
-                    style={{ color: "rgba(0,194,255,0.45)" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.65)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,194,255,0.45)"; }}
+                    style={{ color: "rgba(237,237,237,0.45)" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.65)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.45)"; }}
                   >
                     {item.status}
                   </span>

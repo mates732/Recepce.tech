@@ -1,3 +1,13 @@
+/**
+ * @deprecated Use `@/config/vapi` instead.
+ *
+ * This file is kept for backward compatibility while existing
+ * profession slugs (barbershop, dentalni-hygiena, estetika) are
+ * migrated to the new demo config in src/config/vapi/.
+ *
+ * New code should import from `@/config/vapi`.
+ */
+
 export interface VapiAssistantConfig {
   assistantId: string;
   apiKey: string;

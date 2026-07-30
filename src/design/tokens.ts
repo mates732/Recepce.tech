@@ -1,39 +1,41 @@
-// ── Colors ──────────────────────────────────────────────────────
 export const colors = {
-  primary: "#FAFAFA",
-  secondary: "#A0A0A0",
-  muted: "#666666",
-  faint: "rgba(255,255,255,0.25)",
+  primary: "#111111",
+  secondary: "#5F6368",
+  muted: "#9CA3AF",
+  faint: "rgba(17,17,17,0.04)",
 
-  bg: "#090909",
-  surface: "rgba(17,17,17,0.25)",
-  surfaceHi: "rgba(17,17,17,0.4)",
+  bg: "#F7F8FA",
+  surface: "#FFFFFF",
+  card: "#FCFCFD",
 
-  accent: "#FAFAFA",
-  accentMuted: "rgba(250,250,250,0.7)",
-  accentFaint: "rgba(250,250,250,0.04)",
+  accent: "#111111",
+  accentSecondary: "#5F6368",
+  accentSoft: "rgba(17,17,17,0.06)",
+  accentSecondarySoft: "rgba(17,17,17,0.04)",
 
-  border: "rgba(255,255,255,0.06)",
-  borderHi: "rgba(255,255,255,0.12)",
+  border: "rgba(17,17,17,0.08)",
+  borderHi: "rgba(17,17,17,0.12)",
 
-  violetMuted: "#888888",
-  violetFaint: "rgba(136,136,136,0.08)",
-  borderViolet: "rgba(136,136,136,0.15)",
+  violetMuted: "#6B7280",
+  violetFaint: "rgba(17,17,17,0.06)",
+  borderViolet: "rgba(17,17,17,0.12)",
+
+  accentMuted: "rgba(17,17,17,0.7)",
+  accentFaint: "rgba(17,17,17,0.04)",
 } as const;
 
-// ── Typography ──────────────────────────────────────────────────
 export const typography = {
   fontFamily: {
-    heading: "var(--font-heading), system-ui, sans-serif",
+    heading: "var(--font-heading), Georgia, serif",
     body: "var(--font-body), system-ui, sans-serif",
     mono: "var(--font-mono), monospace",
   },
   size: {
-    display: "clamp(48px, 8vw, 96px)",
-    h1: "clamp(36px, 6vw, 72px)",
-    h2: "clamp(28px, 4vw, 48px)",
-    h3: "clamp(22px, 3vw, 36px)",
-    h4: "clamp(18px, 2.2vw, 24px)",
+    display: "clamp(56px, 10vw, 120px)",
+    h1: "clamp(40px, 6vw, 80px)",
+    h2: "clamp(32px, 4.5vw, 56px)",
+    h3: "clamp(24px, 3vw, 40px)",
+    h4: "clamp(18px, 2vw, 28px)",
     bodyLg: "clamp(16px, 1.5vw, 20px)",
     body: "clamp(14px, 1.2vw, 16px)",
     bodySm: "clamp(12px, 1vw, 14px)",
@@ -43,16 +45,17 @@ export const typography = {
   weight: {
     regular: "400",
     medium: "500",
-    bold: "600",
+    semibold: "600",
+    bold: "700",
   },
   lineHeight: {
-    tight: "1.1",
-    snug: "1.3",
+    tight: "1.05",
+    snug: "1.2",
     relaxed: "1.6",
   },
   letterSpacing: {
-    snug: "-0.01em",
-    tight: "-0.02em",
+    snug: "-0.02em",
+    tight: "-0.01em",
     normal: "0em",
     wide: "0.04em",
     wider: "0.08em",
@@ -61,33 +64,32 @@ export const typography = {
   },
 } as const;
 
-// ── Spacing ─────────────────────────────────────────────────────
 export const spacing = {
   section: {
-    px: "clamp(24px, 5vw, 64px)",
-    py: "clamp(80px, 12vw, 140px)",
+    px: "clamp(24px, 5vw, 80px)",
+    py: "clamp(80px, 12vw, 160px)",
   },
   container: {
-    maxWidth: "1100px",
-    narrow: "700px",
+    maxWidth: "1200px",
+    narrow: "720px",
   },
   stack: {
     sm: "8px",
     md: "16px",
     lg: "24px",
     xl: "40px",
+    xxl: "64px",
   },
 } as const;
 
-// ── Radius ──────────────────────────────────────────────────────
 export const radius = {
+  sm: "4px",
   md: "8px",
-  lg: "12px",
-  xl: "20px",
+  lg: "16px",
+  xl: "24px",
   full: "9999px",
 } as const;
 
-// ── Easing curves (framer-motion arrays) ────────────────────────
 export const easing = {
   hover: [0.22, 1, 0.36, 1],
   pageIn: [0.76, 0, 0.24, 1],
@@ -96,14 +98,11 @@ export const easing = {
   spring: [0.34, 1.56, 0.64, 1],
 } as const;
 
-// ── Easing (CSS strings for transition shorthand) ───────────────
 export const ease = {
   default: "cubic-bezier(0.22, 0.8, 0.2, 1)",
 } as const;
 
-// ── Durations ───────────────────────────────────────────────────
 export const duration = {
-  // Milliseconds (for framer-motion, animations.ts divides by 1000)
   hover: 200,
   card: 280,
   page: 600,
@@ -111,8 +110,6 @@ export const duration = {
   stagger: 0.06,
   floating: 9,
   gradient: 18,
-
-  // CSS strings (for CSS transition shorthand)
   slow: "300ms",
   normal: "200ms",
 } as const;

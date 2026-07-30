@@ -7,7 +7,7 @@ export const translations: Translations = {
     "nav.contact": "Kontakt",
     "nav.home": "Domů",
     "nav.projects": "Projekty",
-    "nav.aiReceptionist": "AI Recepční",
+    "nav.aiReceptionist": "Chat Asistent",
     "nav.profese": "Profese",
     "nav.howItWorks": "Jak to funguje",
     "nav.pricing": "Ceník",
@@ -197,9 +197,9 @@ export const translations: Translations = {
 
     "more.heading": "Další Práce",
     "more.subtitle": "Projekty, na kterých jsem spolupracoval.",
-    "more.barberman.name": "Barberman Revolution",
-    "more.barberman.desc": "Kompletní brand identity",
+    "more.zlaty-hreben.name": "Zlatý Hřeben",
 
+    "more.zlaty-hreben.desc": "Kompletní brand identity",
     "about.label": "O mně",
     "about.name": "Matyáš Vojan",
     "about.intro": "Vývojář a tvůrce produktů.",
@@ -284,7 +284,7 @@ export const translations: Translations = {
     "nav.contact": "Contact",
     "nav.home": "Home",
     "nav.projects": "Projects",
-    "nav.aiReceptionist": "AI Receptionist",
+    "nav.aiReceptionist": "Chat Assistant",
     "nav.profese": "Professions",
     "nav.howItWorks": "How It Works",
     "nav.pricing": "Pricing",
@@ -474,9 +474,9 @@ export const translations: Translations = {
 
     "more.heading": "More Work",
     "more.subtitle": "Projects I've collaborated on.",
-    "more.barberman.name": "Barberman Revolution",
-    "more.barberman.desc": "Complete brand identity",
+    "more.zlaty-hreben.name": "Zlatý Hřeben",
 
+    "more.zlaty-hreben.desc": "Complete brand identity",
     "about.label": "About",
     "about.name": "Matyáš Vojan",
     "about.intro": "Developer and product builder.",

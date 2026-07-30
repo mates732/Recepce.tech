@@ -3,11 +3,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "recepce.tech — AI Receptionist Platform",
-    template: "%s | recepce.tech",
+    default: "Recepce.tech — Intelligent Systems",
+    template: "%s | Recepce.tech",
   },
   description:
-    "AI-powered receptionist platform. Voice AI assistants for businesses — available 24/7.",
+    "I build intelligent systems. AI receptionists, chat assistants, premium websites, automations, and internal AI systems.",
   metadataBase: new URL("https://recepce.tech"),
   alternates: {
     canonical: "/",
@@ -20,10 +20,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "cs_CZ",
     alternateLocale: "en_US",
-    siteName: "recepce.tech",
-    title: "recepce.tech — AI Receptionist Platform",
+    siteName: "Recepce.tech",
+    title: "Recepce.tech — Intelligent Systems",
     description:
-      "AI-powered receptionist platform. Voice AI assistants for businesses — available 24/7.",
+      "I build intelligent systems. AI receptionists, chat assistants, premium websites, automations, and internal AI systems.",
     url: "https://recepce.tech",
   },
   icons: { icon: "/favicon.svg" },
@@ -47,11 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
       </head>

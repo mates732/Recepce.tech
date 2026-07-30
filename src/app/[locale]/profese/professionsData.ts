@@ -18,7 +18,7 @@ export interface Profession {
 export const PROFESSIONS: Profession[] = [
   {
     id: "barbershop",
-    colors: { accent: "#A0A0A0", glow1: "rgba(160,160,160,0.07)", glow2: "rgba(96,96,96,0.04)" },
+    colors: { accent: "#A0A0A0", glow1: "rgba(17,17,17,0.05)", glow2: "rgba(17,17,17,0.03)" },
     cs: {
       name: "Barbershop",
       desc: "AI recepční, která nezmešká jediný hovor. Rezervace termínů, SMS potvrzení a správa kalendáře – vše automaticky.",
@@ -44,7 +44,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "dentalni-hygiena",
-    colors: { accent: "#EDEDED", glow1: "rgba(237,237,237,0.07)", glow2: "rgba(0,153,204,0.05)" },
+    colors: { accent: "#D1D5DB", glow1: "rgba(17,17,17,0.05)", glow2: "rgba(17,17,17,0.03)" },
     cs: {
       name: "Dentální hygiena",
       desc: "Okamžitá odpověď pro vaše pacienty. Diskrétní rezervace a správa konzultačních termínů bez čekání.",
@@ -70,7 +70,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "estetika",
-    colors: { accent: "#A78BFA", glow1: "rgba(167,139,250,0.07)", glow2: "rgba(124,58,237,0.05)" },
+    colors: { accent: "#9CA3AF", glow1: "rgba(17,17,17,0.05)", glow2: "rgba(17,17,17,0.03)" },
     cs: {
       name: "Estetická klinika",
       desc: "Vaše klinika, vaše pravidla. Inteligentní rezervace procedur a automatické připomínky pro klienty.",
@@ -96,7 +96,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "fitness",
-    colors: { accent: "#60A5FA", glow1: "rgba(96,165,250,0.07)", glow2: "rgba(0,102,255,0.05)" },
+    colors: { accent: "#6B7280", glow1: "rgba(17,17,17,0.05)", glow2: "rgba(17,17,17,0.03)" },
     cs: {
       name: "Fitness & PT",
       desc: "Trenéři se soustředí na klienty, ne na telefon. Automatické rezervace tréninků a správa kapacity studia.",
@@ -122,7 +122,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "kadernictvi",
-    colors: { accent: "#F9A8D4", glow1: "rgba(249,168,212,0.07)", glow2: "rgba(232,120,144,0.05)" },
+    colors: { accent: "#9CA3AF", glow1: "rgba(17,17,17,0.05)", glow2: "rgba(17,17,17,0.03)" },
     cs: {
       name: "Kadeřnictví",
       desc: "Žádná zmeškaná rezervace. Inteligentní booking s výběrem kadeřníka a připomínky pro každou návštěvu.",
@@ -148,7 +148,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "masaze",
-    colors: { accent: "#34D399", glow1: "rgba(52,211,153,0.07)", glow2: "rgba(0,184,132,0.05)" },
+    colors: { accent: "#6B7280", glow1: "rgba(17,17,17,0.05)", glow2: "rgba(17,17,17,0.03)" },
     cs: {
       name: "Masáže & wellness",
       desc: "Klid od prvního kontaktu. Inteligentní rezervace procedur a automatická komunikace s klienty.",
@@ -174,7 +174,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "stomatologie",
-    colors: { accent: "#38BDF8", glow1: "rgba(56,189,248,0.07)", glow2: "rgba(2,132,199,0.05)" },
+    colors: { accent: "#9CA3AF", glow1: "rgba(17,17,17,0.05)", glow2: "rgba(17,17,17,0.03)" },
     cs: {
       name: "Stomatologie",
       desc: "Rychlá pomoc při akutní bolesti i běžné kontroly. AI objedná pacienty 24/7, vy se věnujete léčbě.",

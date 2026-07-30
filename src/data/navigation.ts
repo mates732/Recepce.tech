@@ -9,7 +9,7 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   {
     key: "aiReceptionist",
-    label: { cs: "AI Recepční", en: "AI Receptionist" },
+    label: { cs: "Chat Asistent", en: "Chat Assistant" },
     href: { cs: "/cs/ai-receptionist", en: "/en/ai-receptionist" },
   },
   {

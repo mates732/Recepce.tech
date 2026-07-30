@@ -6,7 +6,7 @@ import { t } from "@/lib/utils";
 import { PROFESSIONS } from "../professionsData";
 import Link from "next/link";
 import Vapi from "@vapi-ai/web";
-import type { VapiAssistantConfig } from "@/lib/vapiConfig";
+import type { VapiAssistantResponse } from "@/config/vapi";
 
 interface Props {
   locale: Locale;
@@ -45,7 +45,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
 
     setDemoState("connecting");
 
-    let config: VapiAssistantConfig | undefined;
+    let config: VapiAssistantResponse | undefined;
     try {
       const res = await fetch(`/api/vapi/config/${slug}`);
       if (res.ok) config = await res.json();
@@ -92,7 +92,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
     return (
       <section className="relative w-full min-h-screen flex items-center justify-center px-[clamp(24px,5vw,64px)]">
         <div className="text-center" style={{ maxWidth: "800px" }}>
-          <div className="font-mono text-[11px] tracking-[0.12em] uppercase mb-4" style={{ color: "rgba(102,102,102,0.45)" }}>
+          <div className="font-mono text-[11px] tracking-[0.12em] uppercase mb-4" style={{ color: "rgba(17,17,17,0.35)" }}>
             404
           </div>
           <h1 className="font-heading mb-6" style={{ fontSize: "clamp(28px,4vw,48px)", lineHeight: 1.05, fontWeight: 500 }}>
@@ -101,9 +101,9 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
           <Link
             href={`/${locale}/profese`}
             className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] no-underline transition-all duration-500"
-            style={{ color: "rgba(237,237,237,0.5)" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.85)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(237,237,237,0.5)"; }}
+            style={{ color: "rgba(17,17,17,0.4)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(17,17,17,0.7)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(17,17,17,0.4)"; }}
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <path d="M8 2L4 6l4 4" />
@@ -126,9 +126,9 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
           <Link
             href={`/${locale}/profese`}
             className="group inline-flex items-center gap-1.5 font-body text-[11px] tracking-[0.08em] mb-8 transition-all duration-300 self-start"
-            style={{ color: "rgba(102,102,102,0.65)" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#A0A0A0"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(102,102,102,0.65)"; }}
+            style={{ color: "rgba(17,17,17,0.5)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#5F6368"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(17,17,17,0.5)"; }}
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <path d="M8 2L4 6l4 4" />
@@ -142,25 +142,25 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
               className="relative flex items-center justify-between w-full rounded-full mb-4 overflow-hidden transition-all duration-400 select-none"
               style={{
                 padding: "3px 12px 3px 10px",
-                background: "rgba(9,9,9,0.45)",
+                background: "rgba(255,255,255,0.8)",
                 backdropFilter: "blur(14px)",
                 WebkitBackdropFilter: "blur(14px)",
-                border: "1px solid rgba(255,255,255,0.03)",
+                border: "1px solid rgba(17,17,17,0.06)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.055)";
-                e.currentTarget.style.background = "rgba(9,9,9,0.55)";
+                e.currentTarget.style.borderColor = "rgba(17,17,17,0.12)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.9)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.03)";
-                e.currentTarget.style.background = "rgba(9,9,9,0.45)";
+                e.currentTarget.style.borderColor = "rgba(17,17,17,0.06)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.8)";
               }}
             >
               {/* Ambient light sweep */}
               <div
                 className="absolute inset-0 rounded-full pointer-events-none"
                 style={{
-                  background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.012) 50%, transparent 100%)",
+                  background: "linear-gradient(90deg, transparent 0%, rgba(17,17,17,0.02) 50%, transparent 100%)",
                   backgroundSize: "200% 100%",
                   animation: "shimmer 8s ease-in-out infinite",
                 }}
@@ -176,19 +176,19 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                     boxShadow: `0 0 5px ${prof.colors.accent}20`,
                   }}
                 />
-                <span className="font-mono text-[8px] tracking-[0.16em]" style={{ color: "rgba(160,160,160,0.4)" }}>
+                <span className="font-mono text-[8px] tracking-[0.16em]" style={{ color: "rgba(17,17,17,0.3)" }}>
                   {t(locale, "profese.liveDemoBadge")}
                 </span>
               </div>
 
               {/* Right: profession + ambient label */}
               <div className="flex items-center gap-2 relative z-[1]">
-                <span className="font-mono text-[8px] tracking-[0.06em]" style={{ color: "rgba(102,102,102,0.45)" }}>
+                <span className="font-mono text-[8px] tracking-[0.06em]" style={{ color: "rgba(17,17,17,0.35)" }}>
                   {d.name}
                 </span>
                 <span
                   className="font-mono text-[7px] tracking-[0.06em]"
-                  style={{ color: "rgba(102,102,102,0.2)", animation: "ambient-glow 4s ease-in-out infinite" }}
+                  style={{ color: "rgba(17,17,17,0.15)", animation: "ambient-glow 4s ease-in-out infinite" }}
                 >
                   &middot; {isCs ? "aktivní" : "active"}
                 </span>
@@ -208,7 +208,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
             </h1>
 
             {/* Description */}
-            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch] mb-6" style={{ color: "#A0A0A0" }}>
+            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch] mb-6" style={{ color: "#5F6368" }}>
               {d.desc}
             </p>
 
@@ -255,20 +255,20 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                 <div
                   key={f.label}
                   className="p-4 rounded-lg transition-all duration-300"
-                  style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.03)" }}
+                  style={{ background: "rgba(17,17,17,0.02)", border: "1px solid rgba(17,17,17,0.06)" }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = `${prof.colors.accent}15`;
-                    e.currentTarget.style.background = `${prof.colors.accent}04`;
+                    e.currentTarget.style.borderColor = `${prof.colors.accent}30`;
+                    e.currentTarget.style.background = `${prof.colors.accent}08`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.03)";
-                    e.currentTarget.style.background = "rgba(255,255,255,0.015)";
+                    e.currentTarget.style.borderColor = "rgba(17,17,17,0.06)";
+                    e.currentTarget.style.background = "rgba(17,17,17,0.02)";
                   }}
                 >
                   <div className="font-body text-[11px] tracking-[0.08em] uppercase mb-2" style={{ color: prof.colors.accent, opacity: 0.25 }}>
                     {f.label}
                   </div>
-                  <p className="font-body text-[13px] leading-relaxed" style={{ color: "rgba(160,160,160,0.7)" }}>
+                  <p className="font-body text-[13px] leading-relaxed" style={{ color: "rgba(17,17,17,0.5)" }}>
                     {f.desc}
                   </p>
                 </div>
@@ -310,7 +310,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                   className="font-mono text-[9px] tracking-[0.15em] uppercase transition-all duration-500"
                   style={{
                     opacity: demoState === "connected" ? 0.8 : 0.5,
-                    color: demoState === "connected" ? "rgba(239,68,68,0.7)" : "rgba(102,102,102,0.8)",
+                    color: demoState === "connected" ? "rgba(17,17,17,0.8)" : "rgba(17,17,17,0.5)",
                   }}
                 >
                   {demoState === "connecting" ? t(locale, "profese.connecting") : demoState === "connected" ? (isCs ? "Ukončit" : "End call") : t(locale, "profese.tryDemo")}
@@ -321,11 +321,11 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                   className="flex items-center justify-center w-5 h-5 rounded-full transition-all duration-300"
                   style={{
                     background: showHint ? `${prof.colors.accent}08` : "transparent",
-                    color: showHint ? prof.colors.accent : "rgba(102,102,102,0.35)",
+                    color: showHint ? prof.colors.accent : "rgba(17,17,17,0.3)",
                     opacity: showHint ? 0.7 : 0.4,
                   }}
-                  onMouseEnter={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.7"; e.currentTarget.style.color = "#666666"; } }}
-                  onMouseLeave={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.4"; e.currentTarget.style.color = "rgba(102,102,102,0.35)"; } }}
+                  onMouseEnter={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.7"; e.currentTarget.style.color = "#5F6368"; } }}
+                  onMouseLeave={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.4"; e.currentTarget.style.color = "rgba(17,17,17,0.3)"; } }}
                   aria-label="Info"
                 >
                   <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
@@ -345,12 +345,12 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                   height: demoState === "connected" ? "48px" : "52px",
                   borderRadius: "50%",
                   background: demoState === "connected"
-                    ? "rgba(239,68,68,0.08)"
+                    ? "rgba(17,17,17,0.08)"
                     : demoState === "connecting"
                       ? `${prof.colors.accent}12`
                       : `${prof.colors.accent}08`,
                   border: `1px solid ${
-                    demoState === "connected" ? "rgba(239,68,68,0.15)" : `${prof.colors.accent}15`
+                    demoState === "connected" ? "rgba(17,17,17,0.15)" : `${prof.colors.accent}15`
                   }`,
                   cursor: demoState === "connecting" ? "default" : "pointer",
                 }}
@@ -370,7 +370,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="rgba(239,68,68,0.7)"
+                    stroke="rgba(17,17,17,0.7)"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -410,9 +410,9 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                 <div
                   className="rounded-lg px-3.5 py-2.5 text-[11px] font-body leading-relaxed"
                   style={{
-                    background: "rgba(14,16,20,0.9)",
+                    background: "rgba(255,255,255,0.9)",
                     border: `1px solid ${prof.colors.accent}10`,
-                    color: "rgba(160,160,160,0.7)",
+                    color: "rgba(17,17,17,0.5)",
                   }}
                 >
                   {isConnected ? (

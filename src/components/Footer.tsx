@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { Locale } from "@/lib/types";
-import { t } from "@/lib/utils";
+import { SOCIALS } from "@/config/socials";
 
 interface FooterProps {
   locale: Locale;
@@ -12,94 +12,129 @@ export default function Footer({ locale }: FooterProps) {
   return (
     <footer
       className="relative z-10 border-t"
-      role="contentinfo"
       style={{
-        borderColor: "rgba(255,255,255,0.06)",
-        padding: "64px clamp(24px,5vw,64px) 40px",
+        borderColor: "rgba(17,17,17,0.06)",
+        padding: "64px clamp(24px,5vw,80px) 40px",
         paddingBottom: "max(40px, calc(40px + env(safe-area-inset-bottom)))",
+        background: "#FFFFFF",
       }}
     >
-      <div className="mx-auto" style={{ maxWidth: "1100px" }}>
+      <div className="mx-auto" style={{ maxWidth: "1200px" }}>
         <div
-          className="footer-grid grid mb-10"
+          className="footer-grid grid mb-12"
           style={{
-            gridTemplateColumns: "1fr auto",
-            gap: "48px",
+            gridTemplateColumns: "1fr auto auto",
+            gap: "64px",
             alignItems: "start",
           }}
         >
           <div>
-            <div className="flex items-center gap-1.5 text-[15px] tracking-[-0.02em]">
-              <span className="font-bold">recepce</span>
-              <span style={{ color: "rgba(160,160,160,0.7)", fontWeight: 400 }}>.tech</span>
+            <div className="flex items-center gap-1.5 text-[15px] tracking-[-0.02em]" style={{ color: "#111111" }}>
+              <span className="font-semibold">recepce</span>
+              <span style={{ color: "#5F6368", fontWeight: 400 }}>.tech</span>
             </div>
             <p
-              className="mt-2.5 text-sm leading-relaxed"
-              style={{ color: "#A0A0A0", maxWidth: "30ch" }}
+              className="mt-3 text-sm leading-relaxed"
+              style={{ color: "#5F6368", maxWidth: "28ch" }}
             >
-              {t(locale, "footer.tagline")}
+              {locale === "cs"
+                ? "Stavím inteligentní systémy. AI, software, automatizace."
+                : "I build intelligent systems. AI, software, automation."}
             </p>
           </div>
 
           <div>
             <h4
-              className="text-[11px] font-semibold tracking-[0.08em] uppercase mb-3.5"
-              style={{ color: "#A0A0A0" }}
+              className="text-[10px] font-semibold tracking-[0.1em] uppercase mb-4"
+              style={{ color: "#9CA3AF" }}
             >
-              {t(locale, "footer.pages")}
+              {locale === "cs" ? "Navigace" : "Navigate"}
+            </h4>
+            <ul className="flex flex-col gap-2.5 list-none">
+              {[
+                { label: locale === "cs" ? "Domů" : "Home", href: `/${locale}` },
+                { label: locale === "cs" ? "Chat Asistent" : "Chat Assistant", href: `/${locale}/ai-receptionist` },
+                { label: locale === "cs" ? "Kontakt" : "Contact", href: `/${locale}/contact` },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm transition-colors duration-200"
+                    style={{ color: "#5F6368" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4
+              className="text-[10px] font-semibold tracking-[0.1em] uppercase mb-4"
+              style={{ color: "#9CA3AF" }}
+            >
+              {locale === "cs" ? "Spojení" : "Connect"}
             </h4>
             <ul className="flex flex-col gap-2.5 list-none">
               <li>
-                <Link
-                  href={`/${locale}/ai-receptionist`}
-                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
-                  style={{ color: "#A0A0A0" }}
+                <a
+                  href={`mailto:${SOCIALS.email}`}
+                  className="text-sm transition-colors duration-200"
+                  style={{ color: "#5F6368" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
                 >
-                  {t(locale, "nav.aiReceptionist")}
-                </Link>
+                  {SOCIALS.email}
+                </a>
               </li>
-              <li>
-                <Link
-                  href={`/${locale}/profese`}
-                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
-                  style={{ color: "#A0A0A0" }}
-                >
-                  {t(locale, "nav.profese")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/contact`}
-                  className="text-sm transition-colors duration-200 hover:text-[#FAFAFA]"
-                  style={{ color: "#A0A0A0" }}
-                >
-                  {t(locale, "nav.contact")}
-                </Link>
-              </li>
+              {SOCIALS.youtube && (
+                <li>
+                  <a
+                    href={SOCIALS.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm transition-colors duration-200"
+                    style={{ color: "#5F6368" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
+                  >
+                    YouTube
+                  </a>
+                </li>
+              )}
+              {SOCIALS.github && (
+                <li>
+                  <a
+                    href={SOCIALS.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm transition-colors duration-200"
+                    style={{ color: "#5F6368" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
+                  >
+                    GitHub
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
 
         <div
-          className="flex flex-wrap items-center justify-between gap-2 pt-6 border-t text-xs font-mono tracking-[0.02em]"
+          className="flex flex-wrap items-center justify-between gap-2 pt-6 border-t text-xs"
           style={{
-            borderColor: "rgba(255,255,255,0.06)",
-            color: "rgba(160,160,160,0.6)",
+            borderColor: "rgba(17,17,17,0.06)",
+            color: "#9CA3AF",
           }}
         >
-          <span>{t(locale, "footer.copyright")}</span>
-          <span>{t(locale, "footer.madeIn")}</span>
+          <span>&copy; {new Date().getFullYear()} recepce.tech</span>
+          <span>{locale === "cs" ? "Vytvořeno v České republice" : "Made in the Czech Republic"}</span>
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 640px) {
-          .footer-grid {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-        }
-      `}</style>
     </footer>
   );
 }

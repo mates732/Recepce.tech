@@ -1,11 +1,23 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 
 interface Props {
   children: ReactNode;
+}
+
+function useReducedMotion(): boolean {
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReduced(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+  return prefersReduced;
 }
 
 export default function PageTransitionProvider({ children }: Props) {
@@ -40,7 +52,7 @@ export default function PageTransitionProvider({ children }: Props) {
               width: "100vw",
               zIndex: 100,
               background:
-                "linear-gradient(135deg, #0a0a0a 0%, #111111 40%, #0d0d0d 100%)",
+                "linear-gradient(135deg, #F7F8FA 0%, #FFFFFF 40%, #F7F8FA 100%)",
             }}
             initial={{ x: "-100%" }}
             animate={{ x: ["0%", "100%"] }}

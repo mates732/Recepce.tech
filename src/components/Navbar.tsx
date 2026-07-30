@@ -2,64 +2,62 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useMotionValueEvent, useScroll } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Locale } from "@/lib/types";
-import { navItems } from "@/data/navigation";
-import { t } from "@/lib/utils";
 
 interface NavbarProps {
   locale: Locale;
 }
 
-function NavLink({ item, locale, onClose, index }: { item: (typeof navItems)[0]; locale: Locale; onClose: () => void; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{
-        delay: 0.04 * index,
-        duration: 0.6,
-        ease: [0.22, 0.8, 0.2, 1],
-      }}
-    >
-      <Link
-        href={item.href[locale]}
-        onClick={onClose}
-        className="group relative block py-1"
-      >
-        <span
-          className="relative block font-heading transition-all duration-700"
-          style={{
-            fontSize: "clamp(24px, 3.5vw, 48px)",
-            fontWeight: 400,
-            lineHeight: 1.15,
-            letterSpacing: "-0.02em",
-            color: "rgba(160,160,160,0.7)",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#FAFAFA";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = "rgba(160,160,160,0.7)";
-          }}
-        >
-          {item.label[locale]}
-        </span>
-        <span className="absolute left-1/2 -translate-x-1/2 -bottom-0.5 h-px w-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-700 group-hover:w-3/5" />
-      </Link>
-    </motion.div>
-  );
+interface NavItem {
+  id: string;
+  labelEn: string;
+  labelCs: string;
+  href?: string;
+  children?: NavItem[];
 }
+
+const navTree: NavItem[] = [
+  { id: "home", labelEn: "Home", labelCs: "Domů", href: "/" },
+  {
+    id: "projects", labelEn: "Projects", labelCs: "Projekty",
+    children: [
+      { id: "cortex", labelEn: "Cortex", labelCs: "Cortex", href: "/cortex" },
+      {
+        id: "ai-assistants", labelEn: "AI Assistants", labelCs: "AI Asistenti",
+        children: [
+          { id: "overview", labelEn: "Overview", labelCs: "Přehled", href: "/ai.assistent" },
+          { id: "voice", labelEn: "Voice Assistant", labelCs: "Voice asistent", href: "/projekty/ai-sistent/voice-assistant" },
+          { id: "chat", labelEn: "Chat Assistant", labelCs: "Chat asistent", href: "/projekty/ai-sistent/chat-assistant" },
+        ],
+      },
+      { id: "websites", labelEn: "Websites", labelCs: "Weby", href: "/webs" },
+      { id: "youtube", labelEn: "YouTube", labelCs: "YouTube", href: "/youtube" },
+    ],
+  },
+  { id: "about", labelEn: "About", labelCs: "O mně", href: "/about" },
+  { id: "contact", labelEn: "Contact", labelCs: "Kontakt", href: "/contact" },
+];
+
+type Level = "root" | "projects" | "ai-assistants";
+
+const childItems: Record<string, NavItem[]> = {
+  projects: navTree.find((n) => n.id === "projects")?.children || [],
+  "ai-assistants": navTree.find((n) => n.id === "projects")?.children?.find((n) => n.id === "ai-assistants")?.children || [],
+};
 
 export default function Navbar({ locale }: NavbarProps) {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const toggleMenu = useCallback(() => setOpen((v) => !v), []);
-  const { scrollY } = useScroll();
+  const [level, setLevel] = useState<Level>("root");
+  const pathname = usePathname();
+  const navBg = (() => {
+    if (!pathname) return "#F7F8FA";
+    if (pathname.includes("/ai.assistent") || pathname.includes("/voice-assistant") || pathname.includes("/chat-assistant")) return "#FFFFFF";
+    return "#F7F8FA";
+  })();
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setScrolled(latest > 40);
-  });
+  const toggleMenu = useCallback(() => setOpen((v) => !v), []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -68,76 +66,184 @@ export default function Navbar({ locale }: NavbarProps) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") { setOpen(false); setLevel("root"); }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => {
+    if (!open) setLevel("root");
+  }, [open]);
+
   const switchTo: Locale = locale === "cs" ? "en" : "cs";
+  const getLabel = (item: NavItem) => locale === "cs" ? item.labelCs : item.labelEn;
+
+  const showProjects = level === "projects" || level === "ai-assistants";
+  const showAi = level === "ai-assistants";
+
+  const activeIndex = showAi ? 2 : showProjects ? 1 : 0;
+
+  const handleActivate = (item: NavItem) => {
+    if (item.children) {
+      if (item.id === "projects") setLevel(showProjects ? "root" : "projects");
+      else if (item.id === "ai-assistants") setLevel(showAi ? "projects" : "ai-assistants");
+    } else if (item.href) {
+      setOpen(false);
+      setLevel("root");
+    }
+  };
+
+  const NavItemRow = ({ item, weight }: { item: NavItem; weight: "primary" | "secondary" | "tertiary" }) => {
+    const hasChildren = !!item.children;
+    const isLink = !!item.href && !hasChildren;
+
+    const size = weight === "primary" ? "clamp(28px, 4vw, 56px)"
+      : weight === "secondary" ? "clamp(22px, 3.2vw, 44px)"
+      : "clamp(18px, 2.6vw, 36px)";
+
+    const fontWeight = weight === "primary" ? 500 : weight === "secondary" ? 400 : 350;
+    const textColor = weight === "primary" ? "#111111"
+      : weight === "secondary" ? "rgba(17,17,17,0.40)"
+      : "rgba(17,17,17,0.25)";
+
+    const chevronColor = weight === "primary" ? "rgba(17,17,17,0.20)"
+      : "rgba(17,17,17,0.10)";
+
+    const content = (
+      <span
+        className="relative block font-heading whitespace-nowrap"
+        style={{
+          fontSize: size,
+          fontWeight,
+          lineHeight: 1.15,
+          letterSpacing: "-0.02em",
+          color: textColor,
+        }}
+      >
+        {getLabel(item)}
+        {hasChildren && <span className="inline-block ml-2 align-middle" style={{ fontSize: "clamp(14px, 1.5vw, 20px)", color: chevronColor }}>›</span>}
+      </span>
+    );
+
+    const underline = (
+      <span className="block h-px w-0 mx-auto bg-gradient-to-r from-transparent via-[#111111]/20 to-transparent transition-all duration-500 group-hover:w-2/5" style={{ visibility: hasChildren ? "hidden" : "visible" }} />
+    );
+
+    if (isLink) {
+      return (
+        <Link href={`/${locale}${item.href}`} onClick={() => { setOpen(false); setLevel("root"); }} className="block no-underline py-1 group">
+          {content}
+          {underline}
+        </Link>
+      );
+    }
+
+    return (
+      <button onClick={() => handleActivate(item)} className="block text-left cursor-pointer py-1 group">
+        {content}
+        {underline}
+      </button>
+    );
+  };
+
+  const Column = ({ items, weight, align = "center", label }: {
+    items: NavItem[];
+    weight: "primary" | "secondary" | "tertiary";
+    align?: "center" | "right";
+    label?: string;
+  }) => {
+    const gap = weight === "primary" ? "gap-1" : "gap-0.5";
+    const alignClass = align === "right" ? "items-end" : "items-center";
+    return (
+      <div className={`flex flex-col ${alignClass} ${gap}`}>
+        {label && (
+          <span className="text-[9px] tracking-[0.2em] uppercase mb-4" style={{ color: "rgba(17,17,17,0.15)", fontWeight: 500 }}>
+            {label}
+          </span>
+        )}
+        {items.map((item, i) => (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ delay: 0.04 * i, duration: 0.6, ease: [0.22, 0.8, 0.2, 1] }}
+          >
+            <NavItemRow item={item} weight={weight} />
+          </motion.div>
+        ))}
+      </div>
+    );
+  };
+
+  const Section = ({ children, show }: { children: React.ReactNode; show: boolean }) => (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 30 }}
+          transition={{ duration: 0.25, ease: [0.22, 0.8, 0.2, 1] }}
+          className="flex items-start"
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  const Divider = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="w-px self-stretch mx-3 sm:mx-4"
+      style={{ background: "rgba(17,17,17,0.04)" }}
+    />
+  );
+
+  const rootWeight = level === "root" ? "primary" as const : "tertiary" as const;
+  const projectsWeight = level === "projects" ? "primary" as const : "secondary" as const;
 
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between"
-        aria-label="Main navigation"
+        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between"
         style={{
-          padding: `max(18px, env(safe-area-inset-top)) clamp(24px,5vw,64px) 0`,
-          paddingLeft: `max(clamp(24px,5vw,64px), env(safe-area-inset-left))`,
-          paddingRight: `max(clamp(24px,5vw,64px), env(safe-area-inset-right))`,
-          background: scrolled
-            ? "rgba(9,9,9,0.65)"
-            : "rgba(9,9,9,0)",
-          WebkitBackdropFilter: scrolled ? "blur(20px)" : "blur(0px)",
-          backdropFilter: scrolled ? "blur(20px)" : "blur(0px)",
-          borderBottom: scrolled
-            ? "1px solid rgba(255,255,255,0.04)"
-            : "1px solid transparent",
-          transition: "background 0.4s cubic-bezier(0.22,0.8,0.2,1), border-color 0.4s cubic-bezier(0.22,0.8,0.2,1), backdrop-filter 0.4s cubic-bezier(0.22,0.8,0.2,1), -webkit-backdrop-filter 0.4s cubic-bezier(0.22,0.8,0.2,1)",
+          padding: `${"max(10px, env(safe-area-inset-top))"} ${"clamp(24px,5vw,80px)"}`,
+          paddingLeft: `max(clamp(24px,5vw,80px), env(safe-area-inset-left))`,
+          paddingRight: `max(clamp(24px,5vw,80px), env(safe-area-inset-right))`,
+          background: navBg,
         }}
       >
-        <Link
-          href={`/${locale}`}
-          className="flex items-center gap-1.5 text-[14px] tracking-[-0.02em] transition-all duration-300 hover:opacity-70"
-          aria-label="recepce.tech — home"
-        >
-          <span className="font-heading font-semibold">recepce</span>
-          <span className="font-body" style={{ color: "rgba(160,160,160,0.7)", fontWeight: 400 }}>.tech</span>
+        <Link href={`/${locale}`} className="transition-opacity duration-300 hover:opacity-50">
+          <span className="text-[11px] tracking-[-0.02em]">
+            <span className="font-medium">recepce</span>
+            <span className="text-[#5F6368]" style={{ fontWeight: 400 }}>.tech</span>
+          </span>
         </Link>
 
         <button
           onClick={toggleMenu}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          className="group relative z-50 flex items-center gap-2 transition-all duration-300 hover:opacity-60"
+          className="transition-opacity duration-300 hover:opacity-50"
         >
-          <span
-            className="font-body text-[11px] tracking-[0.12em] uppercase"
-            style={{ color: "#666666" }}
-          >
-            {open ? t(locale, "nav.menuClose") : t(locale, "nav.menuOpen")}
+          <span className="text-[10px] tracking-[0.15em] uppercase" style={{ color: open ? "#111111" : "#9CA3AF" }}>
+            {open ? (locale === "cs" ? "Zavřít" : "Close") : (locale === "cs" ? "Menu" : "Menu")}
           </span>
-          <div className="relative w-5 h-3" aria-hidden="true">
-            <span
-              className={`absolute left-0 top-1/2 block h-px transition-all duration-300 ${
-                open ? "w-5 -translate-y-1/2 rotate-45" : "w-5 -translate-y-[calc(50%+2.5px)]"
-              }`}
-              style={{ background: open ? "#A0A0A0" : "#666666" }}
-            />
-            <span
-              className={`absolute left-0 top-1/2 -translate-y-1/2 block h-px transition-all duration-300 ${
-                open ? "opacity-0" : "w-3 opacity-100"
-              }`}
-              style={{ background: "#666666" }}
-            />
-            <span
-              className={`absolute left-0 top-1/2 block h-px transition-all duration-300 ${
-                open ? "w-5 -translate-y-1/2 -rotate-45" : "w-5 -translate-y-[calc(50%-2.5px)]"
-              }`}
-              style={{ background: open ? "#A0A0A0" : "#666666" }}
-            />
-          </div>
         </button>
+
+        <div
+          aria-hidden="true"
+          className="absolute left-0 right-0 pointer-events-none"
+          style={{
+            top: "100%",
+            height: "clamp(8px, 1.5vw, 16px)",
+            background: `linear-gradient(to bottom, ${navBg}, transparent)`,
+          }}
+        />
       </nav>
 
       <AnimatePresence>
@@ -146,90 +252,74 @@ export default function Navbar({ locale }: NavbarProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 0.8, 0.2, 1] }}
-            className="fixed inset-0 z-40 overflow-hidden"
-            style={{ background: "#090909" }}
-            onClick={(e) => {
-              if (e.target === e.currentTarget) setOpen(false);
-            }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-30 overflow-hidden"
+            style={{ background: "#F7F8FA" }}
+            onClick={(e) => { if (e.target === e.currentTarget) { setOpen(false); setLevel("root"); } }}
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
           >
-            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              <div
-                className="absolute top-[10%] left-[20%] w-[500px] h-[500px] rounded-full"
-                style={{
-                  background: "radial-gradient(circle, rgba(237,237,237,0.06) 0%, transparent 70%)",
-                  animation: "float-orb 20s ease-in-out infinite",
-                }}
-              />
-              <div
-                className="absolute bottom-[20%] right-[15%] w-[400px] h-[400px] rounded-full"
-                style={{
-                  background: "radial-gradient(circle, rgba(136,136,136,0.04) 0%, transparent 70%)",
-                  animation: "float-orb-2 25s ease-in-out infinite",
-                }}
-              />
-            </div>
+            <div className="relative z-10 flex flex-col items-center justify-center h-full" style={{ padding: `clamp(80px, 12vh, 100px) clamp(48px, 8vw, 100px)` }}>
+              <div className="flex items-center justify-center flex-1 w-full overflow-hidden">
+                <motion.div
+                  layout
+                  transition={{ duration: 0.3, ease: [0.22, 0.8, 0.2, 1] }}
+                  className="flex items-start"
+                >
+                  <Column items={navTree} weight={rootWeight} />
 
-            <div
-              className="absolute inset-0 pointer-events-none opacity-[0.012]"
-              aria-hidden="true"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(102,102,102,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(102,102,102,0.05) 1px, transparent 1px)",
-                backgroundSize: "60px 60px",
-                maskImage: "radial-gradient(ellipse at 50% 50%, black, transparent 75%)",
-                WebkitMaskImage: "radial-gradient(ellipse at 50% 50%, black, transparent 75%)",
-              }}
-            />
+                  <Section show={showProjects}>
+                    <Divider />
+                    <Column
+                      items={childItems.projects}
+                      weight={projectsWeight}
+                      align={level === "projects" ? "right" : "center"}
+                    />
+                    {!showAi && (
+                      <motion.button
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        onClick={() => setLevel("root")}
+                        className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                        style={{ color: "#9CA3AF" }}
+                      >
+                        ← {locale === "cs" ? "Zpět" : "Back"}
+                      </motion.button>
+                    )}
+                  </Section>
 
-            <div
-              className="relative z-10 flex flex-col items-center justify-center h-full"
-              style={{
-                padding: `clamp(80px, 12vh, 100px) clamp(48px, 8vw, 100px)`,
-                paddingLeft: `max(clamp(48px, 8vw, 100px), env(safe-area-inset-left))`,
-                paddingRight: `max(clamp(48px, 8vw, 100px), env(safe-area-inset-right))`,
-              }}
-            >
-              <div className="flex flex-col items-center gap-2">
-                {navItems.map((item, i) => (
-                  <NavLink key={item.key} item={item} locale={locale} onClose={() => setOpen(false)} index={i} />
-                ))}
+                  <Section show={showAi}>
+                    <Divider />
+                    <Column
+                      items={childItems["ai-assistants"]}
+                      weight="primary"
+                      align="right"
+                    />
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      onClick={() => setLevel("projects")}
+                      className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                      style={{ color: "#9CA3AF" }}
+                    >
+                      ← {locale === "cs" ? "Zpět" : "Back"}
+                    </motion.button>
+                  </Section>
+                </motion.div>
               </div>
 
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.4 }}
-                className="flex items-center justify-center gap-1 mt-10"
+                className="flex items-center justify-center gap-1 mt-8"
               >
-                <Link
-                  href={`/${locale}`}
-                  onClick={() => setOpen(false)}
-                  className="font-body text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200"
-                  style={{
-                    color: locale === "cs" ? "#A0A0A0" : "rgba(102,102,102,0.45)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.7"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-                >
-                  Česky
-                </Link>
-                <span className="w-px h-3" style={{ background: "rgba(255,255,255,0.06)" }} aria-hidden="true" />
-                <Link
-                  href={`/${switchTo}`}
-                  onClick={() => setOpen(false)}
-                  className="font-body text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200"
-                  style={{
-                    color: locale === "en" ? "#A0A0A0" : "rgba(102,102,102,0.45)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.7"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-                >
-                  English
-                </Link>
+                <Link href={`/${locale}`} onClick={() => { setOpen(false); setLevel("root"); }} className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200" style={{ color: locale === "cs" ? "#111111" : "rgba(17,17,17,0.35)" }}>Česky</Link>
+                <span className="w-px h-3" style={{ background: "rgba(17,17,17,0.08)" }} aria-hidden="true" />
+                <Link href={`/${switchTo}`} onClick={() => { setOpen(false); setLevel("root"); }} className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200" style={{ color: locale === "en" ? "#111111" : "rgba(17,17,17,0.35)" }}>English</Link>
               </motion.div>
             </div>
           </motion.div>

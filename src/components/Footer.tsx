@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import type { Locale } from "@/lib/types";
 import { SOCIALS } from "@/config/socials";
@@ -59,10 +57,8 @@ export default function Footer({ locale }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm transition-colors duration-200"
+                    className="text-sm transition-colors duration-200 hover:text-[#111111]"
                     style={{ color: "#5F6368" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
                   >
                     {link.label}
                   </Link>
@@ -82,10 +78,8 @@ export default function Footer({ locale }: FooterProps) {
               <li>
                 <a
                   href={`mailto:${SOCIALS.email}`}
-                  className="text-sm transition-colors duration-200"
+                  className="text-sm transition-colors duration-200 hover:text-[#111111]"
                   style={{ color: "#5F6368" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
                 >
                   {SOCIALS.email}
                 </a>
@@ -96,10 +90,8 @@ export default function Footer({ locale }: FooterProps) {
                     href={SOCIALS.youtube}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm transition-colors duration-200"
+                    className="text-sm transition-colors duration-200 hover:text-[#111111]"
                     style={{ color: "#5F6368" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
                   >
                     YouTube
                   </a>
@@ -111,10 +103,8 @@ export default function Footer({ locale }: FooterProps) {
                     href={SOCIALS.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm transition-colors duration-200"
+                    className="text-sm transition-colors duration-200 hover:text-[#111111]"
                     style={{ color: "#5F6368" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
                   >
                     GitHub
                   </a>

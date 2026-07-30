@@ -1,5 +1,3 @@
-"use client";
-
 import type { Locale } from "@/lib/types";
 import HeroSection from "@/components/sections/HeroSection";
 import EcosystemSection from "@/components/sections/EcosystemSection";

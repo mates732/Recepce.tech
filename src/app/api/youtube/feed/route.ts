@@ -4,8 +4,8 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const channelId = searchParams.get("channelId");
 
-  if (!channelId) {
-    return NextResponse.json({ error: "Missing channelId" }, { status: 400 });
+  if (!channelId || !/^UC[\w-]{22,24}$/.test(channelId)) {
+    return NextResponse.json({ error: "Invalid channelId" }, { status: 400 });
   }
 
   try {

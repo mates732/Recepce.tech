@@ -149,8 +149,9 @@ export default function ContactContent({ locale }: Props) {
               letterSpacing: "-0.03em",
               color: "#111111",
             }}
-            dangerouslySetInnerHTML={{ __html: t(locale, "contact.title") }}
-          />
+          >
+            {t(locale, "contact.title")}
+          </h1>
 
           <p
             className="font-body mt-6 leading-relaxed max-w-[48ch] mx-auto"

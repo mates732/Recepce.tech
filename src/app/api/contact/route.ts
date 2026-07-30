@@ -131,8 +131,7 @@ export async function POST(request: NextRequest) {
     );
 
     if (!telegramRes.ok) {
-      const errorText = await telegramRes.text();
-      console.error("Telegram API error:", errorText);
+      console.error("Telegram API error:", telegramRes.status, telegramRes.statusText);
       return NextResponse.json(
         { success: false, error: "Failed to send message." },
         { status: 500 }

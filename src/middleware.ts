@@ -32,7 +32,13 @@ export function middleware(request: NextRequest) {
   const newUrl = new URL(`/${locale}${pathname === "/" ? "" : pathname}`, request.url);
   newUrl.search = request.nextUrl.search;
   const response = NextResponse.redirect(newUrl);
-  response.cookies.set("rt-lang", locale, { maxAge: 60 * 60 * 24 * 365 });
+  response.cookies.set("rt-lang", locale, {
+    maxAge: 60 * 60 * 24 * 365,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
   return response;
 }
 

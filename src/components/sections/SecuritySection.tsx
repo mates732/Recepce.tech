@@ -210,13 +210,7 @@ export default function SecuritySection({ locale }: Props) {
         </motion.div>
       </div>
 
-      <style>{`
-        @media (max-width: 640px) {
-          .security-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }

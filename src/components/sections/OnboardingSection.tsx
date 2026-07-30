@@ -163,20 +163,7 @@ export default function OnboardingSection({ locale }: Props) {
         </motion.div>
       </div>
 
-      <style>{`
-        @media (max-width: 640px) {
-          .onboarding-steps {
-            flex-direction: column !important;
-            align-items: center !important;
-          }
-          .onboarding-step {
-            width: 100% !important;
-          }
-          .onboarding-connector {
-            display: none !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }

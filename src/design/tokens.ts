@@ -31,7 +31,7 @@ export const typography = {
     mono: "var(--font-mono), monospace",
   },
   size: {
-    display: "clamp(56px, 10vw, 120px)",
+    display: "clamp(64px, 8vw, 120px)",
     h1: "clamp(40px, 6vw, 80px)",
     h2: "clamp(32px, 4.5vw, 56px)",
     h3: "clamp(24px, 3vw, 40px)",
@@ -39,8 +39,8 @@ export const typography = {
     bodyLg: "clamp(16px, 1.5vw, 20px)",
     body: "clamp(14px, 1.2vw, 16px)",
     bodySm: "clamp(12px, 1vw, 14px)",
-    caption: "11px",
-    micro: "10px",
+    caption: "clamp(10px, 0.8vw, 11px)",
+    micro: "clamp(9px, 0.7vw, 10px)",
   },
   weight: {
     regular: "400",
@@ -67,26 +67,26 @@ export const typography = {
 export const spacing = {
   section: {
     px: "clamp(24px, 5vw, 80px)",
-    py: "clamp(80px, 12vw, 160px)",
+    py: "clamp(64px, 12vw, 160px)",
   },
   container: {
-    maxWidth: "1200px",
-    narrow: "720px",
+    maxWidth: "min(1200px, calc(100vw - clamp(48px, 10vw, 160px)))",
+    narrow: "min(720px, calc(100vw - clamp(48px, 10vw, 160px)))",
   },
   stack: {
-    sm: "8px",
-    md: "16px",
-    lg: "24px",
-    xl: "40px",
-    xxl: "64px",
+    sm: "clamp(6px, 0.6vw, 8px)",
+    md: "clamp(12px, 1.2vw, 16px)",
+    lg: "clamp(20px, 1.8vw, 24px)",
+    xl: "clamp(32px, 3vw, 40px)",
+    xxl: "clamp(48px, 5vw, 64px)",
   },
 } as const;
 
 export const radius = {
-  sm: "4px",
-  md: "8px",
-  lg: "16px",
-  xl: "24px",
+  sm: "clamp(3px, 0.3vw, 4px)",
+  md: "clamp(6px, 0.6vw, 8px)",
+  lg: "clamp(12px, 1.2vw, 16px)",
+  xl: "clamp(18px, 1.8vw, 24px)",
   full: "9999px",
 } as const;
 

@@ -6,7 +6,6 @@ import Footer from "@/components/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PageTransitionProvider from "@/components/PageTransitionProvider";
 import LocaleHtmlLang from "@/components/LocaleHtmlLang";
-import LayoutWrapper from "@/components/LayoutWrapper";
 
 interface Props {
   children: React.ReactNode;
@@ -46,17 +45,15 @@ export default async function LocaleLayout({ children, params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={jsonLdScript(websiteJsonLd(locale as Locale))}
       />
-      <LayoutWrapper>
-        <Navbar locale={loc} />
-        <main className="relative z-10 min-h-screen">
-          <ErrorBoundary>
-            <PageTransitionProvider>
-              {children}
-            </PageTransitionProvider>
-          </ErrorBoundary>
-        </main>
-        <Footer locale={loc} />
-      </LayoutWrapper>
+      <Navbar locale={loc} />
+      <main className="relative z-10 min-h-screen">
+        <ErrorBoundary>
+          <PageTransitionProvider>
+            {children}
+          </PageTransitionProvider>
+        </ErrorBoundary>
+      </main>
+      <Footer locale={loc} />
     </>
   );
 }

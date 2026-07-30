@@ -195,13 +195,7 @@ export default function SupportSection({ locale }: Props) {
         </motion.div>
       </div>
 
-      <style>{`
-        @media (max-width: 640px) {
-          .support-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }

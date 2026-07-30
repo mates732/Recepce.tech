@@ -168,13 +168,7 @@ export default function SolutionSection({ locale }: Props) {
         </motion.div>
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .solution-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }

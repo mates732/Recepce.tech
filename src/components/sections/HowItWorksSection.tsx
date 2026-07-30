@@ -178,10 +178,7 @@ export default function HowItWorksSection({ locale }: Props) {
         }
         .step-connector-1 { left: calc(33.333% - 12px); }
         .step-connector-2 { left: calc(66.666% - 12px); }
-        @media (max-width: 768px) {
-          .step-connector { display: none; }
-          .how-it-works-grid { grid-template-columns: 1fr !important; }
-        }
+
       `}</style>
     </section>
   );

@@ -19,14 +19,14 @@
 }
 
 :root {
-  --ds-spacing-section: clamp(80px, 12vw, 160px);
+  --ds-spacing-section: clamp(64px, 12vw, 160px);
   --ds-spacing-section-px: clamp(24px, 5vw, 80px);
-  --ds-container-max: 1200px;
-  --ds-container-narrow: 720px;
-  --ds-radius-sm: 4px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 16px;
-  --ds-radius-xl: 24px;
+  --ds-container-max: min(1200px, calc(100vw - clamp(48px, 10vw, 160px)));
+  --ds-container-narrow: min(720px, calc(100vw - clamp(48px, 10vw, 160px)));
+  --ds-radius-sm: clamp(3px, 0.3vw, 4px);
+  --ds-radius-md: clamp(6px, 0.6vw, 8px);
+  --ds-radius-lg: clamp(12px, 1.2vw, 16px);
+  --ds-radius-xl: clamp(18px, 1.8vw, 24px);
   --ds-duration-fast: 200ms;
   --ds-duration-normal: 280ms;
   --ds-duration-slow: 600ms;
@@ -180,53 +180,4 @@
 .safe-top { padding-top: max(0px, env(safe-area-inset-top)); }
 .safe-bottom { padding-bottom: max(0px, env(safe-area-inset-bottom)); }
 
-/* ── Mobile canvas scaling ────────────────────────────────────── */
 
-html[data-scaled="true"] .md\:flex {
-  display: flex !important;
-}
-
-html[data-scaled="true"] .md\:hidden {
-  display: none !important;
-}
-
-html[data-scaled="true"] .features-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-}
-
-html[data-scaled="true"] .solution-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-}
-
-html[data-scaled="true"] .benefits-grid {
-  grid-template-columns: repeat(2, 1fr) !important;
-}
-
-html[data-scaled="true"] .security-grid {
-  grid-template-columns: repeat(2, 1fr) !important;
-}
-
-html[data-scaled="true"] .support-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-}
-
-html[data-scaled="true"] .how-it-works-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-}
-
-html[data-scaled="true"] .step-connector {
-  display: block !important;
-}
-
-html[data-scaled="true"] .onboarding-steps {
-  flex-direction: row !important;
-  align-items: flex-start !important;
-}
-
-html[data-scaled="true"] .onboarding-step {
-  width: auto !important;
-}
-
-html[data-scaled="true"] .onboarding-connector {
-  display: block !important;
-}

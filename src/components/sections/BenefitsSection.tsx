@@ -166,13 +166,7 @@ export default function BenefitsSection({ locale }: { locale: Locale }) {
         </motion.div>
       </div>
 
-      <style>{`
-        @media (max-width: 640px) {
-          .benefits-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }

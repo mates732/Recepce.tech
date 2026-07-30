@@ -63,6 +63,7 @@
     letter-spacing: -0.01em;
     min-height: 100%;
     position: relative;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -47,10 +47,261 @@ const childItems: Record<string, NavItem[]> = {
   "ai-assistants": navTree.find((n) => n.id === "projects")?.children?.find((n) => n.id === "ai-assistants")?.children || [],
 };
 
+function getItemById(id: string): NavItem | undefined {
+  for (const item of navTree) {
+    if (item.id === id) return item;
+    if (item.children) {
+      for (const child of item.children) {
+        if (child.id === id) return child;
+      }
+    }
+  }
+  return undefined;
+}
+
+function getScreenLabel(screen: string, locale: Locale): string {
+  if (screen === "root") return "";
+  const item = getItemById(screen);
+  if (!item) return "";
+  return locale === "cs" ? item.labelCs : item.labelEn;
+}
+
+function getItemsForScreen(screen: string): NavItem[] {
+  if (screen === "root") return navTree;
+  if (screen === "projects") return childItems.projects;
+  if (screen === "ai-assistants") return childItems["ai-assistants"];
+  return [];
+}
+
+type ScreenId = "root" | "projects" | "ai-assistants";
+
+function MobileNavigation({
+  locale,
+  onClose,
+}: {
+  locale: Locale;
+  onClose: () => void;
+}) {
+  const [stack, setStack] = useState<ScreenId[]>(["root"]);
+  const [direction, setDirection] = useState<number>(0);
+
+  const currentScreen = stack[stack.length - 1];
+  const items = getItemsForScreen(currentScreen);
+  const isRoot = currentScreen === "root";
+  const screenLabel = getScreenLabel(currentScreen, locale);
+
+  const push = useCallback((id: ScreenId) => {
+    setDirection(1);
+    setStack((prev) => [...prev, id]);
+  }, []);
+
+  const pop = useCallback(() => {
+    if (stack.length > 1) {
+      setDirection(-1);
+      setStack((prev) => prev.slice(0, -1));
+    }
+  }, [stack.length]);
+
+  const getLabel = useCallback(
+    (item: NavItem) => (locale === "cs" ? item.labelCs : item.labelEn),
+    [locale],
+  );
+
+  const handleItemClick = useCallback(
+    (item: NavItem) => {
+      if (item.children) {
+        if (item.id === "projects") push("projects");
+        else if (item.id === "ai-assistants") push("ai-assistants");
+      }
+    },
+    [push],
+  );
+
+  const switchTo: Locale = locale === "cs" ? "en" : "cs";
+
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? "100%" : "-30%",
+    }),
+    center: { x: 0 },
+    exit: (dir: number) => ({
+      x: dir > 0 ? "-30%" : "100%",
+    }),
+  };
+
+  const slideTransition = {
+    duration: 0.275,
+    ease: [0.22, 1, 0.36, 1] as const,
+  };
+
+  return (
+    <div
+      className="flex h-full flex-col bg-white"
+      style={{
+        paddingTop: "max(env(safe-area-inset-top), 0px)",
+        paddingBottom: "max(env(safe-area-inset-bottom), 0px)",
+      }}
+    >
+      {!isRoot && (
+        <div className="flex-shrink-0 border-b border-black/[0.06]">
+          <div
+            className="flex items-center"
+            style={{
+              paddingLeft: "max(12px, env(safe-area-inset-left))",
+              paddingRight: "max(20px, env(safe-area-inset-right))",
+            }}
+          >
+            <button
+              onClick={pop}
+              className="flex min-h-[52px] cursor-pointer items-center gap-1 text-left focus-visible:opacity-60"
+              style={{ color: "#007AFF" }}
+              aria-label={`${locale === "cs" ? "Zpět" : "Back"} ${screenLabel}`}
+            >
+              <span className="text-2xl font-light leading-none">&lsaquo;</span>
+              <span className="text-[17px] font-normal leading-none">
+                {screenLabel}
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="flex-1 overflow-y-auto">
+        <div
+          className="min-h-full"
+          style={{
+            paddingLeft: "max(24px, env(safe-area-inset-left))",
+            paddingRight: "max(24px, env(safe-area-inset-right))",
+          }}
+        >
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={currentScreen}
+              custom={direction}
+              variants={slideVariants}
+              initial={direction === 0 ? false : "enter"}
+              animate="center"
+              exit="exit"
+              transition={slideTransition}
+            >
+              <nav
+                role="navigation"
+                aria-label={
+                  isRoot ? "Main navigation" : screenLabel
+                }
+                className="pt-2"
+              >
+                {items.map((item) => {
+                  const hasChildren = !!item.children;
+                  const isLink = !!item.href && !hasChildren;
+                  const label = getLabel(item);
+
+                  const row = (
+                    <div className="flex min-h-[56px] items-center justify-between py-[14px]">
+                      <span
+                        className="text-[24px] font-medium leading-tight tracking-tight"
+                        style={{
+                          color: "#111111",
+                          fontFamily:
+                            "var(--font-body), system-ui, sans-serif",
+                        }}
+                      >
+                        {label}
+                      </span>
+                      {hasChildren && (
+                        <span
+                          className="text-[20px] leading-none"
+                          style={{ color: "rgba(17,17,17,0.2)" }}
+                          aria-hidden="true"
+                        >
+                          ›
+                        </span>
+                      )}
+                    </div>
+                  );
+
+                  if (isLink) {
+                    return (
+                      <div key={item.id}>
+                        <Link
+                          href={`/${locale}${item.href}`}
+                          onClick={onClose}
+                          className="block no-underline transition-opacity duration-150 focus-visible:opacity-60 active:opacity-60"
+                        >
+                          {row}
+                        </Link>
+                        <div className="ml-0 h-px bg-black/[0.06]" />
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div key={item.id}>
+                      <button
+                        onClick={() => handleItemClick(item)}
+                        className="block w-full cursor-pointer text-left transition-opacity duration-150 focus-visible:opacity-60 active:opacity-60"
+                        aria-haspopup={hasChildren ? "true" : undefined}
+                      >
+                        {row}
+                      </button>
+                      <div className="ml-0 h-px bg-black/[0.06]" />
+                    </div>
+                  );
+                })}
+              </nav>
+
+              {isRoot && (
+                <div className="mt-12">
+                  <div className="flex items-center gap-3">
+                    <Link
+                      href={`/${locale}`}
+                      onClick={onClose}
+                      className="text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
+                      style={{
+                        color:
+                          locale === "cs"
+                            ? "#111111"
+                            : "rgba(17,17,17,0.35)",
+                      }}
+                    >
+                      Česky
+                    </Link>
+                    <span
+                      className="inline-block h-3 w-px"
+                      style={{
+                        backgroundColor: "rgba(17,17,17,0.12)",
+                      }}
+                      aria-hidden="true"
+                    />
+                    <Link
+                      href={`/${switchTo}`}
+                      onClick={onClose}
+                      className="text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
+                      style={{
+                        color:
+                          locale === "en"
+                            ? "#111111"
+                            : "rgba(17,17,17,0.35)",
+                      }}
+                    >
+                      English
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Navbar({ locale }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [level, setLevel] = useState<Level>("root");
   const pathname = usePathname();
+
   const navBg = (() => {
     if (!pathname) return "#F7F8FA";
     if (pathname.includes("/ai.assistent") || pathname.includes("/voice-assistant") || pathname.includes("/chat-assistant")) return "#FFFFFF";
@@ -81,8 +332,6 @@ export default function Navbar({ locale }: NavbarProps) {
 
   const showProjects = level === "projects" || level === "ai-assistants";
   const showAi = level === "ai-assistants";
-
-  const activeIndex = showAi ? 2 : showProjects ? 1 : 0;
 
   const handleActivate = (item: NavItem) => {
     if (item.children) {
@@ -260,7 +509,11 @@ export default function Navbar({ locale }: NavbarProps) {
             aria-modal="true"
             aria-label="Navigation menu"
           >
-            <div className="relative z-10 flex flex-col items-center justify-center h-full" style={{ padding: `clamp(80px, 12vh, 100px) clamp(48px, 8vw, 100px)` }}>
+            {/* Desktop — unchanged */}
+            <div
+              className="relative z-10 hidden flex-col items-center justify-center h-full md:flex"
+              style={{ padding: `clamp(80px, 12vh, 100px) clamp(48px, 8vw, 100px)` }}
+            >
               <div className="flex items-center justify-center flex-1 w-full overflow-hidden">
                 <motion.div
                   layout
@@ -321,6 +574,14 @@ export default function Navbar({ locale }: NavbarProps) {
                 <span className="w-px h-3" style={{ background: "rgba(17,17,17,0.08)" }} aria-hidden="true" />
                 <Link href={`/${switchTo}`} onClick={() => { setOpen(false); setLevel("root"); }} className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200" style={{ color: locale === "en" ? "#111111" : "rgba(17,17,17,0.35)" }}>English</Link>
               </motion.div>
+            </div>
+
+            {/* Mobile — iOS-style */}
+            <div className="flex h-full md:hidden">
+              <MobileNavigation
+                locale={locale}
+                onClose={() => { setOpen(false); setLevel("root"); }}
+              />
             </div>
           </motion.div>
         )}

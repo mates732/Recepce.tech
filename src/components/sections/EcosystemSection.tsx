@@ -29,12 +29,12 @@ const cards: Record<Locale, Card[]> = {
     },
     {
       title: "Weby",
-      desc: "Prémiové webové prezentace, které vypadají jako produktový launch. Ne jako šablona.",
+      desc: "Prémiové webové prezentace, které vypadají jako produktový launch, ne jako šablona.",
       href: "/webs",
     },
     {
       title: "YouTube",
-      desc: "My fitness diary. Training, Vibe, fun.",
+      desc: "My fitness diary. Training, Vibe, Fun.",
       href: "/youtube",
     },
   ],
@@ -56,7 +56,7 @@ const cards: Record<Locale, Card[]> = {
     },
     {
       title: "YouTube",
-      desc: "My fitness diary. Training, Vibe, fun.",
+      desc: "My fitness diary. Training, Vibe, Fun.",
       href: "/youtube",
     },
   ],

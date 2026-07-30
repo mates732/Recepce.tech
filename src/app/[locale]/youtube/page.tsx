@@ -10,10 +10,10 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: locale === "cs" ? "YouTube — Stavím AI systémy. Veřejně." : "YouTube — Building AI in public.",
+    title: "YouTube",
     description: locale === "cs"
-      ? "Každý produkt, experiment a launch je zdokumentovaný na YouTube. Žádné stříhání reality. Jen skutečný vývoj."
-      : "Every product, experiment and launch is documented on YouTube. No reality cutting. Just real development.",
+      ? "Každý produkt, experiment i launch dokumentuji veřejně. Bez přikrášlování. Jen skutečný vývoj."
+      : "Every product, experiment and launch is documented in public. No embellishment. Just real development.",
   };
 }
 

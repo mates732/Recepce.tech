@@ -49,7 +49,7 @@ export default function PageTransitionProvider({ children }: Props) {
               left: 0,
               top: 0,
               bottom: 0,
-              width: "100vw",
+              width: "100%",
               zIndex: 100,
               background:
                 "linear-gradient(135deg, #F7F8FA 0%, #FFFFFF 40%, #F7F8FA 100%)",

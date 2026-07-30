@@ -1,23 +1,31 @@
 "use client";
 
-import { useRef, useEffect, useState, ReactNode } from "react";
+import { useEffect, useState, ReactNode } from "react";
 
 const DESIGN_WIDTH = 1440;
+const MOBILE_THRESHOLD = 480;
 
 export default function ScaleContainer({ children }: { children: ReactNode }) {
-  const contentRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const update = () => {
-      setScale(Math.min(1, window.innerWidth / DESIGN_WIDTH));
+      const w = window.innerWidth;
+      const mobile = w <= MOBILE_THRESHOLD;
+      setIsMobile(mobile);
+      setScale(mobile ? w / DESIGN_WIDTH : 1);
+      document.documentElement.setAttribute("data-scaled", mobile ? "true" : "false");
     };
     update();
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      document.documentElement.removeAttribute("data-scaled");
+    };
   }, []);
 
-  if (scale >= 1) {
+  if (!isMobile || scale >= 1) {
     return <>{children}</>;
   }
 
@@ -30,7 +38,6 @@ export default function ScaleContainer({ children }: { children: ReactNode }) {
       }}
     >
       <div
-        ref={contentRef}
         style={{
           width: `${DESIGN_WIDTH}px`,
           flexShrink: 0,

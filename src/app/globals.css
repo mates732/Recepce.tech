@@ -179,3 +179,54 @@
 
 .safe-top { padding-top: max(0px, env(safe-area-inset-top)); }
 .safe-bottom { padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+
+/* ── Mobile canvas scaling ────────────────────────────────────── */
+
+html[data-scaled="true"] .md\:flex {
+  display: flex !important;
+}
+
+html[data-scaled="true"] .md\:hidden {
+  display: none !important;
+}
+
+html[data-scaled="true"] .features-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+html[data-scaled="true"] .solution-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+html[data-scaled="true"] .benefits-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+html[data-scaled="true"] .security-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+html[data-scaled="true"] .support-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+html[data-scaled="true"] .how-it-works-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+html[data-scaled="true"] .step-connector {
+  display: block !important;
+}
+
+html[data-scaled="true"] .onboarding-steps {
+  flex-direction: row !important;
+  align-items: flex-start !important;
+}
+
+html[data-scaled="true"] .onboarding-step {
+  width: auto !important;
+}
+
+html[data-scaled="true"] .onboarding-connector {
+  display: block !important;
+}

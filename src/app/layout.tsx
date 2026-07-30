@@ -2,10 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { BASE_URL, SITE_NAME, KEYWORDS, organizationJsonLd, jsonLdScript } from "@/lib/seo";
 import "./globals.css";
 
-const DESIGN_WIDTH = 1440;
-
 export const viewport: Viewport = {
-  width: DESIGN_WIDTH,
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
   themeColor: "#F7F8FA",
 };
 
@@ -65,19 +65,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={jsonLdScript(organizationJsonLd())}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(){
-                var DW = 1440;
-                if (screen.width >= DW) {
-                  var m = document.querySelector('meta[name="viewport"]');
-                  if (m) m.content = 'width=device-width, initial-scale=1';
-                }
-              })();
-            `,
-          }}
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

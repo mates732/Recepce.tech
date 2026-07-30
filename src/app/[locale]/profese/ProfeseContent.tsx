@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
 import { PROFESSIONS } from "./professionsData";
 import type { VapiAssistantResponse } from "@/config/vapi";
-import VoiceWidget from "@/components/voice/VoiceWidget";
+
+const VoiceWidget = dynamic(() => import("@/components/voice/VoiceWidget"), { ssr: false });
 
 interface Props {
   locale: Locale;

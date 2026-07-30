@@ -346,7 +346,7 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(24px, 4vw, 60px)" }}>
         <div className="relative w-full max-w-5xl mx-auto rounded-2xl overflow-hidden" style={{ background: "#FFFFFF", border: "1px solid rgba(17,17,17,0.06)", aspectRatio: "16/9" }}>
           <motion.div className="absolute inset-0" style={{ opacity: screenshotOpacity, scale: screenshotScale }}>
-            <Image src="/images/cortex/cortex-dashboard.png" alt="Cortex dashboard" fill className="object-cover" />
+            <Image src="/images/cortex/cortex-dashboard.png" alt="Cortex dashboard" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 1024px" priority />
           </motion.div>
           {annotations.map((a, i) => (
             <motion.div

@@ -18,17 +18,19 @@ export default function YouTubeContent({ locale, channelUrl }: Props) {
   const [videos, setVideos] = useState<{ id: string; title: string; thumbnail: string; url: string; published: string }[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   useEffect(() => {
+    if (!channelId) return;
+    let cancelled = false;
     async function fetchData() {
       try {
         const res = await fetch(`/api/youtube/feed?channelId=${channelId}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.videos) setVideos(data.videos);
-        }
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (data.videos) setVideos(data.videos);
       } catch {}
     }
     fetchData();
-  }, []);
+    return () => { cancelled = true; };
+  }, [channelId]);
 
   const featured = videos[0];
   const archive = videos.slice(1);
@@ -210,7 +212,7 @@ export default function YouTubeContent({ locale, channelUrl }: Props) {
                       className="absolute right-0 top-1/2 -translate-y-1/2 rounded-xl overflow-hidden pointer-events-none z-0"
                       style={{ width: "clamp(180px, 20vw, 280px)", aspectRatio: "16/9" }}
                     >
-                      <Image src={video.thumbnail} alt="" fill className="object-cover" sizes="280px" />
+                      <Image src={video.thumbnail} alt={video.title} fill className="object-cover" sizes="280px" />
                     </motion.div>
                   </a>
                   {i < archive.length - 1 && (

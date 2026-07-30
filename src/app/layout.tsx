@@ -1,14 +1,22 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { BASE_URL, SITE_NAME, KEYWORDS, organizationJsonLd, jsonLdScript } from "@/lib/seo";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#F7F8FA",
+};
 
 export const metadata: Metadata = {
   title: {
-    default: "Recepce.tech — Intelligent Systems",
-    template: "%s | Recepce.tech",
+    default: `${SITE_NAME} — AI Receptionist & Intelligent Systems`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
-    "I build intelligent systems. AI receptionists, chat assistants, premium websites, automations, and internal AI systems.",
-  metadataBase: new URL("https://recepce.tech"),
+    "AI receptionist, voice AI, chat assistants, and business automation. Intelligent systems for modern businesses.",
+  keywords: KEYWORDS,
+  metadataBase: new URL(BASE_URL),
   alternates: {
     canonical: "/",
     languages: {
@@ -20,13 +28,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "cs_CZ",
     alternateLocale: "en_US",
-    siteName: "Recepce.tech",
-    title: "Recepce.tech — Intelligent Systems",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — AI Receptionist & Intelligent Systems`,
     description:
-      "I build intelligent systems. AI receptionists, chat assistants, premium websites, automations, and internal AI systems.",
-    url: "https://recepce.tech",
+      "AI receptionist, voice AI, chat assistants, and business automation. Intelligent systems for modern businesses.",
+    url: BASE_URL,
   },
-  icons: { icon: "/favicon.svg" },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — AI Receptionist & Intelligent Systems`,
+    description:
+      "AI receptionist, voice AI, chat assistants, and business automation. Intelligent systems for modern businesses.",
+  },
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   robots: {
     index: true,
     follow: true,
@@ -44,6 +61,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="cs">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={jsonLdScript(organizationJsonLd())}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

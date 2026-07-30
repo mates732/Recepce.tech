@@ -106,9 +106,9 @@ export default function VoiceWidget({ assistantId, apiKey }: VoiceWidgetProps) {
   return (
     <motion.div
       layout
-      className="relative flex flex-col items-center gap-5 sm:gap-6 select-none sm:px-12 sm:py-10"
+      className="relative flex flex-col items-center gap-5 sm:gap-6 select-none"
       style={{
-        padding: "28px 24px",
+        padding: "clamp(24px, 3vw, 40px) clamp(20px, 3vw, 48px)",
         background: "#FFFFFF",
         borderRadius: 20,
         border: "1px solid rgba(17,17,17,0.06)",

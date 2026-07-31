@@ -47,256 +47,6 @@ const childItems: Record<string, NavItem[]> = {
   "ai-assistants": navTree.find((n) => n.id === "projects")?.children?.find((n) => n.id === "ai-assistants")?.children || [],
 };
 
-function getItemById(id: string): NavItem | undefined {
-  for (const item of navTree) {
-    if (item.id === id) return item;
-    if (item.children) {
-      for (const child of item.children) {
-        if (child.id === id) return child;
-      }
-    }
-  }
-  return undefined;
-}
-
-function getScreenLabel(screen: string, locale: Locale): string {
-  if (screen === "root") return "";
-  const item = getItemById(screen);
-  if (!item) return "";
-  return locale === "cs" ? item.labelCs : item.labelEn;
-}
-
-function getItemsForScreen(screen: string): NavItem[] {
-  if (screen === "root") return navTree;
-  if (screen === "projects") return childItems.projects;
-  if (screen === "ai-assistants") return childItems["ai-assistants"];
-  return [];
-}
-
-type ScreenId = "root" | "projects" | "ai-assistants";
-
-function MobileNavigation({
-  locale,
-  onClose,
-}: {
-  locale: Locale;
-  onClose: () => void;
-}) {
-  const [stack, setStack] = useState<ScreenId[]>(["root"]);
-  const [direction, setDirection] = useState<number>(0);
-
-  const currentScreen = stack[stack.length - 1];
-  const items = getItemsForScreen(currentScreen);
-  const isRoot = currentScreen === "root";
-  const screenLabel = getScreenLabel(currentScreen, locale);
-
-  const push = useCallback((id: ScreenId) => {
-    setDirection(1);
-    setStack((prev) => [...prev, id]);
-  }, []);
-
-  const pop = useCallback(() => {
-    if (stack.length > 1) {
-      setDirection(-1);
-      setStack((prev) => prev.slice(0, -1));
-    }
-  }, [stack.length]);
-
-  const getLabel = useCallback(
-    (item: NavItem) => (locale === "cs" ? item.labelCs : item.labelEn),
-    [locale],
-  );
-
-  const handleItemClick = useCallback(
-    (item: NavItem) => {
-      if (item.children) {
-        if (item.id === "projects") push("projects");
-        else if (item.id === "ai-assistants") push("ai-assistants");
-      }
-    },
-    [push],
-  );
-
-  const switchTo: Locale = locale === "cs" ? "en" : "cs";
-
-  const slideVariants = {
-    enter: (dir: number) => ({
-      x: dir > 0 ? "100%" : "-30%",
-    }),
-    center: { x: 0 },
-    exit: (dir: number) => ({
-      x: dir > 0 ? "-30%" : "100%",
-    }),
-  };
-
-  const slideTransition = {
-    duration: 0.275,
-    ease: [0.22, 1, 0.36, 1] as const,
-  };
-
-  return (
-    <div
-      className="flex h-full flex-col bg-white"
-      style={{
-        paddingTop: "calc(max(env(safe-area-inset-top), 0px) + 28px)",
-        paddingBottom: "max(env(safe-area-inset-bottom), 0px)",
-      }}
-    >
-      {!isRoot && (
-        <div className="flex-shrink-0 border-b border-black/[0.06]">
-          <div
-            className="flex items-center"
-            style={{
-              paddingLeft: "max(12px, env(safe-area-inset-left))",
-              paddingRight: "max(20px, env(safe-area-inset-right))",
-            }}
-          >
-            <button
-              onClick={pop}
-              className="flex min-h-[52px] cursor-pointer items-center gap-1.5 text-left focus-visible:opacity-60"
-              style={{ color: "#9CA3AF" }}
-              aria-label={`${locale === "cs" ? "Zpět" : "Back"} ${screenLabel}`}
-            >
-              <span className="text-[12px] font-normal tracking-[0.15em] uppercase leading-none">
-                &larr; {screenLabel}
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className="flex-1 overflow-y-auto">
-        <div
-          className="flex min-h-full flex-col justify-center"
-          style={{
-            paddingLeft: "max(24px, env(safe-area-inset-left))",
-            paddingRight: "max(24px, env(safe-area-inset-right))",
-          }}
-        >
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={currentScreen}
-              custom={direction}
-              variants={slideVariants}
-              initial={direction === 0 ? false : "enter"}
-              animate="center"
-              exit="exit"
-              transition={slideTransition}
-            >
-              <nav
-                role="navigation"
-                aria-label={
-                  isRoot ? "Main navigation" : screenLabel
-                }
-                className="pt-2"
-              >
-                {items.map((item) => {
-                  const hasChildren = !!item.children;
-                  const isLink = !!item.href && !hasChildren;
-                  const label = getLabel(item);
-
-                  const row = (
-                    <div className="flex min-h-[52px] items-center justify-between py-[10px]">
-                      <span
-                        className="font-heading whitespace-nowrap"
-                        style={{
-                          fontSize: "clamp(28px, 6vw, 32px)",
-                          fontWeight: 500,
-                          lineHeight: 1.15,
-                          letterSpacing: "-0.02em",
-                          color: "#111111",
-                        }}
-                      >
-                        {label}
-                      </span>
-                      {hasChildren && (
-                        <span
-                          className="inline-block align-middle ml-2"
-                          style={{ fontSize: "clamp(14px, 1.5vw, 20px)", color: "rgba(17,17,17,0.20)" }}
-                          aria-hidden="true"
-                        >
-                          ›
-                        </span>
-                      )}
-                    </div>
-                  );
-
-                  if (isLink) {
-                    return (
-                      <div key={item.id}>
-                        <Link
-                          href={`/${locale}${item.href}`}
-                          onClick={onClose}
-                          className="block no-underline transition-opacity duration-150 focus-visible:opacity-60 active:opacity-60"
-                        >
-                          {row}
-                        </Link>
-                        <div className="ml-0 h-px bg-black/[0.06]" />
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <div key={item.id}>
-                      <button
-                        onClick={() => handleItemClick(item)}
-                        className="block w-full cursor-pointer text-left transition-opacity duration-150 focus-visible:opacity-60 active:opacity-60"
-                        aria-haspopup={hasChildren ? "true" : undefined}
-                      >
-                        {row}
-                      </button>
-                      <div className="ml-0 h-px bg-black/[0.06]" />
-                    </div>
-                  );
-                })}
-              </nav>
-
-              {isRoot && (
-                <div className="mt-8">
-                  <div className="flex items-center gap-3">
-                    <Link
-                      href={`/${locale}`}
-                      onClick={onClose}
-                      className="px-2.5 py-3 text-[16px] font-normal uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
-                      style={{
-                        color:
-                          locale === "cs"
-                            ? "#111111"
-                            : "rgba(17,17,17,0.35)",
-                      }}
-                    >
-                      Česky
-                    </Link>
-                    <span
-                      className="inline-block h-3 w-px"
-                      style={{
-                        backgroundColor: "rgba(17,17,17,0.12)",
-                      }}
-                      aria-hidden="true"
-                    />
-                    <Link
-                      href={`/${switchTo}`}
-                      onClick={onClose}
-                      className="px-2.5 py-3 text-[16px] font-normal uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
-                      style={{
-                        color:
-                          locale === "en"
-                            ? "#111111"
-                            : "rgba(17,17,17,0.35)",
-                      }}
-                    >
-                      English
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function Navbar({ locale }: NavbarProps) {
   const [open, setOpen] = useState(false);
@@ -348,9 +98,9 @@ export default function Navbar({ locale }: NavbarProps) {
     const hasChildren = !!item.children;
     const isLink = !!item.href && !hasChildren;
 
-    const size = weight === "primary" ? "clamp(28px, 4vw, 56px)"
-      : weight === "secondary" ? "clamp(22px, 3.2vw, 44px)"
-      : "clamp(18px, 2.6vw, 36px)";
+    const size = weight === "primary" ? "text-[clamp(28px,4vw,56px)] max-md:text-[clamp(23px,3.3vw,46px)]"
+      : weight === "secondary" ? "text-[clamp(22px,3.2vw,44px)] max-md:text-[clamp(18px,2.6vw,36px)]"
+      : "text-[clamp(18px,2.6vw,36px)] max-md:text-[clamp(15px,2.1vw,30px)]";
 
     const fontWeight = weight === "primary" ? 500 : weight === "secondary" ? 400 : 350;
     const textColor = weight === "primary" ? "#111111"
@@ -362,9 +112,8 @@ export default function Navbar({ locale }: NavbarProps) {
 
     const content = (
       <span
-        className="relative block font-heading whitespace-nowrap"
+        className={`relative block font-heading whitespace-nowrap ${size}`}
         style={{
-          fontSize: size,
           fontWeight,
           lineHeight: 1.15,
           letterSpacing: "-0.02em",
@@ -372,7 +121,7 @@ export default function Navbar({ locale }: NavbarProps) {
         }}
       >
         {getLabel(item)}
-        {hasChildren && <span className="inline-block ml-2 align-middle" style={{ fontSize: "clamp(14px, 1.5vw, 20px)", color: chevronColor }}>›</span>}
+        {hasChildren && <span className="inline-block ml-2 align-middle text-[clamp(14px,1.5vw,20px)] max-md:text-[clamp(11px,1.2vw,16px)]" style={{ color: chevronColor }}>›</span>}
       </span>
     );
 
@@ -382,7 +131,7 @@ export default function Navbar({ locale }: NavbarProps) {
 
     if (isLink) {
       return (
-        <Link href={`/${locale}${item.href}`} onClick={() => { setOpen(false); setLevel("root"); }} className="block no-underline py-1 group">
+        <Link href={`/${locale}${item.href}`} onClick={() => { setOpen(false); setLevel("root"); }} className="block no-underline py-1 max-md:py-2.5 group">
           {content}
           {underline}
         </Link>
@@ -390,23 +139,24 @@ export default function Navbar({ locale }: NavbarProps) {
     }
 
     return (
-      <button onClick={() => handleActivate(item)} className="block text-left cursor-pointer py-1 group">
+      <button onClick={() => handleActivate(item)} className="block text-left cursor-pointer py-1 max-md:py-2.5 group">
         {content}
         {underline}
       </button>
     );
   };
 
-  const Column = ({ items, weight, align = "center", label }: {
+  const Column = ({ items, weight, align = "center", label, className = "" }: {
     items: NavItem[];
     weight: "primary" | "secondary" | "tertiary";
     align?: "center" | "right";
     label?: string;
+    className?: string;
   }) => {
     const gap = weight === "primary" ? "gap-1" : "gap-0.5";
     const alignClass = align === "right" ? "items-end" : "items-center";
     return (
-      <div className={`flex flex-col ${alignClass} ${gap}`}>
+      <div className={`flex flex-col ${alignClass} ${gap} ${className}`}>
         {label && (
           <span className="text-[9px] tracking-[0.2em] uppercase mb-4" style={{ color: "rgba(17,17,17,0.15)", fontWeight: 500 }}>
             {label}
@@ -510,18 +260,18 @@ export default function Navbar({ locale }: NavbarProps) {
             aria-modal="true"
             aria-label="Navigation menu"
           >
-            {/* Desktop — unchanged */}
+            {/* Navigation — same overlay layout for desktop and mobile */}
             <div
-              className="relative z-10 hidden flex-col items-center justify-center h-full md:flex"
-              style={{ padding: `clamp(80px, 12vh, 100px) clamp(48px, 8vw, 100px)` }}
+              className="relative z-10 flex flex-col items-center justify-center h-full px-[clamp(48px,8vw,100px)] max-md:px-6"
+              style={{ paddingTop: "clamp(80px, 12vh, 100px)", paddingBottom: "clamp(80px, 12vh, 100px)" }}
             >
               <div className="flex items-center justify-center flex-1 w-full overflow-hidden">
                 <motion.div
                   layout
                   transition={{ duration: 0.3, ease: [0.22, 0.8, 0.2, 1] }}
-                  className="flex items-start"
+          className="flex items-start max-md:flex-wrap"
                 >
-                  <Column items={navTree} weight={rootWeight} />
+                  <Column items={navTree} weight={rootWeight} className={showAi ? "max-md:hidden" : ""} />
 
                   <Section show={showProjects}>
                     <Divider />
@@ -536,7 +286,7 @@ export default function Navbar({ locale }: NavbarProps) {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2 }}
                         onClick={() => setLevel("root")}
-                        className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                        className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap max-md:text-[12px] max-md:px-2 max-md:py-[13px] max-md:basis-full max-md:ml-0 max-md:mt-4 max-md:text-center"
                         style={{ color: "#9CA3AF" }}
                       >
                         ← {locale === "cs" ? "Zpět" : "Back"}
@@ -556,7 +306,7 @@ export default function Navbar({ locale }: NavbarProps) {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.2 }}
                       onClick={() => setLevel("projects")}
-                      className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                      className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap max-md:text-[12px] max-md:px-2 max-md:py-[13px] max-md:basis-full max-md:ml-0 max-md:mt-4 max-md:text-center"
                       style={{ color: "#9CA3AF" }}
                     >
                       ← {locale === "cs" ? "Zpět" : "Back"}
@@ -571,18 +321,10 @@ export default function Navbar({ locale }: NavbarProps) {
                 transition={{ delay: 0.5, duration: 0.4 }}
                 className="flex items-center justify-center gap-1 mt-8"
               >
-                <Link href={`/${locale}`} onClick={() => { setOpen(false); setLevel("root"); }} className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200" style={{ color: locale === "cs" ? "#111111" : "rgba(17,17,17,0.35)" }}>Česky</Link>
+                <Link href={`/${locale}`} onClick={() => { setOpen(false); setLevel("root"); }} className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200 max-md:text-[11px] max-md:px-3 max-md:py-[14px]" style={{ color: locale === "cs" ? "#111111" : "rgba(17,17,17,0.35)" }}>Česky</Link>
                 <span className="w-px h-3" style={{ background: "rgba(17,17,17,0.08)" }} aria-hidden="true" />
-                <Link href={`/${switchTo}`} onClick={() => { setOpen(false); setLevel("root"); }} className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200" style={{ color: locale === "en" ? "#111111" : "rgba(17,17,17,0.35)" }}>English</Link>
+                <Link href={`/${switchTo}`} onClick={() => { setOpen(false); setLevel("root"); }} className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1.5 transition-all duration-200 max-md:text-[11px] max-md:px-3 max-md:py-[14px]" style={{ color: locale === "en" ? "#111111" : "rgba(17,17,17,0.35)" }}>English</Link>
               </motion.div>
-            </div>
-
-            {/* Mobile — iOS-style */}
-            <div className="flex h-full md:hidden">
-              <MobileNavigation
-                locale={locale}
-                onClose={() => { setOpen(false); setLevel("root"); }}
-              />
             </div>
           </motion.div>
         )}

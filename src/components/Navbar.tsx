@@ -153,13 +153,12 @@ function MobileNavigation({
           >
             <button
               onClick={pop}
-              className="flex min-h-[52px] cursor-pointer items-center gap-1 text-left focus-visible:opacity-60"
-              style={{ color: "#007AFF" }}
+              className="flex min-h-[52px] cursor-pointer items-center gap-1.5 text-left focus-visible:opacity-60"
+              style={{ color: "#9CA3AF" }}
               aria-label={`${locale === "cs" ? "Zpět" : "Back"} ${screenLabel}`}
             >
-              <span className="text-2xl font-light leading-none">&lsaquo;</span>
-              <span className="text-[17px] font-normal leading-none">
-                {screenLabel}
+              <span className="text-[12px] font-normal tracking-[0.15em] uppercase leading-none">
+                &larr; {screenLabel}
               </span>
             </button>
           </div>
@@ -168,7 +167,7 @@ function MobileNavigation({
 
       <div className="flex-1 overflow-y-auto">
         <div
-          className="min-h-full"
+          className="flex min-h-full flex-col justify-center"
           style={{
             paddingLeft: "max(24px, env(safe-area-inset-left))",
             paddingRight: "max(24px, env(safe-area-inset-right))",
@@ -197,21 +196,23 @@ function MobileNavigation({
                   const label = getLabel(item);
 
                   const row = (
-                    <div className="flex min-h-[56px] items-center justify-between py-[14px]">
+                    <div className="flex min-h-[52px] items-center justify-between py-[10px]">
                       <span
-                        className="text-[24px] font-medium leading-tight tracking-tight"
+                        className="font-heading whitespace-nowrap"
                         style={{
+                          fontSize: "clamp(28px, 6vw, 32px)",
+                          fontWeight: 500,
+                          lineHeight: 1.15,
+                          letterSpacing: "-0.02em",
                           color: "#111111",
-                          fontFamily:
-                            "var(--font-body), system-ui, sans-serif",
                         }}
                       >
                         {label}
                       </span>
                       {hasChildren && (
                         <span
-                          className="text-[20px] leading-none"
-                          style={{ color: "rgba(17,17,17,0.2)" }}
+                          className="inline-block align-middle ml-2"
+                          style={{ fontSize: "clamp(14px, 1.5vw, 20px)", color: "rgba(17,17,17,0.20)" }}
                           aria-hidden="true"
                         >
                           ›
@@ -251,12 +252,12 @@ function MobileNavigation({
               </nav>
 
               {isRoot && (
-                <div className="mt-12">
+                <div className="mt-8">
                   <div className="flex items-center gap-3">
                     <Link
                       href={`/${locale}`}
                       onClick={onClose}
-                      className="px-1.5 py-2.5 text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
+                      className="px-2.5 py-3 text-[16px] font-normal uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
                       style={{
                         color:
                           locale === "cs"
@@ -276,7 +277,7 @@ function MobileNavigation({
                     <Link
                       href={`/${switchTo}`}
                       onClick={onClose}
-                      className="px-1.5 py-2.5 text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
+                      className="px-2.5 py-3 text-[16px] font-normal uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
                       style={{
                         color:
                           locale === "en"

@@ -477,7 +477,7 @@ export default function Navbar({ locale }: NavbarProps) {
           onClick={toggleMenu}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          className="transition-opacity duration-300 hover:opacity-50 max-md:px-3 max-md:py-2.5 max-md:-m-1"
+          className="transition-opacity duration-300 hover:opacity-50 max-md:py-2.5 max-md:pl-6 max-md:pr-0"
         >
           <span className="text-[10px] tracking-[0.15em] uppercase" style={{ color: open ? "#111111" : "#9CA3AF" }}>
             {open ? (locale === "cs" ? "Zavřít" : "Close") : (locale === "cs" ? "Menu" : "Menu")}

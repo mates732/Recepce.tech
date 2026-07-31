@@ -118,7 +118,7 @@ function CapabilitiesSection({ locale }: { locale: Locale; shouldReduceMotion: b
     <section className="relative" style={{ padding: "clamp(28px, 3vw, 40px) clamp(24px, 5vw, 80px)", background: "#FFFFFF" }}>
       <div className="max-w-6xl mx-auto">
         <div className="h-px w-full" style={{ background: "#ECECEC" }} />
-        <div className="flex items-center justify-center flex-nowrap" style={{ padding: "clamp(20px, 2.5vw, 32px) 0" }}>
+        <div className="flex items-center justify-center flex-nowrap overflow-hidden" style={{ padding: "clamp(20px, 2.5vw, 32px) 0" }}>
           {items.map((item, i) => (
             <motion.span
               key={item}
@@ -161,7 +161,7 @@ function LanguagesSection({ locale }: { locale: Locale; shouldReduceMotion: bool
     <section className="relative" style={{ padding: "0 clamp(24px, 5vw, 80px) clamp(28px, 3vw, 40px)", background: "#F7F8FA" }}>
       <div className="max-w-6xl mx-auto">
         <div className="h-px w-full" style={{ background: "#ECECEC" }} />
-        <div className="flex items-center justify-center flex-nowrap" style={{ padding: "clamp(20px, 2.5vw, 32px) 0" }}>
+        <div className="flex items-center justify-center flex-nowrap overflow-hidden" style={{ padding: "clamp(20px, 2.5vw, 32px) 0" }}>
           {langs.map((lang, i) => (
             <motion.span
               key={lang}
@@ -182,7 +182,7 @@ function LanguagesSection({ locale }: { locale: Locale; shouldReduceMotion: bool
             >
               {lang}
               {i < langs.length - 1 && (
-                <span className="inline-block mx-4 sm:mx-5 md:mx-6 lg:mx-7" style={{ color: "#D4D4D4" }}>\u2014</span>
+                <span className="inline-block mx-4 sm:mx-5 md:mx-6 lg:mx-7" style={{ color: "#D4D4D4" }}>—</span>
               )}
             </motion.span>
           ))}

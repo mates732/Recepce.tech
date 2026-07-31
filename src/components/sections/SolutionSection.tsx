@@ -138,7 +138,7 @@ export default function SolutionSection({ locale }: Props) {
         </motion.h2>
 
         <motion.p
-          className="font-body mb-16"
+          className="font-body mb-12 sm:mb-16"
           style={{
             fontSize: typography.size.body,
             lineHeight: typography.lineHeight.relaxed,
@@ -155,8 +155,7 @@ export default function SolutionSection({ locale }: Props) {
         </motion.p>
 
         <motion.div
-          className="solution-grid grid gap-6"
-          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+          className="solution-grid grid gap-6 md:[grid-template-columns:repeat(2,1fr)] lg:[grid-template-columns:repeat(3,1fr)]"
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}

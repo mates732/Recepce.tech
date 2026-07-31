@@ -138,7 +138,7 @@ function MobileNavigation({
     <div
       className="flex h-full flex-col bg-white"
       style={{
-        paddingTop: "max(env(safe-area-inset-top), 0px)",
+        paddingTop: "calc(max(env(safe-area-inset-top), 0px) + 28px)",
         paddingBottom: "max(env(safe-area-inset-bottom), 0px)",
       }}
     >
@@ -256,7 +256,7 @@ function MobileNavigation({
                     <Link
                       href={`/${locale}`}
                       onClick={onClose}
-                      className="text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
+                      className="px-1.5 py-2.5 text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
                       style={{
                         color:
                           locale === "cs"
@@ -276,7 +276,7 @@ function MobileNavigation({
                     <Link
                       href={`/${switchTo}`}
                       onClick={onClose}
-                      className="text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
+                      className="px-1.5 py-2.5 text-[13px] font-medium uppercase tracking-[0.04em] no-underline transition-opacity duration-200 focus-visible:opacity-60"
                       style={{
                         color:
                           locale === "en"
@@ -477,7 +477,7 @@ export default function Navbar({ locale }: NavbarProps) {
           onClick={toggleMenu}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          className="transition-opacity duration-300 hover:opacity-50"
+          className="transition-opacity duration-300 hover:opacity-50 max-md:px-3 max-md:py-2.5 max-md:-m-1"
         >
           <span className="text-[10px] tracking-[0.15em] uppercase" style={{ color: open ? "#111111" : "#9CA3AF" }}>
             {open ? (locale === "cs" ? "Zavřít" : "Close") : (locale === "cs" ? "Menu" : "Menu")}

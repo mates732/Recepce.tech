@@ -19,10 +19,8 @@ export default function Footer({ locale }: FooterProps) {
     >
       <div className="mx-auto" style={{ maxWidth: "1200px" }}>
         <div
-          className="footer-grid grid mb-12"
+          className="footer-grid grid mb-12 md:[grid-template-columns:1fr_auto_auto] gap-10 md:gap-16"
           style={{
-            gridTemplateColumns: "1fr auto auto",
-            gap: "64px",
             alignItems: "start",
           }}
         >

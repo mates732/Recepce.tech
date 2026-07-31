@@ -123,7 +123,7 @@ export default function ContactContent({ locale }: Props) {
       }}
     >
       <div className="mx-auto relative z-10" style={{ maxWidth: "960px" }}>
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <div
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-8"
             style={{
@@ -165,8 +165,7 @@ export default function ContactContent({ locale }: Props) {
         </div>
 
         <div
-          className="grid gap-10 items-start"
-          style={{ gridTemplateColumns: "1fr 1.3fr" }}
+          className="grid gap-8 md:gap-10 items-start md:[grid-template-columns:1fr_1.3fr]"
         >
           {/* Left column */}
           <motion.div
@@ -197,7 +196,7 @@ export default function ContactContent({ locale }: Props) {
                   href={c.href}
                   target={c.href.startsWith("http") ? "_blank" : undefined}
                   rel={c.href.startsWith("http") ? "noopener" : undefined}
-                  className="group flex items-center gap-4 py-2"
+                  className="group flex items-center gap-4 py-2.5 md:py-2"
                   style={{
                     color: "#5F6368",
                     borderBottom: "1px solid rgba(17,17,17,0.06)",
@@ -341,7 +340,7 @@ export default function ContactContent({ locale }: Props) {
               <button
                 type="submit"
                 disabled={isDisabled}
-                className="font-body text-sm font-medium tracking-[-0.01em] mt-2 self-start px-6 py-3 rounded-full transition-all duration-300"
+                className="font-body text-sm font-medium tracking-[-0.01em] mt-2 self-start w-full md:w-auto px-6 py-3 rounded-full transition-all duration-300"
                 style={{
                   color: isDisabled ? "rgba(17,17,17,0.3)" : "#FFFFFF",
                   background: isDisabled ? "rgba(17,17,17,0.06)" : "#111111",

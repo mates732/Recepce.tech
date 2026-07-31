@@ -24,7 +24,7 @@ const items: Item[] = [
   {
     name: "Chat Assistant",
     poster: "/images/posters/poster.chat.jpg",
-    href: "/projekty/ai-receptionist",
+    href: "/projekty/ai-sistent/chat-assistant",
   },
 ];
 

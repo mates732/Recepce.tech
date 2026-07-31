@@ -130,7 +130,7 @@ export default function HowItWorksSection({ locale }: Props) {
         </motion.h2>
 
         <motion.p
-          className="font-body mb-16"
+          className="font-body mb-12 sm:mb-16"
           style={{
             fontSize: typography.size.body,
             lineHeight: typography.lineHeight.relaxed,
@@ -147,10 +147,8 @@ export default function HowItWorksSection({ locale }: Props) {
         </motion.p>
 
         <motion.div
-          className="how-it-works-grid relative"
+          className="how-it-works-grid relative grid md:[grid-template-columns:repeat(2,1fr)] lg:[grid-template-columns:repeat(3,1fr)]"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
             gap: spacing.stack.lg,
           }}
           initial="hidden"
@@ -178,6 +176,10 @@ export default function HowItWorksSection({ locale }: Props) {
         }
         .step-connector-1 { left: calc(33.333% - 12px); }
         .step-connector-2 { left: calc(66.666% - 12px); }
+
+        @media (max-width: 1023px) {
+          .step-connector { display: none; }
+        }
 
       `}</style>
     </section>

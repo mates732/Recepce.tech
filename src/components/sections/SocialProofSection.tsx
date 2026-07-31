@@ -68,7 +68,7 @@ export default function SocialProofSection({ locale }: { locale: Locale }) {
         </motion.h2>
 
         <motion.p
-          className="font-body mb-16"
+          className="font-body mb-12 sm:mb-16"
           style={{
             fontSize: typography.size.body,
             lineHeight: typography.lineHeight.relaxed,

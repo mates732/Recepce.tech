@@ -161,7 +161,7 @@ export default function SupportSection({ locale }: Props) {
         </motion.h2>
 
         <motion.p
-          className="font-body mb-16"
+          className="font-body mb-12 sm:mb-16"
           style={{
             fontSize: typography.size.body,
             lineHeight: typography.lineHeight.relaxed,
@@ -178,10 +178,8 @@ export default function SupportSection({ locale }: Props) {
         </motion.p>
 
         <motion.div
-          className="support-grid"
+          className="support-grid grid md:[grid-template-columns:repeat(2,1fr)] lg:[grid-template-columns:repeat(3,1fr)]"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
             gap: spacing.stack.lg,
           }}
           initial="hidden"

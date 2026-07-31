@@ -344,7 +344,7 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
   return (
     <section ref={sectionRef} className="relative" style={{ height: "350vh", background: "#F7F8FA" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(24px, 4vw, 60px)" }}>
-        <div className="relative w-full max-w-5xl mx-auto rounded-2xl overflow-hidden" style={{ background: "#FFFFFF", border: "1px solid rgba(17,17,17,0.06)", aspectRatio: "16/9" }}>
+        <div className="relative w-full max-w-5xl mx-auto rounded-2xl overflow-hidden aspect-[16/9] max-md:aspect-[4/3]" style={{ background: "#FFFFFF", border: "1px solid rgba(17,17,17,0.06)" }}>
           <motion.div className="absolute inset-0" style={{ opacity: screenshotOpacity, scale: screenshotScale }}>
             <Image src="/images/cortex/cortex-dashboard.png" alt="Cortex dashboard" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 1024px" priority />
           </motion.div>
@@ -361,9 +361,9 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
               }}
               className="pointer-events-none"
             >
-              <div className="px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.95)", border: "1px solid rgba(17,17,17,0.06)" }}>
-                <p className="font-heading text-xs" style={{ color: "#111111", whiteSpace: "nowrap" }}>{a.label}</p>
-                <p className="font-body text-[10px]" style={{ color: "#5F6368", whiteSpace: "nowrap" }}>{a.note}</p>
+              <div className="px-3 py-2 rounded-lg max-md:px-2 max-md:py-1" style={{ background: "rgba(255,255,255,0.95)", border: "1px solid rgba(17,17,17,0.06)" }}>
+                <p className="font-heading text-xs whitespace-nowrap max-md:text-[9px]" style={{ color: "#111111" }}>{a.label}</p>
+                <p className="font-body text-[10px] whitespace-nowrap max-md:hidden" style={{ color: "#5F6368" }}>{a.note}</p>
               </div>
             </motion.div>
           ))}

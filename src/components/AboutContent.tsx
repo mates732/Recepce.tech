@@ -34,7 +34,7 @@ const products = [
     title: "AI Chat Assistant",
     descCs: "Webový chatbot. Zákaznická podpora. Znalostní báze. Zachytávání leadů.",
     descEn: "Website chatbot. Customer support. Knowledge base. Lead capture.",
-    href: "/chat-assistant",
+    href: "/projekty/ai-sistent/chat-assistant",
   },
   {
     title: "Cortex",

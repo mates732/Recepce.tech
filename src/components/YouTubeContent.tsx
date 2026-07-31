@@ -118,7 +118,7 @@ export default function YouTubeContent({ locale, channelUrl }: Props) {
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className="font-body flex-1 leading-snug transition-all duration-500"
+                      className="font-body flex-1 min-w-0 break-words leading-snug transition-all duration-500"
                       style={{
                         fontSize: "clamp(15px, 1.2vw, 17px)",
                         fontWeight: isHovered ? 500 : 400,

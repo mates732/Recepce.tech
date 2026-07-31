@@ -136,7 +136,7 @@ export default function BenefitsSection({ locale }: { locale: Locale }) {
         </motion.h2>
 
         <motion.p
-          className="font-body mb-16"
+          className="font-body mb-12 sm:mb-16"
           style={{
             fontSize: typography.size.body,
             lineHeight: typography.lineHeight.relaxed,
@@ -153,8 +153,7 @@ export default function BenefitsSection({ locale }: { locale: Locale }) {
         </motion.p>
 
         <motion.div
-          className="benefits-grid grid gap-6"
-          style={{ gridTemplateColumns: "repeat(2, 1fr)" }}
+          className="benefits-grid grid gap-6 md:[grid-template-columns:repeat(2,1fr)]"
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}

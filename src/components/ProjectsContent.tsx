@@ -24,7 +24,7 @@ const navTree: NavItem[] = [
     id: "ai-assistants", labelEn: "AI Assistants", labelCs: "AI Asistenti",
     children: [
       { id: "voice", labelEn: "Voice Assistant", labelCs: "Voice Asistent", href: "/projekty/ai-sistent/voice-assistant" },
-      { id: "receptionist", labelEn: "Chat Assistant", labelCs: "Chat Asistent", href: "/projekty/ai-receptionist" },
+      { id: "receptionist", labelEn: "Chat Assistant", labelCs: "Chat Asistent", href: "/projekty/ai-sistent/chat-assistant" },
     ],
   },
   {
@@ -159,7 +159,7 @@ export default function ProjectsContent({ locale }: Props) {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 30 }}
           transition={{ duration: 0.25, ease: [0.22, 0.8, 0.2, 1] }}
-          className="flex items-start"
+          className="flex flex-col items-center md:flex-row md:items-start"
         >
           {children}
         </motion.div>
@@ -173,7 +173,7 @@ export default function ProjectsContent({ locale }: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="w-px self-stretch mx-3 sm:mx-4"
+      className="max-md:w-full max-md:h-px max-md:my-5 w-px self-stretch mx-3 sm:mx-4"
       style={{ background: "rgba(17,17,17,0.04)" }}
     />
   );
@@ -197,7 +197,7 @@ export default function ProjectsContent({ locale }: Props) {
         <motion.div
           layout
           transition={{ duration: 0.3, ease: [0.22, 0.8, 0.2, 1] }}
-          className="flex items-start"
+          className="flex flex-col items-center md:flex-row md:items-start"
         >
           {/* Root column */}
           <Column items={navTree} weight={rootWeight} />
@@ -211,7 +211,7 @@ export default function ProjectsContent({ locale }: Props) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               onClick={() => setLevel("root")}
-              className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+              className="self-center max-md:ml-0 max-md:mt-2 ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
               style={{ color: "#9CA3AF" }}
             >
               &larr; {locale === "cs" ? "Zp\u011bt" : "Back"}
@@ -227,7 +227,7 @@ export default function ProjectsContent({ locale }: Props) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               onClick={() => setLevel("root")}
-              className="self-center ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+              className="self-center max-md:ml-0 max-md:mt-2 ml-4 text-[10px] tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
               style={{ color: "#9CA3AF" }}
             >
               &larr; {locale === "cs" ? "Zp\u011bt" : "Back"}

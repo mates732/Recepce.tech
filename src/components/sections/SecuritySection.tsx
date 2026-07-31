@@ -176,7 +176,7 @@ export default function SecuritySection({ locale }: Props) {
         </motion.h2>
 
         <motion.p
-          className="font-body mb-16"
+          className="font-body mb-12 sm:mb-16"
           style={{
             fontSize: typography.size.body,
             lineHeight: typography.lineHeight.relaxed,
@@ -193,10 +193,8 @@ export default function SecuritySection({ locale }: Props) {
         </motion.p>
 
         <motion.div
-          className="security-grid"
+          className="security-grid grid md:[grid-template-columns:repeat(2,1fr)]"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
             gap: spacing.stack.lg,
           }}
           initial="hidden"

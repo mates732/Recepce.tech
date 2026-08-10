@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
@@ -11,7 +11,6 @@ interface AboutSectionProps {
 
 export default function AboutSection({ locale }: AboutSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
 
   const name = "Matyáš Vojan";
   const handle = "recepce.tech";
@@ -107,7 +106,7 @@ export default function AboutSection({ locale }: AboutSectionProps) {
           {[philosophy, approach, focus].map((item, i) => (
             <motion.div
               key={item.title}
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}

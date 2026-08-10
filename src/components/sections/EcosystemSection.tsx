@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
@@ -65,7 +65,6 @@ const cards: Record<Locale, Card[]> = {
 
 export default function EcosystemSection({ locale }: EcosystemSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
   const data = cards[locale];
   const title = locale === "cs" ? "Projekty" : "Projects";
   const subtitle = locale === "cs"
@@ -131,7 +130,6 @@ export default function EcosystemSection({ locale }: EcosystemSectionProps) {
                 card={card}
                 index={i}
                 locale={locale}
-                shouldReduceMotion={!!shouldReduceMotion}
               />
             ))}
             </div>
@@ -146,12 +144,10 @@ function EcosystemCard({
   card,
   index,
   locale,
-  shouldReduceMotion,
 }: {
   card: Card;
   index: number;
   locale: Locale;
-  shouldReduceMotion: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -159,7 +155,7 @@ function EcosystemCard({
     <Link href={`/${locale}${card.href}`} className="block no-underline">
       <motion.div
         ref={cardRef}
-        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}

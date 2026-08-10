@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
 
+const CACHE_TTL_MS = 10 * 60 * 1000;
+
+const cache = new Map<string, { videos: unknown; expires: number }>();
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const channelId = searchParams.get("channelId");
 
   if (!channelId || !/^UC[\w-]{22,24}$/.test(channelId)) {
     return NextResponse.json({ error: "Invalid channelId" }, { status: 400 });
+  }
+
+  const cached = cache.get(channelId);
+  if (cached && Date.now() < cached.expires) {
+    return NextResponse.json({ videos: cached.videos });
   }
 
   try {
@@ -15,6 +24,9 @@ export async function GET(request: Request) {
     });
 
     if (!res.ok) {
+      if (cached) {
+        return NextResponse.json({ videos: cached.videos });
+      }
       return NextResponse.json({ error: "Failed to fetch RSS feed" }, { status: 502 });
     }
 
@@ -42,8 +54,12 @@ export async function GET(request: Request) {
       }
     }
 
+    cache.set(channelId, { videos, expires: Date.now() + CACHE_TTL_MS });
     return NextResponse.json({ videos });
   } catch {
+    if (cached) {
+      return NextResponse.json({ videos: cached.videos });
+    }
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

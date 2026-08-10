@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   motionValue,
   useReducedMotion,
@@ -165,10 +165,13 @@ export function useParallax(
   to: number,
   offset: ScrollOffset = OFFSET_ENTRY_EXIT,
 ): MotionValue<number> {
+  const shouldReduce = !!useReducedMotion();
   const progress = useElementScrollProgress(ref, offset);
   const y = useTransform(progress, [0, 1], [from, to]);
-  const zero = useMemo(() => motionValue(0), []);
-  return useReducedMotion() ? zero : y;
+  useEffect(() => {
+    if (shouldReduce) y.set(0);
+  }, [shouldReduce, y]);
+  return y;
 }
 
 export function useScrollY(): MotionValue<number> {

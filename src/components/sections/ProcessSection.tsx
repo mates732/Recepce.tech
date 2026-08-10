@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
@@ -30,7 +30,6 @@ const steps = {
 
 export default function ProcessSection({ locale }: ProcessSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
   const data = steps[locale];
   const title = locale === "cs" ? "Jak vznikají systémy" : "How systems are built";
   const subtitle = locale === "cs"
@@ -85,7 +84,6 @@ export default function ProcessSection({ locale }: ProcessSectionProps) {
                 step={step}
                 index={i}
                 total={data.length}
-                shouldReduceMotion={!!shouldReduceMotion}
               />
             ))}
           </div>
@@ -99,19 +97,17 @@ function ProcessStep({
   step,
   index,
   total,
-  shouldReduceMotion,
 }: {
   step: { title: string; desc: string };
   index: number;
   total: number;
-  shouldReduceMotion: boolean;
 }) {
   const isLeft = index % 2 === 0;
   const dotRef = useRef<HTMLDivElement>(null);
 
   return (
     <motion.div
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}

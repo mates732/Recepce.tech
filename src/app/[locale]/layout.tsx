@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PageTransitionProvider from "@/components/PageTransitionProvider";
 import LocaleHtmlLang from "@/components/LocaleHtmlLang";
+import { MotionConfig } from "framer-motion";
 
 interface Props {
   children: React.ReactNode;
@@ -39,7 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const loc = locale as Locale;
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <LocaleHtmlLang locale={loc} />
       <script
         type="application/ld+json"
@@ -54,6 +55,6 @@ export default async function LocaleLayout({ children, params }: Props) {
         </ErrorBoundary>
       </main>
       <Footer locale={loc} />
-    </>
+    </MotionConfig>
   );
 }

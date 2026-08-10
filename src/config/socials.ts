@@ -5,7 +5,7 @@ export const SOCIALS = {
   email: process.env.NEXT_PUBLIC_EMAIL ?? "vojanmatyas@gmail.com",
   instagram:
     process.env.NEXT_PUBLIC_INSTAGRAM_URL ??
-    "https://www.instagram.com/matyasvojan",
+    "https://www.instagram.com/i_am_trenbolone/",
   phone: "+420 732 839 892",
 };
 

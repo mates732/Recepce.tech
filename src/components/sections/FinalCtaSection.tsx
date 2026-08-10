@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
@@ -11,7 +11,6 @@ interface FinalCtaSectionProps {
 
 export default function FinalCtaSection({ locale }: FinalCtaSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
 
   const title = locale === "cs"
     ? "Pojďme postavit něco inteligentního."
@@ -62,7 +61,7 @@ export default function FinalCtaSection({ locale }: FinalCtaSectionProps) {
             lineHeight: 1.1,
             maxWidth: "12ch",
           }}
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -83,7 +82,7 @@ export default function FinalCtaSection({ locale }: FinalCtaSectionProps) {
             fontSize: "clamp(14px, 1.2vw, 18px)",
             color: "#5F6368",
           }}
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -93,7 +92,7 @@ export default function FinalCtaSection({ locale }: FinalCtaSectionProps) {
 
         <motion.div
           className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}

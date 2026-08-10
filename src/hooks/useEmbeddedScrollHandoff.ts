@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useScrollY } from "@/lib/scroll";
 
 export function useEmbeddedScrollHandoff(
   iframeRef: React.RefObject<HTMLIFrameElement | null>
 ) {
   const lastScrollYRef = useRef(0);
+  const cachedTopRef = useRef<number | null>(null);
+  const cachedHeightRef = useRef(0);
+  const scrollY = useScrollY();
 
   function isIframeDisabled(): boolean {
     return iframeRef.current?.style.pointerEvents === "none";
@@ -23,11 +27,34 @@ export function useEmbeddedScrollHandoff(
     }
   }
 
-  function isInView(): boolean {
-    if (!iframeRef.current) return false;
-    const rect = iframeRef.current.getBoundingClientRect();
-    return rect.top < window.innerHeight && rect.bottom > 0;
+  function measure(): void {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    const rect = iframe.getBoundingClientRect();
+    cachedTopRef.current = rect.top + window.scrollY;
+    cachedHeightRef.current = rect.height;
+    lastScrollYRef.current = window.scrollY;
   }
+
+  useEffect(() => {
+    const unsub = scrollY.on("change", (y) => {
+      const top = cachedTopRef.current;
+      if (top == null) return;
+      const height = cachedHeightRef.current;
+      const inView = top - y < window.innerHeight && top + height - y > 0;
+      if (!inView) return;
+
+      const isScrollingUp = y < lastScrollYRef.current;
+      lastScrollYRef.current = y;
+
+      if (isScrollingUp && !isIframeDisabled()) {
+        disableIframe();
+      } else if (!isScrollingUp && isIframeDisabled()) {
+        enableIframe();
+      }
+    });
+    return unsub;
+  }, [scrollY, iframeRef]);
 
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
@@ -44,21 +71,13 @@ export function useEmbeddedScrollHandoff(
   }, [iframeRef]);
 
   useEffect(() => {
-    function handleScroll() {
-      if (!iframeRef.current || !isInView()) return;
-
-      const currentScrollY = window.scrollY;
-      const isScrollingUp = currentScrollY < lastScrollYRef.current;
-      lastScrollYRef.current = currentScrollY;
-
-      if (isScrollingUp && !isIframeDisabled()) {
-        disableIframe();
-      } else if (!isScrollingUp && isIframeDisabled()) {
-        enableIframe();
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [iframeRef]);
+    measure();
+    const interval = setInterval(measure, 2000);
+    window.addEventListener("resize", measure);
+    window.addEventListener("load", measure, { once: true });
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 }

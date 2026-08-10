@@ -2,7 +2,8 @@
 
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useTransform, useReducedMotion } from "framer-motion";
+import { useElementScrollProgress, OFFSET_TOP_OUT } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface Props {
@@ -27,13 +28,13 @@ export default function ChatAssistantContent({ locale }: Props) {
 
 function HeroSection({ locale, shouldReduceMotion }: { locale: Locale; shouldReduceMotion: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const progress = useElementScrollProgress(sectionRef, OFFSET_TOP_OUT);
+  const y = useTransform(progress, [0, 1], [0, 80]);
+  const opacity = useTransform(progress, [0, 0.7], [1, 0]);
 
   return (
     <section ref={sectionRef} className="relative flex flex-col items-center justify-center overflow-hidden" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 200px) clamp(24px, 5vw, 80px)", background: "#FFFFFF" }}>
-      <motion.div style={{ y, opacity }} className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
+      <motion.div style={{ y: shouldReduceMotion ? 0 : y, opacity: shouldReduceMotion ? 1 : opacity }} className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
         <Link
           href={`/${locale}/projekty/ai-sistent/voice-assistant`}
           className="group inline-flex flex-col items-start"

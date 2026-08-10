@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface YoutubeSectionProps {
@@ -11,19 +12,13 @@ interface YoutubeSectionProps {
 
 export default function YoutubeSection({ locale }: YoutubeSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
   const title = "YouTube";
   const subtitle = locale === "cs"
     ? "Technologie, vývoj a reálné projekty. Bez zbytečné teorie."
     : "Tech, development and real projects. No unnecessary theory.";
   const cta = locale === "cs" ? "Sledovat na YouTube" : "Follow on YouTube";
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const y = useParallax(sectionRef, 40, -40);
 
   return (
     <section
@@ -34,7 +29,7 @@ export default function YoutubeSection({ locale }: YoutubeSectionProps) {
         padding: "clamp(60px, 8vw, 100px) clamp(24px, 5vw, 80px)",
       }}
     >
-      <motion.div style={{ y: shouldReduceMotion ? 0 : y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
+      <motion.div style={{ y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
           <div>
             <h2

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface ProcessSectionProps {
@@ -36,12 +37,7 @@ export default function ProcessSection({ locale }: ProcessSectionProps) {
     ? "Od nápadu po produkci. Každá fáze má svůj význam."
     : "From idea to production. Every phase matters.";
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const y = useParallax(sectionRef, 40, -40);
 
   return (
     <section
@@ -52,7 +48,7 @@ export default function ProcessSection({ locale }: ProcessSectionProps) {
         padding: "clamp(48px, 8vw, 100px) clamp(24px, 5vw, 80px)",
       }}
     >
-      <motion.div style={{ y: shouldReduceMotion ? 0 : y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
+      <motion.div style={{ y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
           <div className="text-center mb-10 sm:mb-16">
           <h2
             className="font-heading"

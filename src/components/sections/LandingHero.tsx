@@ -3,28 +3,26 @@
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
 import { colors, typography, spacing, radius } from "@/design/tokens";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useTransform, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import type { Variants } from "framer-motion";
 import { useRef } from "react";
+import { useElementScrollProgress, OFFSET_TOP_OUT } from "@/lib/scroll";
 
 export default function LandingHero({ locale }: { locale: Locale }) {
   const shouldReduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
+  const progress = useElementScrollProgress(sectionRef, OFFSET_TOP_OUT);
 
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const glowY = useTransform(scrollYProgress, [0, 1], [0, 50]);
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 0]);
-  const fgY = useTransform(scrollYProgress, [0, 1], [0, -30]);
-  const splitX1 = useTransform(scrollYProgress, [0, 0.3], [0, -20]);
-  const splitX2 = useTransform(scrollYProgress, [0, 0.3], [0, 20]);
-  const splitRotate1 = useTransform(scrollYProgress, [0, 0.3], [0, -1]);
-  const splitRotate2 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  const bgY = useTransform(progress, [0, 1], [0, 100]);
+  const glowY = useTransform(progress, [0, 1], [0, 50]);
+  const glowOpacity = useTransform(progress, [0, 0.5], [0.3, 0]);
+  const fgY = useTransform(progress, [0, 1], [0, -30]);
+  const splitX1 = useTransform(progress, [0, 0.3], [0, -20]);
+  const splitX2 = useTransform(progress, [0, 0.3], [0, 20]);
+  const splitRotate1 = useTransform(progress, [0, 0.3], [0, -1]);
+  const splitRotate2 = useTransform(progress, [0, 0.3], [0, 1]);
 
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 24 },
@@ -58,33 +56,47 @@ export default function LandingHero({ locale }: { locale: Locale }) {
       <motion.div
         className="absolute pointer-events-none"
         style={{
-          y: bgY,
+          y: shouldReduceMotion ? 0 : bgY,
           width: "600px",
           height: "600px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(237,237,237,0.04) 0%, transparent 70%)",
           top: "15%",
           left: "50%",
           translateX: "-50%",
-          opacity: glowOpacity,
-          filter: "blur(60px)",
+          opacity: shouldReduceMotion ? 0.3 : glowOpacity,
+          willChange: "transform",
         }}
-      />
+      >
+        <div
+          className="w-full h-full"
+          style={{
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(237,237,237,0.04) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+      </motion.div>
 
       {/* Foreground glow */}
       <motion.div
         className="absolute pointer-events-none"
         style={{
-          y: glowY,
+          y: shouldReduceMotion ? 0 : glowY,
           width: "300px",
           height: "300px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(136,136,136,0.05) 0%, transparent 70%)",
           bottom: "20%",
           right: "15%",
-          filter: "blur(40px)",
+          willChange: "transform",
         }}
-      />
+      >
+        <div
+          className="w-full h-full"
+          style={{
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(136,136,136,0.05) 0%, transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+      </motion.div>
 
       {/* Content */}
       <div

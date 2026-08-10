@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface ProjectContentProps {
@@ -13,15 +14,9 @@ interface ProjectContentProps {
 
 export default function ProjectContent({ locale, title, description }: ProjectContentProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
   const backLabel = locale === "cs" ? "Zpět na přehled" : "Back to overview";
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const y = useParallax(sectionRef, 40, -40);
 
   return (
     <section
@@ -33,7 +28,7 @@ export default function ProjectContent({ locale, title, description }: ProjectCo
       }}
     >
       <motion.div
-        style={{ y: shouldReduceMotion ? 0 : y }}
+        style={{ y }}
         className="relative z-10 mx-auto w-full"
       >
         <motion.div

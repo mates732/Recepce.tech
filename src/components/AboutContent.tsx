@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useTransform, useReducedMotion } from "framer-motion";
+import { useParallax, useElementScrollProgress, OFFSET_TOP_OUT } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface Props {
@@ -74,13 +75,13 @@ export default function AboutContent({ locale }: Props) {
 
 function StatementSection({ locale, shouldReduceMotion }: { locale: Locale; shouldReduceMotion: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const progress = useElementScrollProgress(sectionRef, OFFSET_TOP_OUT);
+  const y = useTransform(progress, [0, 1], [0, 80]);
+  const opacity = useTransform(progress, [0, 0.7], [1, 0]);
 
   return (
     <section ref={sectionRef} className="relative flex flex-col items-center justify-center" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 180px) clamp(24px, 5vw, 80px)", background: "#F7F8FA" }}>
-      <motion.div style={{ y, opacity }} className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto">
+      <motion.div style={{ y: shouldReduceMotion ? 0 : y, opacity: shouldReduceMotion ? 1 : opacity }} className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto">
         <motion.span
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -108,7 +109,7 @@ function StatementSection({ locale, shouldReduceMotion }: { locale: Locale; shou
 
 function WorksSection({ locale, shouldReduceMotion }: { locale: Locale; shouldReduceMotion: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const y = useScrollProgress(sectionRef);
+  const y = useParallax(sectionRef, 30, -30);
 
   const items = locale === "cs"
     ? [
@@ -155,11 +156,11 @@ function WorksSection({ locale, shouldReduceMotion }: { locale: Locale; shouldRe
 
 function PersonalSection({ locale, shouldReduceMotion }: { locale: Locale; shouldReduceMotion: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const y = useScrollProgress(sectionRef);
+  const y = useParallax(sectionRef, 30, -30);
 
   return (
     <section ref={sectionRef} className="relative" style={{ padding: "clamp(120px, 16vw, 200px) clamp(24px, 5vw, 80px)", background: "#F7F8FA" }}>
-      <motion.div style={{ y: shouldReduceMotion ? 0 : y }} className="max-w-5xl mx-auto">
+      <motion.div style={{ y }} className="max-w-5xl mx-auto">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -200,11 +201,11 @@ function PersonalSection({ locale, shouldReduceMotion }: { locale: Locale; shoul
 
 function PrinciplesSection({ locale, shouldReduceMotion }: { locale: Locale; shouldReduceMotion: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const y = useScrollProgress(sectionRef);
+  const y = useParallax(sectionRef, 30, -30);
 
   return (
     <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)", background: "#FFFFFF" }}>
-      <motion.div style={{ y: shouldReduceMotion ? 0 : y }} className="max-w-5xl mx-auto">
+      <motion.div style={{ y }} className="max-w-5xl mx-auto">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -241,11 +242,11 @@ function PrinciplesSection({ locale, shouldReduceMotion }: { locale: Locale; sho
 
 function ProductMapSection({ locale, shouldReduceMotion }: { locale: Locale; shouldReduceMotion: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const y = useScrollProgress(sectionRef);
+  const y = useParallax(sectionRef, 30, -30);
 
   return (
     <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)", background: "#FFFFFF" }}>
-      <motion.div style={{ y: shouldReduceMotion ? 0 : y }} className="max-w-5xl mx-auto">
+      <motion.div style={{ y }} className="max-w-5xl mx-auto">
         {/* Brand card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -318,12 +319,4 @@ function ProductMapSection({ locale, shouldReduceMotion }: { locale: Locale; sho
       </motion.div>
     </section>
   );
-}
-
-function useScrollProgress(ref: React.RefObject<HTMLElement | null>) {
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  return useTransform(scrollYProgress, [0, 1], [30, -30]);
 }

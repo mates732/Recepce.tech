@@ -3,7 +3,8 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useTransform, type MotionValue } from "framer-motion";
+import { useElementScrollProgress, OFFSET_FULL } from "@/lib/scroll";
 
 interface Props {
   locale: Locale;
@@ -314,9 +315,9 @@ function ChatScene({ locale }: { locale: Locale }) {
 
 function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const screenshotOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-  const screenshotScale = useTransform(scrollYProgress, [0, 0.15], [0.95, 1]);
+  const progress = useElementScrollProgress(sectionRef, OFFSET_FULL, 1);
+  const screenshotOpacity = useTransform(progress, [0, 0.15], [0, 1]);
+  const screenshotScale = useTransform(progress, [0, 0.15], [0.95, 1]);
 
   const annotations = locale === "cs"
     ? [
@@ -335,10 +336,10 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
       ];
 
   const annotationOpacity = annotations.map((a) =>
-    useTransform(scrollYProgress, [a.appearAt, a.appearAt + 0.08], [0, 1])
+    useTransform(progress, [a.appearAt, a.appearAt + 0.08], [0, 1])
   );
   const annotationY = annotations.map((a) =>
-    useTransform(scrollYProgress, [a.appearAt, a.appearAt + 0.08], [12, 0])
+    useTransform(progress, [a.appearAt, a.appearAt + 0.08], [12, 0])
   );
 
   return (
@@ -377,9 +378,9 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
 
 function ConfidenceScene({ locale }: { locale: Locale }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const progress = useElementScrollProgress(sectionRef, OFFSET_FULL, 0);
 
-  const pct = useTransform(scrollYProgress, [0, 1], [55, 98]);
+  const pct = useTransform(progress, [0, 1], [55, 98]);
   const roundedPct = useTransform(pct, (v) => Math.round(v) + " %");
 
   const stageLabels = locale === "cs"
@@ -393,18 +394,6 @@ function ConfidenceScene({ locale }: { locale: Locale }) {
         { label: "Evidence verified", desc: "Cross-referencing confirmed findings", range: [0.3, 0.6] },
         { label: "Ready for action", desc: "All signals consistent", range: [0.6, 1] },
       ];
-
-  const [stageIndex, setStageIndex] = useState(0);
-  useEffect(() => {
-    const unsub = scrollYProgress.on("change", (v) => {
-      const idx = stageLabels.findIndex((s) => v >= s.range[0] && v < s.range[1]);
-      if (idx >= 0) setStageIndex(idx);
-      else if (v >= 1) setStageIndex(stageLabels.length - 1);
-    });
-    return () => unsub();
-  }, [scrollYProgress, stageLabels]);
-
-  const stage = stageLabels[stageIndex];
 
   return (
     <section ref={sectionRef} className="relative" style={{ height: "200vh", background: "#F7F8FA" }}>
@@ -424,26 +413,40 @@ function ConfidenceScene({ locale }: { locale: Locale }) {
             {roundedPct}
           </motion.p>
 
-          <motion.p
-            key={stage.label}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="font-heading mt-4"
-            style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.02em", color: "#111111" }}
-          >
-            {stage.label}
-          </motion.p>
-          <motion.p
-            key={stage.desc}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.12, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body mt-2"
-            style={{ fontSize: "clamp(12px, 1vw, 14px)", color: "#5F6368" }}
-          >
-            {stage.desc}
-          </motion.p>
+          <div className="relative" style={{ height: "clamp(104px, 13vh, 132px)" }}>
+            {stageLabels.map((s, i) => {
+              const [from, to] = s.range;
+              const isFirst = i === 0;
+              const opacityInput = isFirst
+                ? [0, from + 0.08, to - 0.08, to]
+                : [from, from + 0.08, to - 0.08, to];
+              const opacityOutput = isFirst ? [1, 1, 1, 0] : [0, 1, 1, 0];
+              const yInput = opacityInput;
+              const yOutput = isFirst ? [0, 0, 0, -10] : [10, 0, 0, -10];
+              const opacity = useTransform(progress, opacityInput, opacityOutput);
+              const y = useTransform(progress, yInput, yOutput);
+              return (
+                <motion.div
+                  key={s.label}
+                  style={{ opacity, y, position: "absolute", inset: 0 }}
+                  className="flex flex-col items-center justify-center"
+                >
+                  <p
+                    className="font-heading"
+                    style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.02em", color: "#111111" }}
+                  >
+                    {s.label}
+                  </p>
+                  <p
+                    className="font-body mt-2"
+                    style={{ fontSize: "clamp(12px, 1vw, 14px)", color: "#5F6368" }}
+                  >
+                    {s.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
@@ -509,8 +512,7 @@ function EditorialQuoteScene({ locale }: { locale: Locale }) {
 
 function CinematicRevealScene({ locale }: { locale: Locale }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const [step, setStep] = useState(0);
+  const progress = useElementScrollProgress(sectionRef, OFFSET_FULL, 1);
 
   const steps = locale === "cs"
     ? [
@@ -528,13 +530,7 @@ function CinematicRevealScene({ locale }: { locale: Locale }) {
         { icon: "\u2713", label: "Ready for review", sub: "Awaiting manual approval" },
       ];
 
-  useEffect(() => {
-    const unsub = scrollYProgress.on("change", (v) => {
-      const idx = Math.min(Math.floor(v * steps.length), steps.length - 1);
-      setStep(idx);
-    });
-    return () => unsub();
-  }, [scrollYProgress, steps.length]);
+  const total = steps.length;
 
   return (
     <section ref={sectionRef} className="relative" style={{ height: "250vh", background: "#F7F8FA" }}>
@@ -551,37 +547,87 @@ function CinematicRevealScene({ locale }: { locale: Locale }) {
           </motion.p>
 
           <div className="space-y-5">
-            {steps.map((s, i) => {
-              const done = i < step;
-              const active = i === step;
-              return (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, x: -16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex items-center gap-3"
-                  style={{ opacity: done ? 0.3 : active ? 1 : 0.12 }}
-                >
-                  <span className="font-mono text-sm flex-shrink-0" style={{ width: 20, color: done ? "#5F6368" : active ? "#111111" : "rgba(17,17,17,0.2)" }}>
-                    {s.icon}
-                  </span>
-                  <div>
-                    <span className="font-heading leading-tight" style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.01em", color: done || active ? "#111111" : "rgba(17,17,17,0.2)" }}>
-                      {s.label}
-                    </span>
-                    <span className="font-body text-xs block" style={{ color: done ? "#9CA3AF" : active ? "#5F6368" : "rgba(17,17,17,0.1)" }}>
-                      {s.sub}
-                    </span>
-                  </div>
-                </motion.div>
-              );
-            })}
+            {steps.map((s, i) => (
+              <CinematicRow key={s.label} step={s} index={i} total={total} progress={progress} />
+            ))}
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function CinematicRow({
+  step,
+  index,
+  total,
+  progress,
+}: {
+  step: { icon: string; label: string; sub: string };
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+}) {
+  const t0 = index / total;
+  const t1 = (index + 1) / total;
+  const isLast = index === total - 1;
+  const rise = t0 === 0 ? 0.001 : Math.max(0.001, t0 - 0.03);
+
+  const bright = isLast
+    ? useTransform(progress, [0, rise, t0, 1], [0, 0, 1, 1])
+    : useTransform(
+        progress,
+        [0, rise, t0, t1, Math.min(t1 + 0.02, 0.999)],
+        [0, 0, 1, 1, 0.3]
+      );
+  const dim = isLast
+    ? useTransform(progress, [0, rise, t0, 1], [1, 1, 0, 0])
+    : useTransform(
+        progress,
+        [0, rise, t0, t1, Math.min(t1 + 0.02, 0.999)],
+        [1, 1, 0, 0, 0.7]
+      );
+
+  return (
+    <div className="relative flex items-center gap-3">
+      <motion.div
+        style={{ opacity: dim }}
+        className="absolute inset-0 flex items-center gap-3 pointer-events-none"
+        aria-hidden="true"
+      >
+        <span className="font-mono text-sm flex-shrink-0" style={{ width: 20, color: "rgba(17,17,17,0.2)" }}>
+          {step.icon}
+        </span>
+        <div>
+          <span className="font-heading leading-tight" style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.01em", color: "rgba(17,17,17,0.2)" }}>
+            {step.label}
+          </span>
+          <span className="font-body text-xs block" style={{ color: "rgba(17,17,17,0.1)" }}>
+            {step.sub}
+          </span>
+        </div>
+      </motion.div>
+      <motion.div
+        style={{ opacity: bright }}
+        initial={{ x: -16 }}
+        whileInView={{ x: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: index * 0.1, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="flex items-center gap-3"
+      >
+        <span className="font-mono text-sm flex-shrink-0" style={{ width: 20, color: "#111111" }}>
+          {step.icon}
+        </span>
+        <div>
+          <span className="font-heading leading-tight" style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.01em", color: "#111111" }}>
+            {step.label}
+          </span>
+          <span className="font-body text-xs block" style={{ color: "#5F6368" }}>
+            {step.sub}
+          </span>
+        </div>
+      </motion.div>
+    </div>
   );
 }
 

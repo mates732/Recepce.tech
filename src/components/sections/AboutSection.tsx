@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface AboutSectionProps {
@@ -39,12 +40,7 @@ export default function AboutSection({ locale }: AboutSectionProps) {
     text: "Intelligent systems that deliver real value. AI receptionists, chatbots, automations, internal tools — everything that moves businesses forward.",
   };
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const y = useParallax(sectionRef, 40, -40);
 
   return (
     <section
@@ -55,7 +51,7 @@ export default function AboutSection({ locale }: AboutSectionProps) {
         padding: "clamp(48px, 8vw, 100px) clamp(24px, 5vw, 80px)",
       }}
     >
-      <motion.div style={{ y: shouldReduceMotion ? 0 : y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
+      <motion.div style={{ y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
         {/* Header */}
         <div className="mb-10 sm:mb-16">
           <div className="flex items-center gap-3 mb-6">

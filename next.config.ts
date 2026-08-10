@@ -30,7 +30,7 @@ const securityHeaders = [
       "font-src 'self' fonts.gstatic.com",
       "img-src 'self' data: img.youtube.com i1.ytimg.com i2.ytimg.com i3.ytimg.com i4.ytimg.com",
       "connect-src 'self' api.vapi.ai",
-      "frame-src 'self'",
+      "frame-src 'self' https://zlaty-hreben.vercel.app",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

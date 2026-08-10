@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface FinalCtaSectionProps {
@@ -21,12 +22,7 @@ export default function FinalCtaSection({ locale }: FinalCtaSectionProps) {
   const cta = locale === "cs" ? "Napsat zprávu" : "Send a message";
   const altCta = locale === "cs" ? "Prozkoumat projekty" : "Explore projects";
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const y = useParallax(sectionRef, 40, -40);
 
   return (
     <section
@@ -54,7 +50,7 @@ export default function FinalCtaSection({ locale }: FinalCtaSectionProps) {
       />
 
       <motion.div
-        style={{ y: shouldReduceMotion ? 0 : y, maxWidth: "800px" }}
+        style={{ y, maxWidth: "800px" }}
         className="relative z-10 mx-auto text-center"
       >
         <motion.h2

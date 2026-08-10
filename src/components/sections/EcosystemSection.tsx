@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
 
 interface EcosystemSectionProps {
@@ -71,12 +72,7 @@ export default function EcosystemSection({ locale }: EcosystemSectionProps) {
     ? "Vše, co stavím. Na jednom místě."
     : "Everything I build. In one place.";
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const y = useParallax(sectionRef, 60, -60);
 
   return (
     <section
@@ -87,7 +83,7 @@ export default function EcosystemSection({ locale }: EcosystemSectionProps) {
         padding: "clamp(48px, 8vw, 100px) clamp(24px, 5vw, 80px)",
       }}
     >
-      <motion.div style={{ y: shouldReduceMotion ? 0 : y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
+      <motion.div style={{ y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
         <h2
           className="sm:absolute sm:left-0 sm:inset-y-0 sm:flex sm:items-center sm:justify-center hidden font-heading select-none pointer-events-none"
           style={{

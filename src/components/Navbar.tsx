@@ -318,19 +318,19 @@ export default function Navbar({ locale }: NavbarProps) {
                   style={{ transform: level === "root" ? "translateX(0)" : level === "projects" ? "translateX(-100%)" : "translateX(-200%)" }}
                 >
                   {/* Root level */}
-                  <div className="flex w-full max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1">
+                  <div className="flex w-full max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1 md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-x-4 md:gap-y-5 md:px-1 md:m-auto md:w-full">
                     <Column items={navTree} weight={rootWeight} />
                   </div>
 
                   {/* Projects level */}
-                  <div className="hidden max-md:flex max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1">
+                  <div className="hidden max-md:flex max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1 md:flex md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-x-4 md:gap-y-5 md:px-1 md:m-auto md:w-full">
                     <Column items={childItems.projects} weight={projectsWeight} align="center" />
                     <motion.button
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.2 }}
                       onClick={() => setLevel("root")}
-                      className="mt-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                      className="mt-4 md:mt-0 md:ml-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
                       style={{ color: "#6E7683" }}
                     >
                       ← {t(locale, "ui.back")}
@@ -338,61 +338,22 @@ export default function Navbar({ locale }: NavbarProps) {
                   </div>
 
                   {/* Communication level */}
-                  <div className="hidden max-md:flex max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1">
+                  <div className="hidden max-md:flex max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1 md:flex md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-x-4 md:gap-y-5 md:px-1 md:m-auto md:w-full">
                     <Column items={leftColumnItems} weight={projectsWeight} align="center" />
-                    <Divider orientation="horizontal" className="my-4 w-full" />
+                    <Divider orientation="horizontal" className="my-4 w-full md:w-px md:self-stretch md:my-0 md:mx-4" />
                     <Column items={childItems["communication"]} weight="primary" align="center" />
                     <motion.button
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.2 }}
                       onClick={() => setLevel("projects")}
-                      className="mt-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                      className="mt-4 md:mt-0 md:ml-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
                       style={{ color: "#6E7683" }}
                     >
                       ← {t(locale, "ui.back")}
                     </motion.button>
                   </div>
                 </motion.div>
-
-                {/* Desktop: side-by-side columns */}
-                <div className="hidden md:flex md:flex-wrap md:items-start md:justify-center md:gap-x-4 md:gap-y-5 md:py-4 md:px-1 md:m-auto md:w-full">
-                  <Column items={navTree} weight={rootWeight} className={showCommunication ? "max-md:hidden" : ""} />
-
-                  {showCommunication ? (
-                    <>
-                      <Divider />
-                      <Column items={leftColumnItems} weight={projectsWeight} align="center" />
-                      <Divider />
-                      <Column items={childItems["communication"]} weight="primary" align="right" />
-                      <motion.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        onClick={() => setLevel("projects")}
-                        className="self-center ml-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap max-md:text-[12px] max-md:px-2 max-md:py-[13px] max-md:basis-full max-md:ml-0 max-md:mt-4 max-md:text-center"
-                        style={{ color: "#6E7683" }}
-                      >
-                        ← {t(locale, "ui.back")}
-                      </motion.button>
-                    </>
-                  ) : showProjects ? (
-                    <>
-                      <Divider />
-                      <Column items={childItems.projects} weight={projectsWeight} align={level === "projects" ? "right" : "center"} />
-                      <motion.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        onClick={() => setLevel("root")}
-                        className="self-center ml-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap max-md:text-[12px] max-md:px-2 max-md:py-[13px] max-md:basis-full max-md:ml-0 max-md:mt-4 max-md:text-center"
-                        style={{ color: "#6E7683" }}
-                      >
-                        ← {t(locale, "ui.back")}
-                      </motion.button>
-                    </>
-                  ) : null}
-                </div>
               </div>
 
               {/* Language switcher — just the texts on the background */}

@@ -167,8 +167,9 @@ export default function Navbar({ locale }: NavbarProps) {
             aria-modal="true"
             aria-label={t(locale, "ui.navigationMenu")}
           >
-            <div className="relative z-10 flex flex-col h-full px-[clamp(48px,8vw,100px)] max-md:px-6">
-              <div className="flex items-start justify-between h-20">
+            <div className="relative z-10 flex flex-col h-full px-[clamp(40px,6vw,80px)] max-md:px-6">
+              {/* Fixed header with logo and close button */}
+              <div className="flex items-center justify-between h-20 flex-shrink-0">
                 <Link
                   href={`/${locale}`}
                   onClick={() => { setOpen(false); setExpanded(null); }}
@@ -201,9 +202,10 @@ export default function Navbar({ locale }: NavbarProps) {
                 </button>
               </div>
 
-              <div className="flex-1 flex items-center justify-center overflow-y-auto py-12">
-                <div className="w-full max-w-4xl">
-                  <div className="space-y-2 md:space-y-4">
+              {/* Centered navigation - vertically and horizontally */}
+              <div className="flex-1 flex items-center justify-center overflow-y-auto py-8">
+                <div className="w-full max-w-4xl text-center">
+                  <div className="space-y-3 md:space-y-5">
                     {navItems.map((item, index) => (
                       <motion.div
                         key={item.id}
@@ -215,16 +217,16 @@ export default function Navbar({ locale }: NavbarProps) {
                           <div className="space-y-1">
                             <button
                               onClick={() => handleToggleExpand(item.id)}
-                              className="w-full text-left group cursor-pointer"
+                              className="w-full text-center group cursor-pointer"
                               style={{ background: "none", border: "none", padding: 0 }}
                             >
                               <span
-                                className="relative block font-heading whitespace-nowrap text-[clamp(48px,6vw,90px)] max-md:text-[clamp(36px,8vw,56px)]"
+                                className="relative inline-block font-heading whitespace-nowrap text-[clamp(48px,6vw,90px)] max-md:text-[clamp(36px,8vw,56px)] transition-colors duration-300"
                                 style={{
                                   fontWeight: 500,
                                   lineHeight: "var(--leading-heading)",
                                   letterSpacing: "-0.03em",
-                                  color: "#F4F6F8",
+                                  color: expanded === item.id ? "#F4F6F8" : "rgba(244,246,248,0.7)",
                                 }}
                               >
                                 {getLabel(item)}
@@ -238,10 +240,6 @@ export default function Navbar({ locale }: NavbarProps) {
                                   ›
                                 </span>
                               </span>
-                              <span
-                                className="block h-px w-0 group-hover:w-1/4 transition-all duration-500 mt-1"
-                                style={{ background: "rgba(244,246,248,0.15)" }}
-                              />
                             </button>
 
                             <AnimatePresence>
@@ -251,7 +249,7 @@ export default function Navbar({ locale }: NavbarProps) {
                                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                                   exit={{ opacity: 0, y: -10, filter: "blur(6px)" }}
                                   transition={{ duration: 0.4, ease: [0.22, 0.8, 0.2, 1] }}
-                                  className="pl-6 md:pl-8 border-l border-white/5 -ml-2 md:-ml-3 pt-2 md:pt-3 space-y-1"
+                                  className="pt-3 space-y-1"
                                 >
                                   {item.children!.map((child, childIndex) => (
                                     <motion.div
@@ -267,7 +265,7 @@ export default function Navbar({ locale }: NavbarProps) {
                                         className="block no-underline group"
                                       >
                                         <span
-                                          className="relative block font-heading whitespace-nowrap text-[clamp(24px,3vw,36px)] max-md:text-[clamp(20px,4vw,28px)]"
+                                          className="relative inline-block font-heading whitespace-nowrap text-[clamp(24px,3vw,36px)] max-md:text-[clamp(20px,4vw,28px)] transition-colors duration-300"
                                           style={{
                                             fontWeight: isActive(child.href) ? 500 : 400,
                                             lineHeight: "var(--leading-heading)",
@@ -277,10 +275,6 @@ export default function Navbar({ locale }: NavbarProps) {
                                         >
                                           {getLabel(child)}
                                         </span>
-                                        <span
-                                          className="block h-px w-0 group-hover:w-1/3 transition-all duration-500 mt-1"
-                                          style={{ background: isActive(child.href) ? "#F4F6F8" : "rgba(244,246,248,0.1)" }}
-                                        />
                                       </Link>
                                     </motion.div>
                                   ))}
@@ -296,20 +290,16 @@ export default function Navbar({ locale }: NavbarProps) {
                             className="block no-underline group"
                           >
                             <span
-                              className="relative block font-heading whitespace-nowrap text-[clamp(48px,6vw,90px)] max-md:text-[clamp(36px,8vw,56px)]"
+                              className="relative inline-block font-heading whitespace-nowrap text-[clamp(48px,6vw,90px)] max-md:text-[clamp(36px,8vw,56px)] transition-colors duration-300"
                               style={{
                                 fontWeight: isActive(item.href) ? 500 : 400,
                                 lineHeight: "var(--leading-heading)",
                                 letterSpacing: "-0.03em",
-                                color: isActive(item.href) ? "#F4F6F8" : "rgba(244,246,248,0.9)",
+                                color: isActive(item.href) ? "#F4F6F8" : "rgba(244,246,248,0.7)",
                               }}
                             >
                               {getLabel(item)}
                             </span>
-                            <span
-                              className="block h-px w-0 group-hover:w-1/3 transition-all duration-500 mt-1"
-                              style={{ background: isActive(item.href) ? "#F4F6F8" : "rgba(244,246,248,0.15)" }}
-                            />
                           </Link>
                         )}
                       </motion.div>
@@ -340,14 +330,14 @@ export default function Navbar({ locale }: NavbarProps) {
                           English
                         </Link>
                       </div>
-                    </motion.div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
+</motion.div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </motion.div>
+         )}
+       </AnimatePresence>
+     </>
+   );
 }

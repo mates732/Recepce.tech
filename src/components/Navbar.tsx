@@ -168,7 +168,7 @@ export default function Navbar({ locale }: NavbarProps) {
     const gap = weight === "primary" ? "gap-1" : "gap-0.5";
     const alignClass = align === "right" ? "items-end" : "items-center";
     return (
-      <div className={`flex flex-col ${alignClass} ${gap} ${className}`}>
+      <div className={`flex flex-row flex-wrap ${alignClass} ${gap} ${className}`}>
         {label && (
           <span className="text-label-sm tracking-[0.2em] uppercase mb-4" style={{ color: "rgba(244,246,248,0.15)", fontWeight: 500 }}>
             {label}

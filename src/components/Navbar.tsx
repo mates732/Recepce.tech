@@ -41,7 +41,15 @@ export default function Navbar({ locale }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const [thirdOpen, setThirdOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const toggleMenu = useCallback(() => setOpen((v) => !v), []);
 
@@ -259,9 +267,276 @@ export default function Navbar({ locale }: NavbarProps) {
               </span>
             </button>
 
-            {/* ─── Three-panel navigation container ─── */}
-            <div className="relative z-10 flex h-full items-center justify-center overflow-hidden">
-              <div className="flex items-center gap-[clamp(24px,3vw,60px)]">
+            {/* ─── Navigation ─── */}
+            {isMobile ? (
+              /* ═══ MOBILE: single-column drill-down ═══ */
+              <div className="relative z-10 h-full overflow-x-hidden" style={{ padding: "80px 24px 32px" }}>
+                <AnimatePresence mode="wait" initial={false}>
+                  {thirdOpen ? (
+                    /* Level 3: Asistenti children */
+                    <motion.div
+                      key="level3"
+                      initial={{ x: "100%", opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: "100%", opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="h-full flex flex-col justify-center"
+                    >
+                      <motion.button
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1, duration: 0.35 }}
+                        onClick={handleBackToSubmenu}
+                        className="flex items-center gap-2 mb-8 cursor-pointer group self-start"
+                        style={{ background: "none", border: "none", padding: 0 }}
+                      >
+                        <span
+                          className="inline-block text-[18px] transition-transform duration-300 group-hover:-translate-x-1"
+                          style={{ color: "rgba(244,246,248,0.3)" }}
+                        >
+                          ←
+                        </span>
+                        <span
+                          className="text-label-sm tracking-[0.12em] uppercase transition-colors duration-300"
+                          style={{ color: "rgba(244,246,248,0.35)" }}
+                        >
+                          {getLabel(asistentiItem!)}
+                        </span>
+                      </motion.button>
+
+                      <div className="space-y-6">
+                        {asistentiChildren.map((child, childIndex) => (
+                          <motion.div
+                            key={child.id}
+                            initial={{ opacity: 0, x: 40 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.08 + 0.06 * childIndex, duration: 0.4, ease: [0.22, 0.8, 0.2, 1] }}
+                          >
+                            <Link
+                              href={`/${locale}${child.href}`}
+                              onClick={() => handleNavigate(child.href)}
+                              aria-current={isActive(child.href) ? "page" : undefined}
+                              className="block no-underline py-2"
+                            >
+                              <span
+                                className="font-heading text-[clamp(26px,7vw,34px)] transition-colors duration-300 break-words"
+                                style={{
+                                  fontWeight: isActive(child.href) ? 500 : 400,
+                                  lineHeight: "var(--leading-heading)",
+                                  letterSpacing: "-0.02em",
+                                  color: isActive(child.href) ? "#F4F6F8" : "rgba(244,246,248,0.55)",
+                                }}
+                              >
+                                {getLabel(child)}
+                              </span>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ) : submenuOpen ? (
+                    /* Level 2: Projekty children */
+                    <motion.div
+                      key="level2"
+                      initial={{ x: "100%", opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: "100%", opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="h-full flex flex-col justify-center"
+                    >
+                      <motion.button
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1, duration: 0.35 }}
+                        onClick={() => setSubmenuOpen(false)}
+                        className="flex items-center gap-2 mb-8 cursor-pointer group self-start"
+                        style={{ background: "none", border: "none", padding: 0 }}
+                      >
+                        <span
+                          className="inline-block text-[18px] transition-transform duration-300 group-hover:-translate-x-1"
+                          style={{ color: "rgba(244,246,248,0.3)" }}
+                        >
+                          ←
+                        </span>
+                        <span
+                          className="text-label-sm tracking-[0.12em] uppercase transition-colors duration-300"
+                          style={{ color: "rgba(244,246,248,0.35)" }}
+                        >
+                          {t(locale, "ui.back")}
+                        </span>
+                      </motion.button>
+
+                      <div className="space-y-7">
+                        {projectsChildren.map((child, childIndex) => {
+                          const hasChildren = "children" in child && child.children;
+                          return (
+                            <motion.div
+                              key={child.id}
+                              initial={{ opacity: 0, x: 40 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.08 + 0.06 * childIndex, duration: 0.4, ease: [0.22, 0.8, 0.2, 1] }}
+                            >
+                              {hasChildren ? (
+                                <button
+                                  onClick={handleOpenThird}
+                                  className="block w-full text-left cursor-pointer py-2"
+                                  style={{ background: "none", border: "none", padding: 0 }}
+                                >
+                                  <span
+                                    className="font-heading inline-flex items-center gap-3 text-[clamp(30px,8vw,42px)] flex-wrap"
+                                    style={{
+                                      fontWeight: 500,
+                                      lineHeight: "var(--leading-heading)",
+                                      letterSpacing: "-0.02em",
+                                      color: thirdOpen ? "#F4F6F8" : "rgba(244,246,248,0.85)",
+                                    }}
+                                  >
+                                    {getLabel(child)}
+                                    <span
+                                      className="inline-block align-middle text-[clamp(16px,4vw,22px)] transition-transform duration-300"
+                                      style={{ color: "rgba(244,246,248,0.25)", transform: "rotate(0deg)" }}
+                                    >
+                                      ›
+                                    </span>
+                                  </span>
+                                </button>
+                              ) : (
+                                <Link
+                                  href={`/${locale}${child.href}`}
+                                  onClick={() => handleNavigate(child.href)}
+                                  aria-current={isActive(child.href) ? "page" : undefined}
+                                  className="block no-underline py-2"
+                                >
+                                  <span
+                                    className="font-heading text-[clamp(30px,8vw,42px)] transition-colors duration-300 break-words"
+                                    style={{
+                                      fontWeight: isActive(child.href) ? 500 : 400,
+                                      lineHeight: "var(--leading-heading)",
+                                      letterSpacing: "-0.02em",
+                                      color: isActive(child.href) ? "#F4F6F8" : "rgba(244,246,248,0.55)",
+                                    }}
+                                  >
+                                    {getLabel(child)}
+                                  </span>
+                                </Link>
+                              )}
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Language switcher — bottom of level 2 */}
+                      <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1" style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom))" }}>
+                        <Link
+                          href={switchPath("cs")}
+                          onClick={() => { setOpen(false); setSubmenuOpen(false); setThirdOpen(false); }}
+                          className="text-label-sm tracking-[0.18em] uppercase px-3 py-2.5 transition-all duration-200"
+                          style={{ color: locale === "cs" ? "#F4F6F8" : "rgba(244,246,248,0.35)" }}
+                        >
+                          Česky
+                        </Link>
+                        <span className="w-px h-3" style={{ background: "rgba(255,255,255,0.08)" }} aria-hidden="true" />
+                        <Link
+                          href={switchPath(switchTo)}
+                          onClick={() => { setOpen(false); setSubmenuOpen(false); setThirdOpen(false); }}
+                          className="text-label-sm tracking-[0.18em] uppercase px-3 py-2.5 transition-all duration-200"
+                          style={{ color: locale === "en" ? "#F4F6F8" : "rgba(244,246,248,0.35)" }}
+                        >
+                          English
+                        </Link>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    /* Level 1: Main menu */
+                    <motion.div
+                      key="level1"
+                      initial={{ x: "-30%", opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: "-30%", opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="h-full flex flex-col justify-center relative"
+                    >
+                      <div className="space-y-6">
+                        {navItems.map((item, index) => (
+                          <motion.div
+                            key={item.id}
+                            initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            transition={{ delay: 0.06 * index, duration: 0.5, ease: [0.22, 0.8, 0.2, 1] }}
+                          >
+                            {item.children ? (
+                              <button
+                                onClick={handleOpenSubmenu}
+                                className="block w-full text-left cursor-pointer py-2"
+                                style={{ background: "none", border: "none", padding: 0 }}
+                              >
+                                <span
+                                  className="font-heading inline-flex items-center gap-3 text-[clamp(38px,10vw,56px)] flex-wrap"
+                                  style={{
+                                    fontWeight: 500,
+                                    lineHeight: "var(--leading-heading)",
+                                    letterSpacing: "-0.03em",
+                                    color: "rgba(244,246,248,0.9)",
+                                  }}
+                                >
+                                  {getLabel(item)}
+                                  <span className="inline-block align-middle text-[clamp(20px,5vw,28px)]" style={{ color: "rgba(244,246,248,0.3)" }}>
+                                    ›
+                                  </span>
+                                </span>
+                              </button>
+                            ) : (
+                              <Link
+                                href={`/${locale}${item.href}`}
+                                onClick={() => handleNavigate(item.href)}
+                                aria-current={isActive(item.href) ? "page" : undefined}
+                                className="block no-underline py-2"
+                              >
+                                <span
+                                  className="font-heading text-[clamp(38px,10vw,56px)] transition-colors duration-300 break-words"
+                                  style={{
+                                    fontWeight: isActive(item.href) ? 500 : 400,
+                                    lineHeight: "var(--leading-heading)",
+                                    letterSpacing: "-0.03em",
+                                    color: isActive(item.href) ? "#F4F6F8" : "rgba(244,246,248,0.7)",
+                                  }}
+                                >
+                                  {getLabel(item)}
+                                </span>
+                              </Link>
+                            )}
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Language switcher — bottom center */}
+                      <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1" style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom))" }}>
+                        <Link
+                          href={switchPath("cs")}
+                          onClick={() => { setOpen(false); setSubmenuOpen(false); setThirdOpen(false); }}
+                          className="text-label-sm tracking-[0.18em] uppercase px-3 py-2.5 transition-all duration-200"
+                          style={{ color: locale === "cs" ? "#F4F6F8" : "rgba(244,246,248,0.35)" }}
+                        >
+                          Česky
+                        </Link>
+                        <span className="w-px h-3" style={{ background: "rgba(255,255,255,0.08)" }} aria-hidden="true" />
+                        <Link
+                          href={switchPath(switchTo)}
+                          onClick={() => { setOpen(false); setSubmenuOpen(false); setThirdOpen(false); }}
+                          className="text-label-sm tracking-[0.18em] uppercase px-3 py-2.5 transition-all duration-200"
+                          style={{ color: locale === "en" ? "#F4F6F8" : "rgba(244,246,248,0.35)" }}
+                        >
+                          English
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              /* ═══ DESKTOP: three-panel layout ═══ */
+              <div className="relative z-10 flex h-full items-center justify-center overflow-hidden">
+                <div className="flex items-center gap-[clamp(24px,3vw,60px)]">
 
                 {/* ── Panel 1: Main menu ── */}
                 <motion.div
@@ -513,6 +788,7 @@ export default function Navbar({ locale }: NavbarProps) {
 
               </div>
             </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

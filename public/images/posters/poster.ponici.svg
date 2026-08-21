@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-label="Ponici.cz — jezdecká škola">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#213A2B"/>
+      <stop offset="1" stop-color="#172A1F"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.62" r="0.55">
+      <stop offset="0" stop-color="#F3EDE0" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#F3EDE0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect width="600" height="800" fill="url(#glow)"/>
+
+  <!-- meadow arcs -->
+  <path d="M0 720 C150 640 450 640 600 720 L600 800 L0 800 Z" fill="#1A2E22"/>
+  <path d="M0 756 C160 700 440 700 600 756 L600 800 L0 800 Z" fill="#162720"/>
+
+  <!-- horseshoe mark -->
+  <g transform="translate(300 300)">
+    <path d="M-70 -95 C-70 -10 -38 35 0 35 C38 35 70 -10 70 -95"
+      fill="none" stroke="#F3EDE0" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="-46" cy="-52" r="6" fill="#F3EDE0"/>
+    <circle cx="-52" cy="-12" r="6" fill="#F3EDE0"/>
+    <circle cx="-26" cy="18" r="6" fill="#F3EDE0"/>
+    <circle cx="26" cy="18" r="6" fill="#F3EDE0"/>
+    <circle cx="52" cy="-12" r="6" fill="#F3EDE0"/>
+    <circle cx="46" cy="-52" r="6" fill="#F3EDE0"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="300" y="540" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="64" font-weight="500" letter-spacing="1" fill="#F3EDE0">ponici.cz</text>
+  <text x="300" y="585" text-anchor="middle"
+    font-family="'Helvetica Neue', Arial, sans-serif"
+    font-size="20" letter-spacing="8" fill="#F3EDE0" opacity="0.7">JEZDECKÁ ŠKOLA</text>
+
+  <!-- bottom tag -->
+  <text x="300" y="700" text-anchor="middle"
+    font-family="'Helvetica Neue', Arial, sans-serif"
+    font-size="14" letter-spacing="4" fill="#F3EDE0" opacity="0.4">CÍSAŘSKÝ OSTROV · PRAHA</text>
+</svg>

@@ -2,19 +2,22 @@
 
 import type { VoiceState } from "./useVoiceAssistant";
 import { motion, AnimatePresence } from "framer-motion";
+import type { Locale, TranslationKey } from "@/lib/types";
+import { t } from "@/lib/utils";
 
 interface VoiceStatusProps {
   state: VoiceState;
   error: string | null;
   duration: number;
+  locale: Locale;
 }
 
-const STATUS_CONFIG: Record<VoiceState, { label: string; color: string; breathing: boolean }> = {
-  idle: { label: "Klikněte a začněte mluvit", color: "#9CA3AF", breathing: true },
-  connecting: { label: "Navazuji spojení…", color: "#F97316", breathing: false },
-  listening: { label: "Naslouchám", color: "#22C55E", breathing: false },
-  speaking: { label: "AI právě odpovídá", color: "#22C55E", breathing: false },
-  error: { label: "", color: "#EF4444", breathing: false },
+const STATUS_CONFIG: Record<VoiceState, { key: TranslationKey | ""; color: string; breathing: boolean }> = {
+  idle: { key: "voice.idle", color: "#6E7683", breathing: true },
+  connecting: { key: "voice.connecting", color: "var(--color-accent)", breathing: false },
+  listening: { key: "voice.listening", color: "#34D399", breathing: false },
+  speaking: { key: "voice.speaking", color: "#34D399", breathing: false },
+  error: { key: "", color: "var(--color-danger)", breathing: false },
 };
 
 function formatDuration(seconds: number): string {
@@ -23,10 +26,10 @@ function formatDuration(seconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export default function VoiceStatus({ state, error, duration }: VoiceStatusProps) {
+export default function VoiceStatus({ state, error, duration, locale }: VoiceStatusProps) {
   const cfg = STATUS_CONFIG[state];
   const showDuration = (state === "listening" || state === "speaking") && duration > 0;
-  const label = state === "error" && error ? error : cfg.label;
+  const label = state === "error" && error ? error : cfg.key ? t(locale, cfg.key) : "";
 
   return (
     <div className="flex flex-col items-center gap-2 select-none">
@@ -59,7 +62,7 @@ export default function VoiceStatus({ state, error, duration }: VoiceStatusProps
           />
           <span
             className="text-sm font-mono tracking-tight"
-            style={{ color: "rgba(17,17,17,0.5)" }}
+            style={{ color: "rgba(255,255,255,0.5)" }}
           >
             {label}
           </span>
@@ -70,8 +73,8 @@ export default function VoiceStatus({ state, error, duration }: VoiceStatusProps
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-[11px] font-mono tabular-nums"
-          style={{ color: "rgba(17,17,17,0.25)" }}
+          className="text-label-lg font-mono tabular-nums"
+          style={{ color: "rgba(255,255,255,0.25)" }}
         >
           {formatDuration(duration)}
         </motion.span>

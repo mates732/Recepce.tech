@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
+import { createMetadata } from "@/lib/seo";
+import { getPage } from "@/content/repository";
 import YouTubeContent from "@/components/YouTubeContent";
 import { SOCIALS } from "@/config/socials";
 
@@ -9,12 +11,14 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return {
-    title: "YouTube",
-    description: locale === "cs"
-      ? "Každý produkt, experiment i launch dokumentuji veřejně. Bez přikrášlování. Jen skutečný vývoj."
-      : "Every product, experiment and launch is documented in public. No embellishment. Just real development.",
-  };
+  const seo = getPage("youtube")?.seo;
+  return createMetadata(locale as Locale, {
+    title: seo?.title.cs ?? "",
+    titleEn: seo?.title.en ?? "",
+    description: seo?.description.cs ?? "",
+    descriptionEn: seo?.description.en ?? "",
+    path: "/youtube",
+  });
 }
 
 export default async function YoutubePage({ params }: Props) {

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
+import { createMetadata } from "@/lib/seo";
+import { getPage } from "@/content/repository";
 import WebsitesContent from "@/components/WebsitesContent";
 
 interface Props {
@@ -8,12 +10,14 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return {
-    title: locale === "cs" ? "Weby — Websites people remember" : "Websites — Websites people remember",
-    description: locale === "cs"
-      ? "Ne šablony. Ne generické. Digitální zážitky navržené tak, aby vás nebylo možné ignorovat."
-      : "Not templates. Not generic. Digital experiences designed to make your business impossible to ignore.",
-  };
+  const seo = getPage("webs")?.seo;
+  return createMetadata(locale as Locale, {
+    title: seo?.title.cs ?? "",
+    titleEn: seo?.title.en ?? "",
+    description: seo?.description.cs ?? "",
+    descriptionEn: seo?.description.en ?? "",
+    path: "/webs",
+  });
 }
 
 export default async function WebsPage({ params }: Props) {

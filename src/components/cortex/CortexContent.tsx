@@ -5,32 +5,65 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { useElementScrollProgress, OFFSET_FULL } from "@/lib/scroll";
+import type { Locale } from "@/lib/types";
+import { t } from "@/lib/utils";
+import { getPage } from "@/content/repository";
+import type { CortexPageData } from "@/content/types";
+import ProjectFacts from "@/components/ProjectFacts";
 
 interface Props {
   locale: Locale;
 }
 
-type Locale = "cs" | "en";
-
 export default function CortexContent({ locale }: Props) {
+  const data = getPage("cortex")?.data;
+
   return (
-    <div className="relative" style={{ background: "#F7F8FA" }}>
-      <HeroScene locale={locale} />
-      <WhyScene locale={locale} />
-      <ChatScene locale={locale} />
-      <ScreenshotWithAnnotationsScene locale={locale} />
-      <ConfidenceScene locale={locale} />
-      <QuoteSplitScene locale={locale} />
-      <EditorialQuoteScene locale={locale} />
-      <CinematicRevealScene locale={locale} />
-      <FinalScene locale={locale} />
+    <div className="relative" style={{ background: "#0A0A0B" }}>
+      <HeroScene locale={locale} data={data} />
+      <FactsScene locale={locale} data={data} />
+      <WhyScene locale={locale} data={data} />
+      <ChatScene locale={locale} data={data} />
+      <ScreenshotWithAnnotationsScene locale={locale} data={data} />
+      <ConfidenceScene locale={locale} data={data} />
+      <QuoteSplitScene locale={locale} data={data} />
+      <EditorialQuoteScene locale={locale} data={data} />
+      <CinematicRevealScene locale={locale} data={data} />
+      <FinalScene locale={locale} data={data} />
     </div>
+  );
+}
+
+/* ─── Project Facts ─── */
+
+function FactsScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
+  const facts = (data?.facts ?? []).map((f) => ({
+    label: f.label[locale],
+    value: f.value[locale],
+    href: f.href,
+    external: f.external,
+  }));
+
+  return (
+    <section className="relative" style={{ padding: "0 clamp(24px, 5vw, 80px) clamp(48px, 6vw, 80px)" }}>
+      <div className="max-w-4xl mx-auto">
+        <Link
+          href={`/${locale}/projekty`}
+          className="inline-flex items-center gap-1.5 font-mono text-label font-semibold uppercase tracking-[0.15em] mb-6 transition-opacity duration-200 hover:opacity-60"
+          style={{ color: "#6E7683" }}
+        >
+          <span aria-hidden="true">&larr;</span>
+          {t(locale, "ui.allProjects")}
+        </Link>
+        <ProjectFacts locale={locale} facts={facts} />
+      </div>
+    </section>
   );
 }
 
 /* ─── Hero ─── */
 
-function HeroScene({ locale }: { locale: Locale }) {
+function HeroScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   return (
     <section className="relative flex flex-col items-center justify-center" style={{ minHeight: "70vh", padding: "clamp(48px, 6vw, 80px)" }}>
       <motion.div
@@ -39,11 +72,11 @@ function HeroScene({ locale }: { locale: Locale }) {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="text-center max-w-4xl mx-auto"
       >
-        <span className="text-xs font-mono font-semibold tracking-widest uppercase" style={{ color: "rgba(17,17,17,0.20)" }}>
-          {locale === "cs" ? "Intern\u00ed syst\u00e9m" : "Internal System"}
+        <span className="text-xs font-mono font-semibold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.20)" }}>
+          {data?.hero.label[locale]}
         </span>
-        <h1 className="font-heading leading-tight mt-8 sm:mt-10" style={{ fontSize: "clamp(36px, 5.5vw, 72px)", letterSpacing: "-0.04em", color: "#111111" }}>
-          Cortex
+        <h1 className="font-heading leading-tight mt-8 sm:mt-10" style={{ fontSize: "var(--text-hero-md)", letterSpacing: "-0.04em", color: "#F4F6F8" }}>
+          {data?.hero.title}
         </h1>
       </motion.div>
       <motion.p
@@ -51,9 +84,9 @@ function HeroScene({ locale }: { locale: Locale }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="font-heading mt-8 text-center max-w-lg"
-        style={{ fontSize: "clamp(16px, 1.8vw, 22px)", letterSpacing: "-0.03em", color: "rgba(17,17,17,0.25)" }}
+        style={{ fontSize: "var(--text-h4)", letterSpacing: "-0.03em", color: "rgba(255,255,255,0.25)" }}
       >
-        {locale === "cs" ? "Cortex nikdy neza\u010d\u00edn\u00e1 AI." : "Cortex never starts with AI."}
+        {data?.hero.tagline[locale]}
       </motion.p>
     </section>
   );
@@ -61,7 +94,7 @@ function HeroScene({ locale }: { locale: Locale }) {
 
 /* ─── Why ─── */
 
-function WhyScene({ locale }: { locale: Locale }) {
+function WhyScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   return (
     <section className="relative flex items-center justify-center" style={{ minHeight: "50vh", padding: "clamp(48px, 6vw, 80px)" }}>
       <div className="max-w-xl mx-auto">
@@ -71,9 +104,9 @@ function WhyScene({ locale }: { locale: Locale }) {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.4 }}
           className="text-xs font-mono font-semibold tracking-widest uppercase mb-6"
-          style={{ color: "#9CA3AF" }}
+          style={{ color: "#6E7683" }}
         >
-          {locale === "cs" ? "Pro\u010d" : "Why"}
+          {data?.why.label[locale]}
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 15 }}
@@ -81,11 +114,9 @@ function WhyScene({ locale }: { locale: Locale }) {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
           className="font-body leading-relaxed"
-          style={{ fontSize: "clamp(15px, 1.2vw, 18px)", color: "#5F6368" }}
+          style={{ fontSize: "var(--text-lead)", color: "#9AA1AB" }}
         >
-          {locale === "cs"
-            ? "Tradi\u010dn\u00ed oslovov\u00e1n\u00ed vy\u017eaduje hodiny manu\u00e1ln\u00ed pr\u00e1ce. Cortex ji automatizuje p\u0159i zachov\u00e1n\u00ed d\u016fkazn\u011b podlo\u017een\u00fdch doporu\u010den\u00ed."
-            : "Traditional outreach requires hours of manual work. Cortex automates it while keeping every recommendation evidence-based."}
+          {data?.why.text[locale]}
         </motion.p>
       </div>
     </section>
@@ -101,7 +132,7 @@ interface RawMsg {
   typingMs?: number;
 }
 
-function ChatScene({ locale }: { locale: Locale }) {
+function ChatScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [hasStarted, setHasStarted] = useState(false);
   const [revealed, setRevealed] = useState(0);
@@ -110,67 +141,10 @@ function ChatScene({ locale }: { locale: Locale }) {
   const msgA = "a";
   const msgB = "b";
 
-  function m(sender: string, text: string, opts?: { delayMs?: number; typingMs?: number }): RawMsg {
-    return { sender, text, ...opts };
-  }
-
-  const enRaw: RawMsg[] = [
-    m(msgA, "So\u2026 what actually is Cortex?", { delayMs: 500 }),
-    m(msgB, "It\u2019s my internal system.", { delayMs: 1000 }),
-    m(msgB, "It helps me decide who I should contact.", { delayMs: 1200 }),
-    m(msgA, "So\u2026 ChatGPT?", { delayMs: 800 }),
-    m(msgB, "Haha no \uD83D\uDE04", { typingMs: 1200, delayMs: 600 }),
-    m(msgB, "ChatGPT writes.", { delayMs: 800 }),
-    m(msgB, "Cortex decides whether anything should be written at all.", { delayMs: 1400 }),
-    m(msgA, "How?", { delayMs: 600 }),
-    m(msgB, "It researches companies.", { delayMs: 900 }),
-    m(msgB, "Checks websites.", { delayMs: 700 }),
-    m(msgB, "Looks for booking systems.", { delayMs: 800 }),
-    m(msgB, "Collects evidence.", { delayMs: 900 }),
-    m(msgA, "So it just crawls websites?", { delayMs: 700 }),
-    m(msgB, "No.", { typingMs: 800, delayMs: 400 }),
-    m(msgB, "The crawler only gathers information.", { delayMs: 1000 }),
-    m(msgB, "Cortex makes the decision.", { delayMs: 1200 }),
-    m(msgA, "What if it isn\u2019t sure?", { delayMs: 700 }),
-    m(msgB, "Then nothing happens.", { typingMs: 1500, delayMs: 600 }),
-    m(msgA, "Seriously?", { delayMs: 500 }),
-    m(msgB, "Yep.", { delayMs: 600 }),
-    m(msgB, "I\u2019d rather lose a potential client\u2026", { delayMs: 1000 }),
-    m(msgB, "\u2026than send a stupid email.", { delayMs: 1200 }),
-    m(msgA, "So writing emails isn\u2019t the hard part?", { delayMs: 800 }),
-    m(msgB, "Exactly.", { typingMs: 2000, delayMs: 500 }),
-    m(msgB, "The hardest part is deciding whether one should even exist.", { delayMs: 1800 }),
-  ];
-
-  const csRaw: RawMsg[] = [
-    m(msgA, "Tak\u017ee\u2026 co vlastn\u011b je Cortex?", { delayMs: 500 }),
-    m(msgB, "M\u016fj intern\u00ed syst\u00e9m.", { delayMs: 1000 }),
-    m(msgB, "Pom\u00e1h\u00e1 mi rozhodnout, koho m\u00e1m oslovit.", { delayMs: 1200 }),
-    m(msgA, "Tak\u017ee\u2026 ChatGPT?", { delayMs: 800 }),
-    m(msgB, "Haha ne \uD83D\uDE04", { typingMs: 1200, delayMs: 600 }),
-    m(msgB, "ChatGPT p\u00ed\u0161e.", { delayMs: 800 }),
-    m(msgB, "Cortex rozhoduje, jestli v\u016fbec n\u011bco m\u00e1 b\u00fdt naps\u00e1no.", { delayMs: 1400 }),
-    m(msgA, "Jak?", { delayMs: 600 }),
-    m(msgB, "Zkoum\u00e1 firmy.", { delayMs: 900 }),
-    m(msgB, "Kontroluje weby.", { delayMs: 700 }),
-    m(msgB, "Hled\u00e1 rezerva\u010dn\u00ed syst\u00e9my.", { delayMs: 800 }),
-    m(msgB, "Sb\u00edr\u00e1 d\u016fkazy.", { delayMs: 900 }),
-    m(msgA, "Tak\u017ee jen proch\u00e1z\u00ed weby?", { delayMs: 700 }),
-    m(msgB, "Ne.", { typingMs: 800, delayMs: 400 }),
-    m(msgB, "Crawler jen sb\u00edr\u00e1 informace.", { delayMs: 1000 }),
-    m(msgB, "Rozhodnut\u00ed d\u011bl\u00e1 Cortex.", { delayMs: 1200 }),
-    m(msgA, "Co kdy\u017e si nen\u00ed jistej?", { delayMs: 700 }),
-    m(msgB, "Pak se nic nestane.", { typingMs: 1500, delayMs: 600 }),
-    m(msgA, "Fakt?", { delayMs: 500 }),
-    m(msgB, "Jo.", { delayMs: 600 }),
-    m(msgB, "Rad\u011bji p\u0159ijdu o potenci\u00e1ln\u00edho klienta\u2026", { delayMs: 1000 }),
-    m(msgB, "\u2026ne\u017e abych poslal blb\u00fd e-mail.", { delayMs: 1200 }),
-    m(msgA, "Tak\u017ee psan\u00ed e-mail\u016f nen\u00ed to nejt\u011b\u017e\u0161\u00ed?", { delayMs: 800 }),
-    m(msgB, "P\u0159esn\u011b.", { typingMs: 2000, delayMs: 500 }),
-    m(msgB, "Nejt\u011b\u017e\u0161\u00ed je rozhodnout, jestli v\u016fbec m\u00e1 existovat.", { delayMs: 1800 }),
-  ];
-
-  const raw = locale === "cs" ? csRaw : enRaw;
+  const raw: RawMsg[] =
+    locale === "cs"
+      ? (data?.chat.cs ?? [])
+      : (data?.chat.en ?? []);
 
   const displaySteps = useMemo(
     () =>
@@ -244,13 +218,13 @@ function ChatScene({ locale }: { locale: Locale }) {
   }, [revealed]);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "100vh", background: "#FFFFFF" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "100vh", background: "#121316" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(32px, 5vw, 80px)" }}>
         <div className="w-full max-w-[680px] mx-auto flex flex-col" style={{ height: "min(65vh, 560px)" }}>
           <div
             ref={scrollRef}
             className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 pr-2"
-            style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(17,17,17,0.08) transparent" }}
+            style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.08) transparent" }}
           >
             {revealedMsgs.map((s, i) => {
               const isA = s.msg.sender === msgA;
@@ -262,19 +236,19 @@ function ChatScene({ locale }: { locale: Locale }) {
                   transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                   className={`flex items-start gap-3 ${isA ? "" : "flex-row-reverse"}`}
                 >
-                  <span className="font-heading text-xs flex-shrink-0" style={{ color: "rgba(17,17,17,0.10)", minWidth: "clamp(28px, 3vw, 36px)", paddingTop: 4 }}>
+                  <span className="font-heading text-xs flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)", minWidth: "clamp(28px, 3vw, 36px)", paddingTop: 4 }}>
                     {isA ? "A" : "B"}
                   </span>
                   <div
                     className="px-4 py-2.5 sm:px-5 sm:py-3"
                     style={{
-                      background: isA ? "#FFFFFF" : "#F7F8FA",
-                      border: "1px solid rgba(17,17,17,0.06)",
+                      background: isA ? "#1C1E23" : "#26282E",
+                      border: "1px solid rgba(255,255,255,0.06)",
                       borderRadius: 14,
                       maxWidth: "clamp(260px, 70%, 480px)",
                     }}
                   >
-                    <p className="font-body leading-relaxed" style={{ fontSize: "clamp(13px, 1.1vw, 15px)", color: "#111111" }}>
+                    <p className="font-body leading-relaxed" style={{ fontSize: "var(--text-small)", color: "#F4F6F8" }}>
                       {s.msg.text}
                     </p>
                   </div>
@@ -290,13 +264,13 @@ function ChatScene({ locale }: { locale: Locale }) {
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="flex items-start gap-3"
               >
-                <span className="font-heading text-xs flex-shrink-0" style={{ color: "rgba(17,17,17,0.15)", minWidth: "clamp(28px, 3vw, 36px)", paddingTop: 2 }}>B</span>
-                <div className="flex items-center gap-1 px-4 py-3" style={{ background: "#F7F8FA", border: "1px solid rgba(17,17,17,0.06)", borderRadius: 14 }}>
+                <span className="font-heading text-xs flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)", minWidth: "clamp(28px, 3vw, 36px)", paddingTop: 2 }}>B</span>
+                <div className="flex items-center gap-1 px-4 py-3" style={{ background: "#26282E", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14 }}>
                   {[0, 1, 2].map((d) => (
                     <motion.span
                       key={d}
                       className="w-1.5 h-1.5 rounded-full block"
-                      style={{ background: "rgba(17,17,17,0.20)" }}
+                      style={{ background: "rgba(255,255,255,0.45)" }}
                       animate={{ opacity: [0.3, 1, 0.3] }}
                       transition={{ repeat: Infinity, duration: 1.2, delay: d * 0.2 }}
                     />
@@ -313,27 +287,20 @@ function ChatScene({ locale }: { locale: Locale }) {
 
 /* ─── Sticky screenshot + annotations ─── */
 
-function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
+function ScreenshotWithAnnotationsScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useElementScrollProgress(sectionRef, OFFSET_FULL, 1);
   const screenshotOpacity = useTransform(progress, [0, 0.15], [0, 1]);
   const screenshotScale = useTransform(progress, [0, 0.15], [0.95, 1]);
 
-  const annotations = locale === "cs"
-    ? [
-        { label: "Ov\u011b\u0159en\u00e9 d\u016fkazy", note: "V\u00edce ne\u017e 10 sign\u00e1l\u016f potvrzeno", appearAt: 0.2, top: "15%", left: "8%" },
-        { label: "Sk\u00f3re d\u016fv\u011bry", note: "94 %", appearAt: 0.35, top: "55%", right: "10%", left: "auto" },
-        { label: "AI doporu\u010den\u00ed", note: "Generov\u00e1no z d\u016fkaz\u016f", appearAt: 0.5, top: "35%", left: "55%" },
-        { label: "P\u0159ipraveno k review", note: "\u010cek\u00e1 na schv\u00e1len\u00ed", appearAt: 0.65, top: "72%", left: "15%" },
-        { label: "P\u0159\u00edle\u017eitost", note: "Detekov\u00e1na a ohodnocena", appearAt: 0.8, top: "20%", right: "18%", left: "auto" },
-      ]
-    : [
-        { label: "Verified evidence", note: "More than 10 signals confirmed", appearAt: 0.2, top: "15%", left: "8%" },
-        { label: "Confidence score", note: "94 %", appearAt: 0.35, top: "55%", right: "10%", left: "auto" },
-        { label: "AI recommendation", note: "Generated from evidence", appearAt: 0.5, top: "35%", left: "55%" },
-        { label: "Ready for review", note: "Awaiting approval", appearAt: 0.65, top: "72%", left: "15%" },
-        { label: "Opportunity", note: "Detected and scored", appearAt: 0.8, top: "20%", right: "18%", left: "auto" },
-      ];
+  const annotations = (data?.annotations ?? []).map((a) => ({
+    label: a.label[locale],
+    note: a.note[locale],
+    appearAt: a.appearAt,
+    top: a.top,
+    left: a.left,
+    right: a.right,
+  }));
 
   const annotationOpacity = annotations.map((a) =>
     useTransform(progress, [a.appearAt, a.appearAt + 0.08], [0, 1])
@@ -343,11 +310,18 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
   );
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "350vh", background: "#F7F8FA" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "350vh", background: "#0A0A0B" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(24px, 4vw, 60px)" }}>
-        <div className="relative w-full max-w-5xl mx-auto rounded-2xl overflow-hidden aspect-[16/9] max-md:aspect-[4/3]" style={{ background: "#FFFFFF", border: "1px solid rgba(17,17,17,0.06)" }}>
+        <div className="relative w-full max-w-5xl mx-auto rounded-2xl overflow-hidden aspect-[16/9] max-md:aspect-[4/3]" style={{ background: "#121316", border: "1px solid rgba(255,255,255,0.06)" }}>
           <motion.div className="absolute inset-0" style={{ opacity: screenshotOpacity, scale: screenshotScale }}>
-            <Image src="/images/cortex/cortex-dashboard.png" alt="Cortex dashboard" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 1024px" priority />
+            <Image
+              src={data?.screenshot.src ?? "/images/cortex/cortex-dashboard.png"}
+              alt={data?.screenshot.alt[locale] ?? "Cortex dashboard"}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              priority
+            />
           </motion.div>
           {annotations.map((a, i) => (
             <motion.div
@@ -357,14 +331,14 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
                 y: annotationY[i],
                 position: "absolute",
                 top: a.top,
-                left: a.left as string | undefined,
-                right: (a as any).right as string | undefined,
+                left: a.left,
+                right: a.right,
               }}
               className="pointer-events-none"
             >
-              <div className="px-3 py-2 rounded-lg max-md:px-2 max-md:py-1" style={{ background: "rgba(255,255,255,0.95)", border: "1px solid rgba(17,17,17,0.06)" }}>
-                <p className="font-heading text-xs whitespace-nowrap max-md:text-[9px]" style={{ color: "#111111" }}>{a.label}</p>
-                <p className="font-body text-[10px] whitespace-nowrap max-md:hidden" style={{ color: "#5F6368" }}>{a.note}</p>
+              <div className="px-3 py-2 rounded-lg max-md:px-2 max-md:py-1" style={{ background: "rgba(255,255,255,0.95)", border: "1px solid rgba(0,0,0,0.08)" }}>
+                <p className="font-heading text-xs whitespace-nowrap max-md:text-label-sm" style={{ color: "#0A0A0B" }}>{a.label}</p>
+                <p className="font-body text-label whitespace-nowrap max-md:hidden" style={{ color: "rgba(0,0,0,0.55)" }}>{a.note}</p>
               </div>
             </motion.div>
           ))}
@@ -376,27 +350,21 @@ function ScreenshotWithAnnotationsScene({ locale }: { locale: Locale }) {
 
 /* ─── Confidence ─── */
 
-function ConfidenceScene({ locale }: { locale: Locale }) {
+function ConfidenceScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useElementScrollProgress(sectionRef, OFFSET_FULL, 0);
 
   const pct = useTransform(progress, [0, 1], [55, 98]);
   const roundedPct = useTransform(pct, (v) => Math.round(v) + " %");
 
-  const stageLabels = locale === "cs"
-    ? [
-        { label: "Po\u010d\u00e1te\u010dn\u00ed anal\u00fdza", desc: "Z\u00e1kladn\u00ed sign\u00e1ly detekov\u00e1ny", range: [0, 0.3] },
-        { label: "D\u016fkazy ov\u011b\u0159eny", desc: "K\u0159\u00ed\u017eov\u00e1 reference potvrdila n\u00e1lezy", range: [0.3, 0.6] },
-        { label: "P\u0159ipraveno k akci", desc: "V\u0161echny sign\u00e1ly konzistentn\u00ed", range: [0.6, 1] },
-      ]
-    : [
-        { label: "Initial analysis", desc: "Basic signals detected", range: [0, 0.3] },
-        { label: "Evidence verified", desc: "Cross-referencing confirmed findings", range: [0.3, 0.6] },
-        { label: "Ready for action", desc: "All signals consistent", range: [0.6, 1] },
-      ];
+  const stageLabels = (data?.confidence.stages ?? []).map((s) => ({
+    label: s.label[locale],
+    desc: s.desc[locale],
+    range: s.range,
+  }));
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "200vh", background: "#F7F8FA" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "200vh", background: "#0A0A0B" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(48px, 6vw, 80px) clamp(24px, 5vw, 80px)" }}>
         <div className="max-w-lg mx-auto text-center">
           <motion.p
@@ -404,12 +372,12 @@ function ConfidenceScene({ locale }: { locale: Locale }) {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="text-xs font-mono font-semibold tracking-widest uppercase mb-6 sm:mb-8"
-            style={{ color: "#9CA3AF" }}
+            style={{ color: "#6E7683" }}
           >
-            {locale === "cs" ? "D\u016fv\u011bra v rozhodnut\u00ed" : "Confidence"}
+            {data?.confidence.label[locale]}
           </motion.p>
 
-          <motion.p className="font-heading leading-tight" style={{ fontSize: "clamp(56px, 10vw, 120px)", letterSpacing: "-0.04em", color: "#111111" }}>
+          <motion.p className="font-heading leading-tight" style={{ fontSize: "var(--text-display)", letterSpacing: "-0.04em", color: "#F4F6F8" }}>
             {roundedPct}
           </motion.p>
 
@@ -433,13 +401,13 @@ function ConfidenceScene({ locale }: { locale: Locale }) {
                 >
                   <p
                     className="font-heading"
-                    style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.02em", color: "#111111" }}
+                    style={{ fontSize: "var(--text-h4)", letterSpacing: "-0.02em", color: "#F4F6F8" }}
                   >
                     {s.label}
                   </p>
                   <p
                     className="font-body mt-2"
-                    style={{ fontSize: "clamp(12px, 1vw, 14px)", color: "#5F6368" }}
+                    style={{ fontSize: "var(--text-small)", color: "#9AA1AB" }}
                   >
                     {s.desc}
                   </p>
@@ -455,7 +423,7 @@ function ConfidenceScene({ locale }: { locale: Locale }) {
 
 /* ─── Quote: AI writes ─── */
 
-function QuoteSplitScene({ locale }: { locale: Locale }) {
+function QuoteSplitScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   return (
     <section className="relative flex items-center justify-center" style={{ minHeight: "60vh", padding: "clamp(60px, 8vw, 100px) clamp(24px, 5vw, 80px)" }}>
       <motion.div
@@ -465,11 +433,11 @@ function QuoteSplitScene({ locale }: { locale: Locale }) {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="text-center max-w-3xl mx-auto"
       >
-        <p className="font-heading leading-tight" style={{ fontSize: "clamp(24px, 3.5vw, 44px)", letterSpacing: "-0.03em", color: "#111111" }}>
-          {locale === "cs" ? "AI p\u00ed\u0161e." : "AI writes."}
+        <p className="font-heading leading-tight" style={{ fontSize: "var(--text-h2-lg)", letterSpacing: "-0.03em", color: "#F4F6F8" }}>
+          {data?.quoteSplit.primary[locale]}
         </p>
-        <p className="font-heading leading-tight mt-3" style={{ fontSize: "clamp(24px, 3.5vw, 44px)", letterSpacing: "-0.03em", color: "rgba(17,17,17,0.20)" }}>
-          {locale === "cs" ? "D\u016fkazy rozhoduj\u00ed." : "Evidence decides."}
+        <p className="font-heading leading-tight mt-3" style={{ fontSize: "var(--text-h2-lg)", letterSpacing: "-0.03em", color: "rgba(255,255,255,0.20)" }}>
+          {data?.quoteSplit.secondary[locale]}
         </p>
       </motion.div>
     </section>
@@ -478,7 +446,7 @@ function QuoteSplitScene({ locale }: { locale: Locale }) {
 
 /* ─── Quote: doing nothing ─── */
 
-function EditorialQuoteScene({ locale }: { locale: Locale }) {
+function EditorialQuoteScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   return (
     <section className="relative flex items-center justify-center" style={{ minHeight: "50vh", padding: "clamp(48px, 6vw, 80px) clamp(24px, 5vw, 80px)" }}>
       <motion.div
@@ -488,8 +456,8 @@ function EditorialQuoteScene({ locale }: { locale: Locale }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="text-center max-w-2xl mx-auto"
       >
-        <p className="font-heading leading-tight" style={{ fontSize: "clamp(18px, 2.5vw, 32px)", letterSpacing: "-0.03em", color: "#111111" }}>
-          {locale === "cs" ? "Cortex um\u00ed doporu\u010dit ned\u011blat nic." : "Cortex can recommend doing nothing."}
+        <p className="font-heading leading-tight" style={{ fontSize: "var(--text-h3)", letterSpacing: "-0.03em", color: "#F4F6F8" }}>
+          {data?.editorial.title[locale]}
         </p>
         <motion.p
           initial={{ opacity: 0 }}
@@ -497,11 +465,9 @@ function EditorialQuoteScene({ locale }: { locale: Locale }) {
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="font-body mt-4 leading-relaxed max-w-md mx-auto"
-          style={{ fontSize: "clamp(13px, 1vw, 15px)", color: "#5F6368" }}
+          style={{ fontSize: "var(--text-small)", color: "#9AA1AB" }}
         >
-          {locale === "cs"
-            ? "C\u00edlem je spr\u00e1vnost, ne prodej."
-            : "The goal is correctness, not selling."}
+          {data?.editorial.text[locale]}
         </motion.p>
       </motion.div>
     </section>
@@ -510,30 +476,20 @@ function EditorialQuoteScene({ locale }: { locale: Locale }) {
 
 /* ─── Cinematic reveal ─── */
 
-function CinematicRevealScene({ locale }: { locale: Locale }) {
+function CinematicRevealScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useElementScrollProgress(sectionRef, OFFSET_FULL, 1);
 
-  const steps = locale === "cs"
-    ? [
-        { icon: "\u25B6", label: "D\u016fkazy", sub: "8 sign\u00e1l\u016f shrom\u00e1\u017ed\u011bno a ov\u011b\u0159eno" },
-        { icon: "\u25B6", label: "Usuzov\u00e1n\u00ed", sub: "AI analyzuje validovan\u00fd kontext" },
-        { icon: "\u25B6", label: "Rozhodnut\u00ed", sub: "Nejvhodn\u011bj\u0161\u00ed postup vybr\u00e1n" },
-        { icon: "\u25B6", label: "Generov\u00e1n\u00ed", sub: "Personalizovan\u00e9 doporu\u010den\u00ed vytvo\u0159eno" },
-        { icon: "\u2713", label: "P\u0159ipraveno ke kontrole", sub: "\u010cek\u00e1 na manu\u00e1ln\u00ed schv\u00e1len\u00ed" },
-      ]
-    : [
-        { icon: "\u25B6", label: "Evidence", sub: "8 signals collected and verified" },
-        { icon: "\u25B6", label: "Reasoning", sub: "AI analyses validated context" },
-        { icon: "\u25B6", label: "Decision", sub: "Most suitable action selected" },
-        { icon: "\u25B6", label: "Generation", sub: "Personalised recommendation created" },
-        { icon: "\u2713", label: "Ready for review", sub: "Awaiting manual approval" },
-      ];
+  const steps = (data?.cinematic.steps ?? []).map((s) => ({
+    icon: s.icon,
+    label: s.label[locale],
+    sub: s.sub[locale],
+  }));
 
   const total = steps.length;
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "250vh", background: "#F7F8FA" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "250vh", background: "#0A0A0B" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(48px, 6vw, 80px) clamp(24px, 5vw, 80px)" }}>
         <div className="max-w-md mx-auto">
           <motion.p
@@ -541,9 +497,9 @@ function CinematicRevealScene({ locale }: { locale: Locale }) {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="text-xs font-mono font-semibold tracking-widest uppercase mb-8"
-            style={{ color: "#9CA3AF" }}
+            style={{ color: "#6E7683" }}
           >
-            {locale === "cs" ? "Pr\u00e1v\u011b prob\u00edh\u00e1" : "In Progress"}
+            {data?.cinematic.label[locale]}
           </motion.p>
 
           <div className="space-y-5">
@@ -595,14 +551,14 @@ function CinematicRow({
         className="absolute inset-0 flex items-center gap-3 pointer-events-none"
         aria-hidden="true"
       >
-        <span className="font-mono text-sm flex-shrink-0" style={{ width: 20, color: "rgba(17,17,17,0.2)" }}>
+        <span className="font-mono text-sm flex-shrink-0" style={{ width: 20, color: "rgba(255,255,255,0.2)" }}>
           {step.icon}
         </span>
         <div>
-          <span className="font-heading leading-tight" style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.01em", color: "rgba(17,17,17,0.2)" }}>
+          <span className="font-heading leading-tight" style={{ fontSize: "var(--text-h4)", letterSpacing: "-0.01em", color: "rgba(255,255,255,0.2)" }}>
             {step.label}
           </span>
-          <span className="font-body text-xs block" style={{ color: "rgba(17,17,17,0.1)" }}>
+          <span className="font-body text-xs block" style={{ color: "rgba(255,255,255,0.1)" }}>
             {step.sub}
           </span>
         </div>
@@ -615,14 +571,14 @@ function CinematicRow({
         transition={{ delay: index * 0.1, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
         className="flex items-center gap-3"
       >
-        <span className="font-mono text-sm flex-shrink-0" style={{ width: 20, color: "#111111" }}>
+        <span className="font-mono text-sm flex-shrink-0" style={{ width: 20, color: "#F4F6F8" }}>
           {step.icon}
         </span>
         <div>
-          <span className="font-heading leading-tight" style={{ fontSize: "clamp(16px, 1.5vw, 20px)", letterSpacing: "-0.01em", color: "#111111" }}>
+          <span className="font-heading leading-tight" style={{ fontSize: "var(--text-h4)", letterSpacing: "-0.01em", color: "#F4F6F8" }}>
             {step.label}
           </span>
-          <span className="font-body text-xs block" style={{ color: "#5F6368" }}>
+          <span className="font-body text-xs block" style={{ color: "#9AA1AB" }}>
             {step.sub}
           </span>
         </div>
@@ -633,7 +589,9 @@ function CinematicRow({
 
 /* ─── Final CTA ─── */
 
-function FinalScene({ locale }: { locale: Locale }) {
+function FinalScene({ locale, data }: { locale: Locale; data?: CortexPageData }) {
+  const title = (data?.final.title ?? []).map((line) => line[locale]);
+
   return (
     <section className="relative flex flex-col items-center justify-center" style={{ minHeight: "60vh", padding: "clamp(60px, 8vw, 100px) clamp(24px, 5vw, 80px)" }}>
       <div className="max-w-2xl mx-auto text-center">
@@ -642,10 +600,15 @@ function FinalScene({ locale }: { locale: Locale }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="font-heading font-bold leading-tight"
-          style={{ fontSize: "clamp(24px, 3.5vw, 44px)", letterSpacing: "-0.03em", color: "#111111" }}
+          className="font-heading font-medium leading-tight"
+          style={{ fontSize: "var(--text-h2-lg)", letterSpacing: "-0.03em", color: "#F4F6F8" }}
         >
-          {locale === "cs" ? "M\u00e1te z\u00e1jem o\npodobn\u00fd intern\u00ed syst\u00e9m?" : "Interested in a similar\ninternal system?"}
+          {title.map((line, i) => (
+            <span key={i}>
+              {line}
+              {i < title.length - 1 && <br />}
+            </span>
+          ))}
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -653,9 +616,9 @@ function FinalScene({ locale }: { locale: Locale }) {
           viewport={{ once: true }}
           transition={{ delay: 0.12, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="font-body mt-4 max-w-md mx-auto leading-relaxed"
-          style={{ fontSize: "clamp(13px, 1vw, 15px)", color: "#5F6368" }}
+          style={{ fontSize: "var(--text-small)", color: "#9AA1AB" }}
         >
-          {locale === "cs" ? "Poj\u010fme ho postavit spole\u010dn\u011b." : "Let's build it together."}
+          {data?.final.text[locale]}
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -667,11 +630,11 @@ function FinalScene({ locale }: { locale: Locale }) {
           <Link
             href={`/${locale}/contact`}
             className="inline-flex items-center gap-2 px-7 py-2.5 rounded-full text-sm font-medium transition-all duration-300"
-            style={{ color: "#FFFFFF", background: "#111111" }}
+            style={{ color: "#0A0A0B", background: "var(--color-accent)" }}
             onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; }}
             onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
           >
-            {locale === "cs" ? "Poj\u010fme stav\u011bt" : "Let's build"} &rarr;
+            {data?.final.cta[locale]} &rarr;
           </Link>
         </motion.div>
       </div>

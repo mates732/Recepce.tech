@@ -3,7 +3,9 @@
 import { useRef } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { useElementScrollProgress, OFFSET_TOP_OUT } from "@/lib/scroll";
+import ParticleField from "@/components/lab/ParticleField";
 import type { Locale } from "@/lib/types";
+import { getPage } from "@/content/repository";
 
 interface HeroSectionProps {
   locale: Locale;
@@ -30,6 +32,42 @@ function cancelScrollTween(id: number): void {
 
 function cancelScrollTweenListener(): void {
   cancelScrollTween(scrollTweenId);
+}
+
+let reducedMotionCache: boolean | null = null;
+
+function prefersReducedMotion(): boolean {
+  if (reducedMotionCache === null && typeof window !== "undefined") {
+    reducedMotionCache = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+  }
+  return reducedMotionCache === true;
+}
+
+/** Jemný magnetický posun primárního CTA za kurzorem (max ~3 px). */
+function magnetic(e: React.MouseEvent<HTMLElement>): void {
+  if (prefersReducedMotion()) return;
+  const el = e.currentTarget;
+  const rect = el.getBoundingClientRect();
+  const dx = e.clientX - (rect.left + rect.width / 2);
+  const dy = e.clientY - (rect.top + rect.height / 2);
+  const mx = Math.max(-3, Math.min(3, dx * 0.05));
+  const my = Math.max(-3, Math.min(3, dy * 0.05));
+  el.style.transform = `translate(${mx}px, ${my}px)`;
+}
+
+function resetMagnetic(e: React.MouseEvent<HTMLElement>): void {
+  e.currentTarget.style.transform = "translate(0px, 0px)";
+}
+
+/** Aktivní (stisknutý) stav tlačítka — rychlý, bez per-frame stavu. */
+function press(e: React.MouseEvent<HTMLElement>): void {
+  e.currentTarget.style.scale = "0.97";
+}
+
+function unpress(e: React.MouseEvent<HTMLElement>): void {
+  e.currentTarget.style.scale = "1";
 }
 
 function scrollToSection(id: string): void {
@@ -84,40 +122,29 @@ export default function HeroSection({ locale }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useElementScrollProgress(sectionRef, OFFSET_TOP_OUT);
 
-  const title = locale === "cs"
-    ? "Stavím inteligentní systémy."
-    : "I build intelligent systems.";
-
-  const subtitle = locale === "cs"
-    ? "Cortex · AI asistenti · Weby · YouTube"
-    : "Cortex · AI assistants · Websites · YouTube";
-
-  const ctaLabel = locale === "cs" ? "Prozkoumat projekty" : "Explore projects";
+  const page = getPage("home");
+  const hero = page?.data.hero;
+  const title = hero?.title[locale] ?? "";
+  const subtitle = hero?.subtitle[locale] ?? "";
+  const proof = hero?.proof[locale] ?? "";
+  const ctaLabel = hero?.ctaLabel[locale] ?? "";
+  const altCtaLabel = hero?.altCtaLabel[locale] ?? "";
 
   const words = title.split(" ");
-
   const isItalicWord = (word: string) =>
-    word === "inteligentní" || word === "intelligent";
+    (hero?.emphasis[locale] ?? []).some((e) => word.includes(e));
 
-  const subOpacity = useTransform(
+  const contentOpacity = useTransform(
     progress,
-    (p) => 1 - smoothstep(seg(p, 0.05, 0.2))
+    (p) => 1 - smoothstep(seg(p, 0.1, 0.55))
   );
-  const subY = useTransform(
+  const contentY = useTransform(
     progress,
-    (p) => -24 * smoothstep(seg(p, 0, 0.2))
+    (p) => -32 * smoothstep(seg(p, 0.05, 0.5))
   );
-  const ctaOpacity = useTransform(
+  const bgOpacity = useTransform(
     progress,
-    (p) => 1 - smoothstep(seg(p, 0.1, 0.25))
-  );
-  const ctaY = useTransform(
-    progress,
-    (p) => -18 * smoothstep(seg(p, 0, 0.25))
-  );
-  const containerScale = useTransform(
-    progress,
-    (p) => 1 + 0.04 * smoothstep(seg(p, 0.15, 0.55))
+    (p) => 1 - smoothstep(seg(p, 0.35, 0.8))
   );
 
   return (
@@ -125,110 +152,194 @@ export default function HeroSection({ locale }: HeroSectionProps) {
       ref={sectionRef}
       className="relative overflow-hidden flex flex-col items-center justify-center"
       style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         padding: "clamp(24px, 5vw, 80px)",
         paddingTop: "max(80px, 8vh)",
         paddingBottom: "max(40px, 5vh)",
       }}
     >
       <motion.div
-        className="relative z-10 w-full flex flex-col items-center"
-        style={{ maxWidth: "640px", scale: containerScale, willChange: "transform" }}
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{ opacity: bgOpacity }}
       >
-        {words.map((word, i) => (
-          <HeroWord
-            key={i}
-            word={word}
-            index={i}
-            total={words.length}
-            progress={progress}
-            italic={isItalicWord(word)}
+        <ParticleField className="absolute inset-0 w-full h-full" />
+<div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,74,46,0.10) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 100%, rgba(255,107,61,0.05) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 15% 90%, rgba(232,52,31,0.05) 0%, transparent 60%)",
+            }}
           />
-        ))}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, transparent 60%, #0A0A0B 100%)",
+          }}
+        />
+      </motion.div>
+
+      <h1 className="sr-only">{title}</h1>
+
+      <motion.div
+        className="relative z-10 w-full flex flex-col items-center text-center"
+        style={{
+          maxWidth: "860px",
+          opacity: contentOpacity,
+          y: contentY,
+          willChange: "transform",
+        }}
+      >
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="font-mono flex items-center gap-2.5"
+          style={{
+            fontSize: "var(--text-label-fluid)",
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "var(--color-accent)",
+          }}
+        >
+          <span
+            aria-hidden="true"
+            className="inline-block w-1.5 h-1.5 rounded-full"
+            style={{ background: "#FF6B3D", animation: "pulse-dot 2.4s ease-in-out infinite" }}
+          />
+          Digital Systems Studio
+        </motion.p>
+
+        <motion.h2
+          className="font-heading leading-none mt-8"
+          style={{
+            fontSize: "var(--text-hero)",
+            letterSpacing: "-0.03em",
+            color: "#F4F6F8",
+          }}
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.3 } } }}
+        >
+          {words.map((word, i) => (
+            <motion.span
+              key={i}
+              className="inline-block"
+              variants={{
+                hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  filter: "blur(0px)",
+                  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+                },
+              }}
+            >
+              <span className={isItalicWord(word) ? "gradient-text" : undefined}>
+                {word}
+              </span>
+              {"\u00A0"}
+            </motion.span>
+          ))}
+        </motion.h2>
 
         <motion.p
-          className="font-body mt-8 text-center"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
+          className="font-mono mt-6"
           style={{
-            fontSize: "clamp(11px, 1vw, 13px)",
-            color: "#5F6368",
-            letterSpacing: "0.12em",
+            fontSize: "var(--text-label-fluid)",
+            color: "#9AA1AB",
+            letterSpacing: "0.14em",
             textTransform: "uppercase",
-            opacity: subOpacity,
-            y: subY,
-            willChange: "transform",
           }}
         >
           {subtitle}
         </motion.p>
 
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.85, ease: [0.16, 1, 0.3, 1] }}
+          className="font-body mt-4"
+          style={{ fontSize: "var(--text-body)", color: "#6E7683" }}
+        >
+          {proof}
+        </motion.p>
+
         <motion.div
-          className="mt-10"
-          style={{ opacity: ctaOpacity, y: ctaY, willChange: "transform" }}
+          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 2.0, ease: [0.16, 1, 0.3, 1] }}
         >
           <a
-            href="#ekosystem"
+            href={hero?.ctaHref ?? "#systems-audit"}
             onClick={(e) => {
               e.preventDefault();
-              scrollToSection("ekosystem");
+              scrollToSection(hero?.scrollTarget ?? "systems-audit");
             }}
-            className="font-body text-xs tracking-[0.2em] uppercase transition-colors duration-300 cursor-pointer"
-            style={{ color: "#5F6368", textDecoration: "none" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
+            onMouseMove={magnetic}
+            onMouseDown={press}
+            onMouseUp={unpress}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = "0 0 40px var(--color-accent-glow)";
+            }}
+            onMouseLeave={(e) => {
+              resetMagnetic(e);
+              unpress(e);
+              e.currentTarget.style.boxShadow = "none";
+            }}
+            className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-medium cursor-pointer"
+            style={{
+              background: "var(--color-accent)",
+              color: "#0A0A0B",
+              transition: "box-shadow 0.3s ease, transform 0.25s ease-out, scale 0.15s ease-out",
+            }}
           >
             {ctaLabel}
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+              className="transition-transform duration-300 group-hover:translate-y-0.5"
+            >
+              <path d="M8 1v12m0 0l-4-4m4 4l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+
+          <a
+            href={hero?.altCtaHref ?? "#live-systems"}
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection(hero?.altScrollTarget ?? "live-systems");
+            }}
+            onMouseDown={press}
+            onMouseUp={unpress}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.35)";
+              e.currentTarget.style.color = "#F4F6F8";
+            }}
+            onMouseLeave={(e) => {
+              unpress(e);
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)";
+              e.currentTarget.style.color = "#9AA1AB";
+            }}
+            className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-medium cursor-pointer"
+            style={{
+              color: "#9AA1AB",
+              border: "1px solid rgba(255,255,255,0.14)",
+              transition: "border-color 0.3s ease, color 0.3s ease, scale 0.15s ease-out",
+            }}
+          >
+            {altCtaLabel}
           </a>
         </motion.div>
       </motion.div>
     </section>
-  );
-}
-
-function HeroWord({
-  word,
-  index,
-  total,
-  progress,
-  italic,
-}: {
-  word: string;
-  index: number;
-  total: number;
-  progress: MotionValue<number>;
-  italic: boolean;
-}) {
-  const isLast = index === total - 1;
-
-  const y = useTransform(progress, (p) =>
-    isLast
-      ? -44 * smoothstep(seg(p, 0.7, 1))
-      : -(48 + index * 26) * smoothstep(seg(p, 0, 0.45))
-  );
-  const opacity = useTransform(progress, (p) =>
-    isLast
-      ? 1 - smoothstep(seg(p, 0.72, 0.95))
-      : 1 - smoothstep(seg(p, 0.18 + index * 0.05, 0.45 + index * 0.05))
-  );
-  const scale = useTransform(progress, (p) =>
-    isLast ? 1 + 0.1 * smoothstep(seg(p, 0.45, 0.68)) : 1
-  );
-
-  return (
-    <motion.span
-      className="block text-center"
-      style={{ y, opacity, scale, willChange: "transform" }}
-    >
-      <span
-        className="font-heading leading-none"
-        style={{
-          fontSize: "clamp(36px, 7vw, 90px)",
-          letterSpacing: "-0.03em",
-          color: "#111111",
-          fontStyle: italic ? "italic" : "normal",
-        }}
-      >
-        {word}
-      </span>
-    </motion.span>
   );
 }

@@ -1,25 +1,46 @@
 import type { Metadata } from "next";
 import type { Locale } from "./types";
+import { getSite } from "@/content/repository";
 
-export const BASE_URL = "https://recepce.tech";
-export const SITE_NAME = "Recepce.tech";
+/** Site-wide nastavení z obsahu (admin) s fallbackem na defaulty. */
+const settings = getSite()?.settings;
 
-export const KEYWORDS = [
-  "AI agent",
-  "AI agents",
-  "AI receptionist",
-  "AI receptionist for business",
-  "Voice AI",
-  "AI phone assistant",
-  "AI call assistant",
-  "AI customer support",
-  "AI automation",
-  "AI for business",
-  "business AI assistant",
-  "inteligentní recepční",
-  "AI asistent",
-  "automatizace pro firmy",
+export const BASE_URL = settings?.baseUrl?.trim() || "https://recepce.tech";
+export const SITE_NAME = settings?.siteName?.trim() || "Recepce.tech";
+
+export const KEYWORDS = settings?.keywords?.length ? settings.keywords : [
+  "digital systems studio",
+  "custom software",
+  "web development",
+  "business automation",
+  "customer communication systems",
+  "internal tools",
+  "system design",
+  "booking systems",
+  "workflow automation",
+  "intelligent workflows",
+  "integrations",
+  "custom systems",
+  "digitální systémy",
+  "vývoj webů",
+  "automatizace firemních procesů",
+  "komunikační systémy",
+  "interní nástroje",
+  "systémový design",
 ];
+
+export const SITE_DESCRIPTION: Record<Locale, string> = settings?.description
+  ? { cs: settings.description.cs, en: settings.description.en }
+  : {
+      cs: "Digitální systémové studio. Navrhujeme a stavíme weby, komunikační systémy, interní nástroje a automatizaci — technologie je jen nástroj, výsledek je důvod.",
+      en: "A digital systems studio. We design and build websites, communication systems, internal tools and automation — technology is just the means, results are the point.",
+    };
+
+export const BUSINESS_NAME = settings?.business?.name?.cs?.trim() || "Matyáš Vojan";
+
+export const SAME_AS = [settings?.social?.youtube, settings?.social?.github].filter(
+  (url): url is string => Boolean(url?.trim())
+);
 
 export const LOCALE_META: Record<Locale, { lang: string; ogLocale: string; localeFull: string }> = {
   cs: { lang: "cs", ogLocale: "cs_CZ", localeFull: "cs-CZ" },
@@ -93,12 +114,8 @@ export function organizationJsonLd() {
     "@type": "Organization",
     name: SITE_NAME,
     url: BASE_URL,
-    description:
-      "AI receptionists, voice assistants, chat assistants, premium websites and business automation.",
-    sameAs: [
-      "https://youtube.com/@Big.matysek",
-      "https://github.com/mates732",
-    ],
+    description: SITE_DESCRIPTION.en,
+    sameAs: SAME_AS,
   };
 }
 
@@ -108,19 +125,8 @@ export function websiteJsonLd(locale: Locale) {
     "@type": "WebSite",
     name: SITE_NAME,
     url: `${BASE_URL}/${locale}`,
-    description:
-      locale === "cs"
-        ? "Stavím inteligentní systémy. AI recepční, AI asistenti, prémiové weby a automatizace."
-        : "I build intelligent systems. AI receptionists, AI assistants, premium websites and automation.",
+    description: SITE_DESCRIPTION[locale],
     inLanguage: locale,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${BASE_URL}/${locale}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 

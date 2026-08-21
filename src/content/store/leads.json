@@ -1,0 +1,176 @@
+[
+  {
+    "source": "ai_audit",
+    "name": "Smoke Test",
+    "company": "SmokeCo",
+    "email": "smoke@test.dev",
+    "website": "",
+    "companySize": "",
+    "challenge": "",
+    "companyProfile": {
+      "industry": "",
+      "size": ""
+    },
+    "opportunities": [],
+    "topOpportunity": "",
+    "selectedOpportunity": "",
+    "auditCompletionTime": 0,
+    "answers": {},
+    "createdAt": "2026-08-17T16:51:00.455Z",
+    "id": "msxh05wo-zscdot",
+    "status": "New",
+    "updatedAt": "2026-08-17T16:51:00.455Z"
+  },
+  {
+    "source": "ai_audit",
+    "name": "Smoke Audit",
+    "company": "SmokeCo",
+    "email": "smoke.audit@test.dev",
+    "website": "",
+    "companySize": "Jen já",
+    "challenge": "",
+    "companyProfile": {
+      "industry": "Služby",
+      "size": "Jen já"
+    },
+    "opportunities": [
+      "Automatizace zákaznické komunikace"
+    ],
+    "topOpportunity": "Automatizace zákaznické komunikace",
+    "selectedOpportunity": "Automatizace zákaznické komunikace",
+    "auditCompletionTime": 10881,
+    "answers": {
+      "industry": [
+        "services"
+      ],
+      "size": [
+        "solo"
+      ],
+      "tasks": [
+        "messages"
+      ],
+      "channels": [
+        "phone"
+      ],
+      "processes": [
+        "customer"
+      ]
+    },
+    "createdAt": "2026-08-17T16:54:49.131Z",
+    "id": "msxh52cv-xalbvg",
+    "status": "New",
+    "updatedAt": "2026-08-17T16:54:49.131Z"
+  },
+  {
+    "source": "ai_audit",
+    "name": "sdd",
+    "company": "dd",
+    "email": "dd@f.f",
+    "website": "d.cz",
+    "companySize": "2–10 lidí",
+    "challenge": "ddd",
+    "companyProfile": {
+      "industry": "Vzdělávání",
+      "size": "2–10 lidí"
+    },
+    "opportunities": [
+      "Automatizace zákaznické komunikace",
+      "Rezervace a objednávky"
+    ],
+    "topOpportunity": "Automatizace zákaznické komunikace",
+    "selectedOpportunity": "Rezervace a objednávky",
+    "auditCompletionTime": 119907,
+    "answers": {
+      "industry": [
+        "education"
+      ],
+      "size": [
+        "small"
+      ],
+      "tasks": [
+        "reservations"
+      ],
+      "channels": [
+        "chat",
+        "email"
+      ],
+      "processes": [
+        "orders"
+      ]
+    },
+    "createdAt": "2026-08-18T06:57:08.626Z",
+    "id": "msyb8ay1-xn2zxu",
+    "status": "New",
+    "updatedAt": "2026-08-18T06:57:08.626Z"
+  },
+  {
+    "source": "ai_audit",
+    "name": "MD *Lead*",
+    "company": "Firma _s_ podtrzitkem",
+    "email": "lead_underscore@test.dev",
+    "website": "",
+    "companySize": "",
+    "challenge": "",
+    "companyProfile": {
+      "industry": "",
+      "size": ""
+    },
+    "opportunities": [
+      "Oportunita [1]",
+      "Druha *oportunita*"
+    ],
+    "topOpportunity": "",
+    "selectedOpportunity": "",
+    "auditCompletionTime": 0,
+    "answers": {
+      "tasks": [
+        "Odpovídání zákazníkům"
+      ]
+    },
+    "createdAt": "2026-08-18T07:04:56.052Z",
+    "id": "msybibjp-ec49h7",
+    "status": "New",
+    "updatedAt": "2026-08-18T07:04:56.052Z"
+  },
+  {
+    "source": "ai_audit",
+    "name": "d",
+    "company": "d",
+    "email": "d@c.c",
+    "website": "",
+    "companySize": "10–50 lidí",
+    "challenge": "",
+    "companyProfile": {
+      "industry": "Vzdělávání",
+      "size": "10–50 lidí"
+    },
+    "opportunities": [
+      "Interní workflow",
+      "Rezervace a objednávky"
+    ],
+    "topOpportunity": "Interní workflow",
+    "selectedOpportunity": "Rezervace a objednávky",
+    "auditCompletionTime": 53906,
+    "answers": {
+      "industry": [
+        "education"
+      ],
+      "size": [
+        "medium"
+      ],
+      "tasks": [
+        "reservations"
+      ],
+      "channels": [
+        "whatsapp"
+      ],
+      "processes": [
+        "data"
+      ]
+    },
+    "createdAt": "2026-08-18T07:19:35.989Z",
+    "id": "msyc16ni-5pbb3v",
+    "status": "New",
+    "updatedAt": "2026-08-18T07:19:35.989Z"
+  }
+]

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useParallax } from "@/lib/scroll";
 import type { Locale } from "@/lib/types";
+import { getPage } from "@/content/repository";
 
 interface YoutubeSectionProps {
   locale: Locale;
@@ -12,11 +13,10 @@ interface YoutubeSectionProps {
 
 export default function YoutubeSection({ locale }: YoutubeSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const title = "YouTube";
-  const subtitle = locale === "cs"
-    ? "Technologie, vývoj a reálné projekty. Bez zbytečné teorie."
-    : "Tech, development and real projects. No unnecessary theory.";
-  const cta = locale === "cs" ? "Sledovat na YouTube" : "Follow on YouTube";
+  const youtube = getPage("home")?.data.youtube;
+  const title = youtube?.title[locale] ?? "YouTube";
+  const subtitle = youtube?.subtitle[locale] ?? "";
+  const cta = youtube?.cta[locale] ?? "";
 
   const y = useParallax(sectionRef, 40, -40);
 
@@ -24,7 +24,7 @@ export default function YoutubeSection({ locale }: YoutubeSectionProps) {
     <section
       id="youtube"
       ref={sectionRef}
-      className="relative"
+      className="relative overflow-hidden"
       style={{
         padding: "clamp(60px, 8vw, 100px) clamp(24px, 5vw, 80px)",
       }}
@@ -32,12 +32,18 @@ export default function YoutubeSection({ locale }: YoutubeSectionProps) {
       <motion.div style={{ y, maxWidth: "1200px" }} className="relative z-10 mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
           <div>
+            <p
+              className="font-mono mb-4"
+              style={{ fontSize: "var(--text-label-fluid)", letterSpacing: "0.22em", textTransform: "uppercase", color: "#6E7683" }}
+            >
+              / 11
+            </p>
             <h2
               className="font-heading"
               style={{
-                fontSize: "clamp(32px, 5vw, 64px)",
+                fontSize: "var(--text-h1)",
                 letterSpacing: "-0.03em",
-                color: "#111111",
+                color: "#F4F6F8",
               }}
             >
               {title}
@@ -45,8 +51,8 @@ export default function YoutubeSection({ locale }: YoutubeSectionProps) {
             <p
               className="mt-3 font-body"
               style={{
-                fontSize: "clamp(14px, 1.2vw, 18px)",
-                color: "#5F6368",
+                fontSize: "var(--text-lead)",
+                color: "#9AA1AB",
                 maxWidth: "40ch",
               }}
             >
@@ -57,16 +63,24 @@ export default function YoutubeSection({ locale }: YoutubeSectionProps) {
             href={`/${locale}/youtube`}
             className="group inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap self-start sm:self-auto"
             style={{
-              color: "#FFFFFF",
-              background: "#111111",
+              color: "#9AA1AB",
+              border: "1px solid rgba(255,255,255,0.14)",
+              scale: "1",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(17,17,17,0.15)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.35)";
+              e.currentTarget.style.color = "#F4F6F8";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0px)";
-              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)";
+              e.currentTarget.style.color = "#9AA1AB";
+              e.currentTarget.style.scale = "1";
+            }}
+            onMouseDown={(e) => {
+              e.currentTarget.style.scale = "0.97";
+            }}
+            onMouseUp={(e) => {
+              e.currentTarget.style.scale = "1";
             }}
           >
             {cta}

@@ -1,6 +1,16 @@
 "use client";
 
-import { Component, type ReactNode, type ErrorInfo } from "react";
+import { Component, useEffect, useState, type ReactNode, type ErrorInfo } from "react";
+import type { Locale } from "@/lib/types";
+import { t } from "@/lib/utils";
+
+function useLocale(): Locale {
+  const [locale, setLocale] = useState<Locale>("cs");
+  useEffect(() => {
+    setLocale(document.documentElement.lang === "en" ? "en" : "cs");
+  }, []);
+  return locale;
+}
 
 interface Props {
   children: ReactNode;
@@ -29,50 +39,49 @@ export default class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
-      return (
-        <div
-          className="flex items-center justify-center min-h-screen px-6"
-          style={{ background: "#090909" }}
-        >
-          <div className="text-center max-w-md">
-            <div
-              className="font-mono text-[10px] tracking-[0.15em] uppercase mb-4"
-              style={{ color: "rgba(102,102,102,0.35)" }}
-            >
-              rendering error
-            </div>
-            <h1
-              className="font-heading text-[clamp(24px,3vw,36px)] font-medium tracking-[-0.03em] mb-3"
-              style={{ color: "#FAFAFA" }}
-            >
-              Something went wrong
-            </h1>
-            <p
-              className="text-[13px] leading-relaxed mb-8"
-              style={{ color: "#666666" }}
-            >
-              A rendering error occurred. The dev server is still running — try saving the file again to trigger a hot reload.
-            </p>
-            <button
-              onClick={() => {
-                this.setState({ hasError: false, error: null });
-                window.location.reload();
-              }}
-              className="font-body text-[12px] font-medium tracking-[-0.01em] transition-all duration-300"
-              style={{ color: "rgba(237,237,237,0.5)" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "rgba(237,237,237,0.85)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "rgba(237,237,237,0.5)";
-              }}
-            >
-              reload page
-            </button>
-          </div>
-        </div>
-      );
+      return <ErrorFallback />;
     }
     return this.props.children;
   }
+}
+
+function ErrorFallback() {
+  const locale = useLocale();
+
+  return (
+    <div
+      className="flex items-center justify-center min-h-screen px-6"
+      style={{ background: "#0A0A0B" }}
+    >
+      <div className="text-center max-w-md">
+        <div
+          className="font-mono text-label tracking-[0.15em] uppercase mb-4"
+          style={{ color: "rgba(255,255,255,0.35)" }}
+        >
+          error
+        </div>
+        <h1
+          className="font-heading text-[clamp(24px,3vw,36px)] font-medium tracking-[-0.03em] mb-3"
+          style={{ color: "#F4F6F8" }}
+        >
+          {t(locale, "errorBoundary.title")}
+        </h1>
+        <p
+          className="font-body text-[13px] leading-relaxed mb-8"
+          style={{ color: "#9AA1AB" }}
+        >
+          {t(locale, "errorBoundary.text")}
+        </p>
+        <button
+          onClick={() => {
+            window.location.reload();
+          }}
+          className="font-body text-sm font-medium px-6 py-2.5 rounded-full transition-all duration-300 cursor-pointer"
+          style={{ color: "#0A0A0B", background: "#F4F6F8", border: "none" }}
+        >
+          {t(locale, "errorBoundary.reload")}
+        </button>
+      </div>
+    </div>
+  );
 }

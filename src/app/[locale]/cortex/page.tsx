@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
+import { getPage } from "@/content/repository";
 import CortexContent from "@/components/cortex/CortexContent";
 
 interface Props {
@@ -8,14 +9,13 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const title = locale === "cs" ? "Cortex — Inteligence pohánějící Recepce.tech" : "Cortex — The intelligence powering Recepce.tech";
-  const description = locale === "cs"
-    ? "Cortex je interní platforma pro analýzu firem, vyhledávání příležitostí a AI automatizaci."
-    : "Cortex is an internal platform for company analysis, opportunity discovery and AI automation.";
+  const seo = getPage("cortex")?.seo;
+  const title = seo?.title[locale as Locale];
+  const description = seo?.description[locale as Locale];
   return {
     title,
     description,
-    openGraph: { title, description },
+    openGraph: title ? { title, description } : undefined,
   };
 }
 

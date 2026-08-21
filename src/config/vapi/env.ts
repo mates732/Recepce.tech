@@ -1,3 +1,5 @@
+import "server-only";
+
 interface AssistantEnvVars {
   apiKey: string;
   assistantId: string;
@@ -38,6 +40,7 @@ function readEnv(name: string): string {
   return process.env[name] ?? "";
 }
 
+/** Vrací veřejný (pk_) klíč a ID asistenta pro dané odvětví. */
 export function getAssistantConfig(industry: string): { apiKey: string; assistantId: string } {
   const vars = ASSISTANT_ENV_MAP[industry];
   if (!vars) {
@@ -50,44 +53,6 @@ export function getAssistantConfig(industry: string): { apiKey: string; assistan
     apiKey: readEnv(vars.apiKey),
     assistantId: readEnv(vars.assistantId),
   };
-}
-
-export function getAssistantField<K extends keyof AssistantEnvVars>(
-  industry: string,
-  field: K,
-): string {
-  const vars = ASSISTANT_ENV_MAP[industry];
-  if (!vars) {
-    throw new Error(
-      `Unknown Vapi industry "${industry}". ` +
-        `Available: ${Object.keys(ASSISTANT_ENV_MAP).join(", ")}`,
-    );
-  }
-  return readEnv(vars[field]);
-}
-
-export function getAssistantId(industry: string): string {
-  return getAssistantField(industry, "assistantId");
-}
-
-export function getAssistantApiKey(industry: string): string {
-  return getAssistantField(industry, "apiKey");
-}
-
-export function getAllAssistantEnvNames(): string[] {
-  const names: string[] = [];
-  for (const vars of Object.values(ASSISTANT_ENV_MAP)) {
-    names.push(vars.apiKey, vars.assistantId);
-  }
-  return names;
-}
-
-export function getPublicKey(): string {
-  return readEnv("VAPI_PUBLIC_KEY");
-}
-
-export function getPrivateKey(): string {
-  return readEnv("VAPI_PRIVATE_KEY");
 }
 
 export function validateVapiEnv(): void {

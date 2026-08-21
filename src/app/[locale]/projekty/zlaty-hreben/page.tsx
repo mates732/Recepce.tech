@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
+import { createMetadata } from "@/lib/seo";
+import { getPage } from "@/content/repository";
 import ZlatyHrebenContent from "./ZlatyHrebenContent";
 
 interface Props {
@@ -8,12 +10,14 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return {
-    title: locale === "cs" ? "Zlatý Hřeben — Projekt webu" : "Zlatý Hřeben — Website Project",
-    description: locale === "cs"
-      ? "Case study webového projektu, který nedosáhl produkce. Design, proces a vizuální směr."
-      : "A case study of a web project that never reached production. Design, process and visual direction.",
-  };
+  const seo = getPage("zlaty-hreben")?.seo;
+  return createMetadata(locale as Locale, {
+    title: seo?.title.cs ?? "",
+    titleEn: seo?.title.en ?? "",
+    description: seo?.description.cs ?? "",
+    descriptionEn: seo?.description.en ?? "",
+    path: "/projekty/zlaty-hreben",
+  });
 }
 
 export default async function ZlatyHrebenPage({ params }: Props) {

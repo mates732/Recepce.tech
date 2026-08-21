@@ -2,6 +2,7 @@
 
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
+import { SOCIALS } from "@/config/socials";
 import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -11,9 +12,9 @@ interface Props {
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
-const phone = "+420 732 839 892";
-const email = "vojanmatyas@gmail.com";
-const whatsapp = "+420 732 839 892";
+const phone = SOCIALS.phone;
+const email = SOCIALS.email;
+const whatsapp = SOCIALS.phone;
 
 export default function ContactContent({ locale }: Props) {
   const isCs = locale === "cs";
@@ -52,13 +53,13 @@ export default function ContactContent({ locale }: Props) {
       message: message.trim(),
     };
     if (!trimmed.name || !trimmed.email || !trimmed.message) {
-      return isCs ? "Prosím vyplňte všechna povinná pole." : "Please fill in all required fields.";
+      return t(locale, "contact.formRequired");
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed.email)) {
-      return isCs ? "Zadejte prosím platný e-mail." : "Please enter a valid email address.";
+      return t(locale, "contact.formInvalidEmail");
     }
     if (trimmed.message.length < 10) {
-      return isCs ? "Zpráva musí mít alespoň 10 znaků." : "Message must be at least 10 characters.";
+      return t(locale, "contact.formTooShort");
     }
     return null;
   }
@@ -94,13 +95,13 @@ export default function ContactContent({ locale }: Props) {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? (isCs ? "Něco se pokazilo. Zkuste to prosím znovu." : "Something went wrong. Please try again."));
+      if (!res.ok) throw new Error(data.error ?? t(locale, "contact.formError"));
       setStatus("success");
       resetForm();
       setTimeout(() => setStatus("idle"), 6000);
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : (isCs ? "Něco se pokazilo." : "Something went wrong."));
+      setErrorMsg(err instanceof Error ? err.message : t(locale, "contact.formErrorGeneric"));
     }
   }
 
@@ -119,7 +120,7 @@ export default function ContactContent({ locale }: Props) {
       className="relative min-h-screen"
       style={{
         padding: "clamp(120px, 15vw, 200px) clamp(24px, 5vw, 80px)",
-        background: "#F7F8FA",
+        background: "#0A0A0B",
       }}
     >
       <div className="mx-auto relative z-10" style={{ maxWidth: "960px" }}>
@@ -127,27 +128,27 @@ export default function ContactContent({ locale }: Props) {
           <div
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-8"
             style={{
-              background: "#FFFFFF",
-              border: "1px solid rgba(17,17,17,0.06)",
-              color: "#5F6368",
+              background: "#121316",
+              border: "1px solid rgba(255,255,255,0.06)",
+              color: "#9AA1AB",
             }}
           >
             <span
               className="w-1.5 h-1.5 rounded-full"
               style={{
-                background: "#111111",
+                background: "#F4F6F8",
                 animation: "pulse-dot 2.8s ease-in-out infinite",
               }}
             />
-            <span className="font-body text-[10px] tracking-[0.08em]">{t(locale, "contact.badge")}</span>
+            <span className="font-body text-label tracking-[0.08em]">{t(locale, "contact.badge")}</span>
           </div>
 
           <h1
-            className="font-heading font-bold leading-tight"
+            className="font-heading font-medium leading-tight"
             style={{
-              fontSize: "clamp(36px, 6vw, 80px)",
+              fontSize: "var(--text-h1-lg)",
               letterSpacing: "-0.03em",
-              color: "#111111",
+              color: "#F4F6F8",
             }}
           >
             {t(locale, "contact.title")}
@@ -156,8 +157,8 @@ export default function ContactContent({ locale }: Props) {
           <p
             className="font-body mt-6 leading-relaxed max-w-[48ch] mx-auto"
             style={{
-              fontSize: "clamp(15px, 1.2vw, 17px)",
-              color: "#5F6368",
+              fontSize: "var(--text-body)",
+              color: "#9AA1AB",
             }}
           >
             {t(locale, "contact.subtitle")}
@@ -174,17 +175,17 @@ export default function ContactContent({ locale }: Props) {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <h2
-              className="font-heading font-semibold mb-3"
+              className="font-heading font-medium mb-3"
               style={{
-                fontSize: "clamp(20px, 2.5vw, 28px)",
-                color: "#111111",
+                fontSize: "var(--text-h2)",
+                color: "#F4F6F8",
               }}
             >
               {t(locale, "contact.formTitle")}
             </h2>
             <p
               className="font-body text-sm leading-relaxed mb-8"
-              style={{ color: "#5F6368" }}
+              style={{ color: "#9AA1AB" }}
             >
               {t(locale, "contact.formSub")}
             </p>
@@ -198,17 +199,17 @@ export default function ContactContent({ locale }: Props) {
                   rel={c.href.startsWith("http") ? "noopener" : undefined}
                   className="group flex items-center gap-4 py-2.5 md:py-2"
                   style={{
-                    color: "#5F6368",
-                    borderBottom: "1px solid rgba(17,17,17,0.06)",
+                    color: "#9AA1AB",
+                    borderBottom: "1px solid rgba(255,255,255,0.06)",
                     transition: "color 0.3s ease",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "#111111"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "#5F6368"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "#F4F6F8"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "#9AA1AB"; }}
                 >
                   <div className="flex-1 min-w-0">
                     <div
-                      className="font-body text-[10px] tracking-[0.08em] uppercase"
-                      style={{ color: "rgba(17,17,17,0.35)" }}
+                      className="font-body text-label tracking-[0.08em] uppercase"
+                      style={{ color: "rgba(255,255,255,0.35)" }}
                     >
                       {c.label}
                     </div>
@@ -230,16 +231,16 @@ export default function ContactContent({ locale }: Props) {
                 <div
                   key={i}
                   className="flex items-center gap-2.5 font-body text-sm transition-all duration-300"
-                  style={{ color: "#5F6368" }}
+                  style={{ color: "#9AA1AB" }}
                 >
                   <div
                     className="w-[18px] h-[18px] rounded-[5px] flex items-center justify-center flex-shrink-0"
                     style={{
-                      background: "rgba(17,17,17,0.04)",
-                      border: "1px solid rgba(17,17,17,0.08)",
+                      background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.08)",
                     }}
                   >
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" style={{ opacity: 0.4 }}>
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#F4F6F8" strokeWidth="2.5" strokeLinecap="round" style={{ opacity: 0.4 }}>
                       <path d="M2 5l2.5 2.5 3.5-4" />
                     </svg>
                   </div>
@@ -256,8 +257,8 @@ export default function ContactContent({ locale }: Props) {
             transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="rounded-2xl p-6 sm:p-8"
             style={{
-              background: "#FFFFFF",
-              border: "1px solid rgba(17,17,17,0.06)",
+              background: "#121316",
+              border: "1px solid rgba(255,255,255,0.06)",
             }}
           >
             <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
@@ -274,12 +275,14 @@ export default function ContactContent({ locale }: Props) {
               {(["name", "email", "phone"] as const).map((field) => (
                 <div key={field} className="flex flex-col gap-1.5">
                   <label
+                    htmlFor={`contact-${field}`}
                     className="font-body text-xs tracking-[0.06em]"
-                    style={{ color: "#5F6368" }}
+                    style={{ color: "#9AA1AB" }}
                   >
                     {t(locale, `contact.form${field.charAt(0).toUpperCase() + field.slice(1)}` as any)}
                   </label>
                   <input
+                    id={`contact-${field}`}
                     value={field === "name" ? name : field === "email" ? emailVal : phoneVal}
                     onChange={(e) => {
                       const val = e.target.value;
@@ -295,44 +298,46 @@ export default function ContactContent({ locale }: Props) {
                     style={{
                       background: "transparent",
                       border: "none",
-                      borderBottom: "1px solid rgba(17,17,17,0.1)",
-                      color: "#111111",
+                      borderBottom: "1px solid rgba(255,255,255,0.1)",
+                      color: "#F4F6F8",
                       padding: "8px 0",
                       opacity: isLoading ? 0.4 : 1,
                     }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = "#111111"; }}
-                    onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(17,17,17,0.1)"; }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = "var(--color-accent)"; }}
+                    onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
                   />
                 </div>
               ))}
 
               <div className="flex flex-col gap-1.5">
                 <label
+                  htmlFor="contact-message"
                   className="font-body text-xs tracking-[0.06em]"
-                  style={{ color: "#5F6368" }}
+                  style={{ color: "#9AA1AB" }}
                 >
                   {t(locale, "contact.formMessage")}
                 </label>
                 <textarea
+                  id="contact-message"
                   value={message}
                   onChange={(e) => { setMessage(e.target.value); if (status === "error") setStatus("idle"); }}
                   disabled={isLoading}
                   rows={4}
                   className="w-full text-sm outline-none transition-all duration-200 resize-vertical rounded-xl px-3.5 py-3"
                   style={{
-                    background: "rgba(17,17,17,0.02)",
-                    border: "1px solid rgba(17,17,17,0.08)",
-                    color: "#111111",
-                    lineHeight: "1.5",
+                    background: "rgba(255,255,255,0.02)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    color: "#F4F6F8",
+                    lineHeight: "var(--leading-body)",
                     opacity: isLoading ? 0.4 : 1,
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(17,17,17,0.2)";
-                    e.currentTarget.style.background = "rgba(17,17,17,0.03)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.03)";
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(17,17,17,0.08)";
-                    e.currentTarget.style.background = "rgba(17,17,17,0.02)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.02)";
                   }}
                 />
               </div>
@@ -342,14 +347,14 @@ export default function ContactContent({ locale }: Props) {
                 disabled={isDisabled}
                 className="font-body text-sm font-medium tracking-[-0.01em] mt-2 self-start w-full md:w-auto px-6 py-3 rounded-full transition-all duration-300"
                 style={{
-                  color: isDisabled ? "rgba(17,17,17,0.3)" : "#FFFFFF",
-                  background: isDisabled ? "rgba(17,17,17,0.06)" : "#111111",
+                  color: isDisabled ? "rgba(244,246,248,0.3)" : "#0A0A0B",
+                  background: isDisabled ? "rgba(255,255,255,0.06)" : "var(--color-accent)",
                   cursor: isDisabled ? "default" : "pointer",
                 }}
                 onMouseEnter={(e) => {
                   if (!isDisabled) {
                     e.currentTarget.style.transform = "translateY(-1px)";
-                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(17,17,17,0.1)";
+                    e.currentTarget.style.boxShadow = "0 4px 16px var(--color-accent-glow)";
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -374,32 +379,34 @@ export default function ContactContent({ locale }: Props) {
                 {status === "success" && (
                   <motion.div
                     key="success"
+                    role="status"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <span className="font-body text-sm" style={{ color: "#5F6368" }}>
-                      {isCs ? "Děkujeme! Vaše zpráva byla odeslána." : "Thank you! Your message has been sent."}
+                    <span className="font-body text-sm" style={{ color: "#9AA1AB" }}>
+                      {t(locale, "contact.formSuccessMessage")}
                     </span>
                   </motion.div>
                 )}
                 {status === "error" && (
                   <motion.div
                     key="error"
+                    role="alert"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <span className="font-body text-sm" style={{ color: "#EF4444" }}>
+                    <span className="font-body text-sm" style={{ color: "var(--color-danger)" }}>
                       {errorMsg}
                     </span>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              <div className="font-body text-xs text-center mt-1" style={{ color: "rgba(17,17,17,0.3)" }}>
+              <div className="font-body text-xs text-center mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>
                 {t(locale, "contact.note")}
               </div>
             </form>

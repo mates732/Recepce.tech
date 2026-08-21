@@ -1,0 +1,9 @@
+{"actor":"admin","action":"update","entityKind":"project","entityId":"cortex","summary":"Draft uložen: Cortex","details":{"state":"draft"},"id":"msp2phtz-rm7pfc","timestamp":"2026-08-11T19:48:38.663Z"}
+{"actor":"admin","action":"update","entityKind":"project","entityId":"cortex","summary":"Draft zahozen: cortex","details":{"state":"draft-discarded"},"id":"msp2phvu-fsv9p7","timestamp":"2026-08-11T19:48:38.730Z"}
+{"actor":"admin","action":"update","entityKind":"project","entityId":"cortex","summary":"Draft uložen: Cortex","details":{"state":"draft"},"id":"msq1cmnb-8v8y9o","timestamp":"2026-08-12T11:58:24.935Z"}
+{"actor":"admin","action":"update","entityKind":"project","entityId":"cortex","summary":"Draft zahozen: cortex","details":{"state":"draft-discarded"},"id":"msq1cmp0-4yze9c","timestamp":"2026-08-12T11:58:24.996Z"}
+{"actor":"admin","action":"update","entityKind":"site","entityId":"site","summary":"Draft uložen: site","details":{"state":"draft"},"id":"msq1zhhl-nbcc98","timestamp":"2026-08-12T12:16:11.337Z"}
+{"actor":"admin","action":"publish","entityKind":"site","entityId":"site","summary":"Publikováno: site","details":{"state":"published"},"id":"msq1zhkg-geb1fk","timestamp":"2026-08-12T12:16:11.440Z"}
+{"actor":"admin","action":"update","entityKind":"site","entityId":"site","summary":"Draft uložen: site","details":{"state":"draft"},"id":"msq20p94-48knnp","timestamp":"2026-08-12T12:17:08.056Z"}
+{"actor":"admin","action":"update","entityKind":"site","entityId":"site","summary":"Draft uložen: site","details":{"state":"draft"},"id":"msq21p4p-kt2m0v","timestamp":"2026-08-12T12:17:54.553Z"}
+{"actor":"admin","action":"update","entityKind":"site","entityId":"site","summary":"Draft zahozen: site","details":{"state":"draft-discarded"},"id":"msq21p55-wvueh4","timestamp":"2026-08-12T12:17:54.569Z"}

@@ -2,11 +2,14 @@
 
 import type { VoiceState } from "./useVoiceAssistant";
 import { motion } from "framer-motion";
+import type { Locale } from "@/lib/types";
+import { t } from "@/lib/utils";
 
 interface VoiceButtonProps {
   state: VoiceState;
   onClick: () => void;
   disabled?: boolean;
+  locale: Locale;
 }
 
 function MicIcon() {
@@ -36,15 +39,15 @@ function StopIcon() {
   );
 }
 
-export default function VoiceButton({ state, onClick, disabled }: VoiceButtonProps) {
+export default function VoiceButton({ state, onClick, disabled, locale }: VoiceButtonProps) {
   const isIdle = state === "idle";
   const isLoading = state === "connecting";
   const isActive = state === "listening" || state === "speaking";
 
   const size = isIdle ? 72 : 64;
-  const bg = isIdle ? "rgba(17,17,17,0.03)" : isActive ? "rgba(34,197,94,0.08)" : "rgba(17,17,17,0.05)";
-  const border = isIdle ? "rgba(17,17,17,0.08)" : isActive ? "rgba(34,197,94,0.2)" : "rgba(17,17,17,0.08)";
-  const color = isIdle ? "rgba(17,17,17,0.5)" : isActive ? "#22C55E" : "rgba(17,17,17,0.5)";
+  const bg = isIdle ? "rgba(255,255,255,0.03)" : isActive ? "rgba(52,211,153,0.08)" : "rgba(255,255,255,0.05)";
+  const border = isIdle ? "rgba(255,255,255,0.08)" : isActive ? "rgba(52,211,153,0.2)" : "rgba(255,255,255,0.08)";
+  const color = isIdle ? "rgba(255,255,255,0.5)" : isActive ? "#34D399" : "rgba(255,255,255,0.5)";
 
   return (
     <motion.button
@@ -62,10 +65,16 @@ export default function VoiceButton({ state, onClick, disabled }: VoiceButtonPro
           ? { repeat: Infinity, duration: 3, ease: "easeInOut" }
           : { duration: 0 }
       }
-      whileHover={isIdle ? { scale: 1.05, boxShadow: "0 8px 24px rgba(17,17,17,0.08)" } : undefined}
+      whileHover={isIdle ? { scale: 1.05, boxShadow: "0 8px 24px rgba(255,255,255,0.08)" } : undefined}
       whileTap={isIdle ? { scale: 0.97, transition: { duration: 0.12 } } : undefined}
       aria-label={
-        isIdle ? "Zahájit hovor" : isActive ? "Ukončit hovor" : isLoading ? "Připojování" : "Zkusit znovu"
+        isIdle
+          ? t(locale, "voice.idle")
+          : isActive
+            ? t(locale, "ui.endCall")
+            : isLoading
+              ? t(locale, "voice.connecting")
+              : t(locale, "ui.retry")
       }
     >
       {isLoading ? (

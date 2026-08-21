@@ -1,37 +1,29 @@
 import type { MetadataRoute } from "next";
 import { BASE_URL } from "@/lib/seo";
-
-const LOCALES = ["cs", "en"] as const;
+import { LOCALES } from "@/lib/types";
+import { list } from "@/content/repository";
 
 const STATIC_ROUTES = [
   "",
   "/about",
-  "/ai-receptionist",
-  "/ai.assistent",
+  "/systems/communication",
+  "/systems/communication/chat",
+  "/systems/communication/voice",
   "/contact",
   "/cortex",
   "/demo",
   "/profese",
   "/projekty",
-  "/projekty/ai-sistent/chat-assistant",
-  "/projekty/ai-sistent/voice-assistant",
+  "/projekty/ponici",
   "/projekty/zlaty-hreben",
   "/webs",
   "/youtube",
 ] as const;
 
-const PROFESSION_SLUGS = [
-  "barbershop",
-  "dentalni-hygiena",
-  "estetika",
-  "fitness",
-  "kadernictvi",
-  "masaze",
-  "stomatologie",
-];
-
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
+
+  const professionSlugs = list("profession").map((p) => p.id);
 
   for (const locale of LOCALES) {
     for (const route of STATIC_ROUTES) {
@@ -49,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       });
     }
 
-    for (const slug of PROFESSION_SLUGS) {
+    for (const slug of professionSlugs) {
       entries.push({
         url: `${BASE_URL}/${locale}/profese/${slug}`,
         lastModified: new Date(),

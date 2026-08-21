@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
 import { createMetadata } from "@/lib/seo";
+import { getPage } from "@/content/repository";
 import ContactContent from "@/components/ContactContent";
 
 interface Props {
@@ -9,13 +10,12 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const seo = getPage("contact")?.seo;
   return createMetadata(locale as Locale, {
-    title: "Kontakt — AI Recepční a automatizace na míru",
-    titleEn: "Contact — AI Receptionist & Custom Automation",
-    description:
-      "Objednejte si konzultaci. AI recepční, voice asistenti, chat roboti a automatizace pro vaši firmu.",
-    descriptionEn:
-      "Book a consultation. AI receptionists, voice assistants, chatbots and automation for your business.",
+    title: seo?.title.cs ?? "",
+    titleEn: seo?.title.en ?? "",
+    description: seo?.description.cs ?? "",
+    descriptionEn: seo?.description.en ?? "",
     path: "/contact",
   });
 }

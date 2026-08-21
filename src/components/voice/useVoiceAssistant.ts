@@ -2,21 +2,25 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import Vapi from "@vapi-ai/web";
+import type { Locale } from "@/lib/types";
+import { t } from "@/lib/utils";
 
 export type VoiceState = "idle" | "connecting" | "listening" | "speaking" | "error";
 
 interface UseVoiceAssistantOptions {
   assistantId: string;
   apiKey: string;
+  locale: Locale;
 }
 
-export function useVoiceAssistant({ assistantId, apiKey }: UseVoiceAssistantOptions) {
+export function useVoiceAssistant({ assistantId, apiKey, locale }: UseVoiceAssistantOptions) {
   const [state, setState] = useState<VoiceState>("idle");
   const [error, setError] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
   const vapiRef = useRef<Vapi | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const connectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -36,6 +40,10 @@ export function useVoiceAssistant({ assistantId, apiKey }: UseVoiceAssistantOpti
 
   const cleanup = useCallback(() => {
     clearTimer();
+    if (connectTimeoutRef.current) {
+      clearTimeout(connectTimeoutRef.current);
+      connectTimeoutRef.current = null;
+    }
     const v = vapiRef.current;
     vapiRef.current = null;
     startTimeRef.current = null;
@@ -47,7 +55,7 @@ export function useVoiceAssistant({ assistantId, apiKey }: UseVoiceAssistantOpti
 
   const start = useCallback(async () => {
     if (!assistantId || !apiKey) {
-      setError("Chybí konfigurace pro toto demo.");
+      setError(t(locale, "voice.missingConfig"));
       setState("error");
       return;
     }
@@ -56,11 +64,22 @@ export function useVoiceAssistant({ assistantId, apiKey }: UseVoiceAssistantOpti
     setError(null);
     setDuration(0);
 
+    if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
+    connectTimeoutRef.current = setTimeout(() => {
+      cleanup();
+      setState("error");
+      setError(t(locale, "voice.connectFailed"));
+    }, 20000);
+
     try {
       const vapi = new Vapi(apiKey);
       vapiRef.current = vapi;
 
       vapi.on("call-start", () => {
+        if (connectTimeoutRef.current) {
+          clearTimeout(connectTimeoutRef.current);
+          connectTimeoutRef.current = null;
+        }
         startTimer();
         setState("listening");
       });
@@ -80,18 +99,18 @@ export function useVoiceAssistant({ assistantId, apiKey }: UseVoiceAssistantOpti
 
       vapi.on("error", (e) => {
         cleanup();
-        setError(e?.message || "Došlo k chybě spojení.");
+        setError(e?.message || t(locale, "voice.connectionError"));
         setState("error");
       });
 
       await vapi.start(assistantId);
     } catch (e) {
       cleanup();
-      const message = e instanceof Error ? e.message : "Nepodařilo se připojit.";
+      const message = e instanceof Error ? e.message : t(locale, "voice.connectFailed");
       setError(message);
       setState("error");
     }
-  }, [assistantId, apiKey, cleanup, startTimer]);
+  }, [assistantId, apiKey, locale, cleanup, startTimer]);
 
   const stop = useCallback(() => {
     cleanup();

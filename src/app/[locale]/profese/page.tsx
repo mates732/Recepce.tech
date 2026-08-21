@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
 import { createMetadata } from "@/lib/seo";
+import { getPage } from "@/content/repository";
 import ProfeseContent from "./ProfeseContent";
 
 interface Props {
@@ -9,13 +10,12 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const seo = getPage("profese")?.seo;
   return createMetadata(locale as Locale, {
-    title: "Profese — AI Recepční pro každé odvětví",
-    titleEn: "Industries — AI Receptionist for Every Business",
-    description:
-      "AI recepční pro kadeřnictví, zubní kliniky, restaurace, masáže, fitness a další. Vyzkoušejte si živé demo.",
-    descriptionEn:
-      "AI receptionist for hair salons, dental clinics, restaurants, massage studios, fitness centers and more. Try a live demo.",
+    title: seo?.title.cs ?? "",
+    titleEn: seo?.title.en ?? "",
+    description: seo?.description.cs ?? "",
+    descriptionEn: seo?.description.en ?? "",
     path: "/profese",
   });
 }

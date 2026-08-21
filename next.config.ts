@@ -25,12 +25,12 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "font-src 'self' fonts.gstatic.com",
       "img-src 'self' data: img.youtube.com i1.ytimg.com i2.ytimg.com i3.ytimg.com i4.ytimg.com",
-      "connect-src 'self' api.vapi.ai",
-      "frame-src 'self' https://zlaty-hreben.vercel.app",
+      "connect-src 'self' https://api.vapi.ai wss://api.vapi.ai https://*.daily.co wss://*.daily.co",
+      "frame-src 'self' https://zlaty-hreben.vercel.app https://*.daily.co",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
@@ -43,6 +43,8 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   serverExternalPackages: [],
   images: {
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "https", hostname: "i1.ytimg.com" },
@@ -59,9 +61,25 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
       {
-        source: "/_next/static/(.*)",
+        source: "/api/ponici-preview/:path*",
         headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self' https://www.ponici.cz",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.ponici.cz",
+              "style-src 'self' 'unsafe-inline' https://www.ponici.cz fonts.googleapis.com",
+              "font-src 'self' data: https://www.ponici.cz fonts.gstatic.com",
+              "img-src 'self' data: blob: https://www.ponici.cz",
+              "connect-src 'self' https://www.ponici.cz wss://www.ponici.cz",
+              "media-src 'self' https://www.ponici.cz",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self' https://www.ponici.cz",
+              "frame-ancestors 'self'",
+            ].join("; "),
+          },
         ],
       },
     ];
@@ -72,6 +90,51 @@ const nextConfig: NextConfig = {
       {
         source: "/:locale/live-demo",
         destination: "/:locale/profese",
+        permanent: true,
+      },
+      {
+        source: "/live-demo",
+        destination: "/profese",
+        permanent: true,
+      },
+      {
+        source: "/:locale/ai-receptionist",
+        destination: "/:locale/systems/communication",
+        permanent: true,
+      },
+      {
+        source: "/ai-receptionist",
+        destination: "/systems/communication",
+        permanent: true,
+      },
+      {
+        source: "/:locale/ai.assistent",
+        destination: "/:locale/systems/communication",
+        permanent: true,
+      },
+      {
+        source: "/ai.assistent",
+        destination: "/systems/communication",
+        permanent: true,
+      },
+      {
+        source: "/:locale/projekty/ai-sistent/voice-assistant",
+        destination: "/:locale/systems/communication/voice",
+        permanent: true,
+      },
+      {
+        source: "/projekty/ai-sistent/voice-assistant",
+        destination: "/systems/communication/voice",
+        permanent: true,
+      },
+      {
+        source: "/:locale/projekty/ai-sistent/chat-assistant",
+        destination: "/:locale/systems/communication/chat",
+        permanent: true,
+      },
+      {
+        source: "/projekty/ai-sistent/chat-assistant",
+        destination: "/systems/communication/chat",
         permanent: true,
       },
     ];

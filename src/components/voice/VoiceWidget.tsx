@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Locale } from "@/lib/types";
 import { useVoiceAssistant } from "./useVoiceAssistant";
 import VoiceButton from "./VoiceButton";
 import VoiceStatus from "./VoiceStatus";
@@ -8,6 +9,7 @@ import VoiceStatus from "./VoiceStatus";
 interface VoiceWidgetProps {
   assistantId: string;
   apiKey: string;
+  locale: Locale;
 }
 
 function ListeningPulses() {
@@ -75,10 +77,10 @@ function ConnectingRing() {
       animate={{ rotate: 360 }}
       transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
     >
-      <circle cx="44" cy="44" r="40" stroke="rgba(17,17,17,0.06)" strokeWidth="1.5" />
+      <circle cx="44" cy="44" r="40" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" />
       <path
         d="M44 4a40 40 0 0 1 40 40"
-        stroke="rgba(17,17,17,0.2)"
+        stroke="rgba(255,255,255,0.2)"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -86,10 +88,11 @@ function ConnectingRing() {
   );
 }
 
-export default function VoiceWidget({ assistantId, apiKey }: VoiceWidgetProps) {
+export default function VoiceWidget({ assistantId, apiKey, locale }: VoiceWidgetProps) {
   const { state, error, duration, start, stop, retry } = useVoiceAssistant({
     assistantId,
     apiKey,
+    locale,
   });
 
   const handleClick = () => {
@@ -109,14 +112,14 @@ export default function VoiceWidget({ assistantId, apiKey }: VoiceWidgetProps) {
       className="relative flex flex-col items-center gap-5 sm:gap-6 select-none"
       style={{
         padding: "clamp(24px, 3vw, 40px) clamp(20px, 3vw, 48px)",
-        background: "#FFFFFF",
+        background: "#121316",
         borderRadius: 20,
-        border: "1px solid rgba(17,17,17,0.06)",
+        border: "1px solid rgba(255,255,255,0.06)",
       }}
       animate={
         isActive
-          ? { boxShadow: "0 8px 32px rgba(34,197,94,0.06), 0 2px 8px rgba(17,17,17,0.03)" }
-          : { boxShadow: "0 4px 24px rgba(17,17,17,0.04), 0 1px 4px rgba(17,17,17,0.02)" }
+          ? { boxShadow: "0 8px 32px rgba(34,197,94,0.06), 0 2px 8px rgba(255,255,255,0.03)" }
+          : { boxShadow: "0 4px 24px rgba(255,255,255,0.04), 0 1px 4px rgba(255,255,255,0.02)" }
       }
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
@@ -133,10 +136,10 @@ export default function VoiceWidget({ assistantId, apiKey }: VoiceWidgetProps) {
         {state === "connecting" && <ConnectingRing />}
         {state === "listening" && <ListeningPulses />}
         {state === "speaking" && <SpeakingRings />}
-        <VoiceButton state={state} onClick={handleClick} />
+        <VoiceButton state={state} onClick={handleClick} locale={locale} />
       </div>
 
-      <VoiceStatus state={state} error={error} duration={duration} />
+      <VoiceStatus state={state} error={error} duration={duration} locale={locale} />
     </motion.div>
   );
 }

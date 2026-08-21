@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
-import { PROFESSIONS } from "../professionsData";
+import { get } from "@/content/repository";
+import { useAssistantConfig } from "@/hooks/useAssistantConfig";
 import Link from "next/link";
 import Vapi from "@vapi-ai/web";
-import type { VapiAssistantResponse } from "@/config/vapi";
 
 interface Props {
   locale: Locale;
@@ -16,9 +16,10 @@ interface Props {
 type DemoState = "idle" | "connecting" | "connected";
 
 export default function ProfessionDetailContent({ locale, slug }: Props) {
-  const prof = PROFESSIONS.find((p) => p.id === slug);
+  const prof = get("profession", slug);
   const isCs = locale === "cs";
   const [demoState, setDemoState] = useState<DemoState>("idle");
+  const { error: configError, load } = useAssistantConfig(locale);
   const [showHint, setShowHint] = useState(false);
   const hintTimer = useRef<number>(0);
 
@@ -28,8 +29,13 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
   }, []);
 
   const vapiRef = useRef<Vapi | null>(null);
+  const connectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cleanupVapi = useCallback(() => {
+    if (connectTimeoutRef.current) {
+      clearTimeout(connectTimeoutRef.current);
+      connectTimeoutRef.current = null;
+    }
     const v = vapiRef.current;
     vapiRef.current = null;
     try { v?.stop(); } catch {}
@@ -45,11 +51,13 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
 
     setDemoState("connecting");
 
-    let config: VapiAssistantResponse | undefined;
-    try {
-      const res = await fetch(`/api/vapi/config/${slug}`);
-      if (res.ok) config = await res.json();
-    } catch {}
+    if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
+    connectTimeoutRef.current = setTimeout(() => {
+      cleanupVapi();
+      setDemoState("idle");
+    }, 20000);
+
+    const config = await load(slug);
 
       if (config?.apiKey && config?.assistantId) {
       try {
@@ -57,6 +65,10 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
         vapiRef.current = vapi;
 
         vapi.on("call-start", () => {
+          if (connectTimeoutRef.current) {
+            clearTimeout(connectTimeoutRef.current);
+            connectTimeoutRef.current = null;
+          }
           if (vapiRef.current) setDemoState("connected");
         });
 
@@ -82,7 +94,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
       cleanupVapi();
       setDemoState("idle");
     }
-  }, [demoState, slug, cleanupVapi]);
+  }, [demoState, slug, cleanupVapi, load]);
 
   useEffect(() => {
     return () => cleanupVapi();
@@ -92,18 +104,18 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
     return (
       <section className="relative w-full min-h-screen flex items-center justify-center px-[clamp(24px,5vw,64px)]">
         <div className="text-center" style={{ maxWidth: "800px" }}>
-          <div className="font-mono text-[11px] tracking-[0.12em] uppercase mb-4" style={{ color: "rgba(17,17,17,0.35)" }}>
+          <div className="font-mono text-label-lg tracking-[0.12em] uppercase mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>
             404
           </div>
-          <h1 className="font-heading mb-6" style={{ fontSize: "clamp(28px,4vw,48px)", lineHeight: 1.05, fontWeight: 500 }}>
+          <h1 className="font-heading mb-6" style={{ fontSize: "var(--text-h1-md)", lineHeight: "var(--leading-display)", fontWeight: 500 }}>
             {t(locale, "profese.notFound")}
           </h1>
           <Link
             href={`/${locale}/profese`}
             className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] no-underline transition-all duration-500"
-            style={{ color: "rgba(17,17,17,0.4)" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(17,17,17,0.7)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(17,17,17,0.4)"; }}
+            style={{ color: "rgba(255,255,255,0.4)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.7)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.4)"; }}
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <path d="M8 2L4 6l4 4" />
@@ -125,10 +137,10 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
           {/* Back link */}
           <Link
             href={`/${locale}/profese`}
-            className="group inline-flex items-center gap-1.5 font-body text-[11px] tracking-[0.08em] mb-8 transition-all duration-300 self-start"
-            style={{ color: "rgba(17,17,17,0.5)" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#5F6368"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(17,17,17,0.5)"; }}
+            className="group inline-flex items-center gap-1.5 font-body text-label-lg tracking-[0.08em] mb-8 transition-all duration-300 self-start"
+            style={{ color: "rgba(255,255,255,0.5)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#9AA1AB"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }}
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <path d="M8 2L4 6l4 4" />
@@ -139,28 +151,28 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
           <div className="flex-1 flex flex-col justify-center">
             {/* Status ribbon — ambient system status */}
             <div
-              className="relative flex items-center justify-between w-full rounded-full mb-4 overflow-hidden transition-all duration-400 select-none"
+              className="relative flex items-center justify-between w-full rounded-xl mb-4 overflow-hidden transition-all duration-400 select-none"
               style={{
-                padding: "3px 12px 3px 10px",
-                background: "rgba(255,255,255,0.8)",
+                padding: "10px 16px",
+                background: "rgba(255,255,255,0.04)",
                 backdropFilter: "blur(14px)",
                 WebkitBackdropFilter: "blur(14px)",
-                border: "1px solid rgba(17,17,17,0.06)",
+                border: "1px solid rgba(255,255,255,0.08)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(17,17,17,0.12)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.9)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.16)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.06)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(17,17,17,0.06)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.8)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.04)";
               }}
             >
               {/* Ambient light sweep */}
               <div
-                className="absolute inset-0 rounded-full pointer-events-none"
+                className="absolute inset-0 rounded-xl pointer-events-none"
                 style={{
-                  background: "linear-gradient(90deg, transparent 0%, rgba(17,17,17,0.02) 50%, transparent 100%)",
+                  background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.02) 50%, transparent 100%)",
                   backgroundSize: "200% 100%",
                   animation: "shimmer 8s ease-in-out infinite",
                 }}
@@ -176,21 +188,21 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                     boxShadow: `0 0 5px ${prof.colors.accent}20`,
                   }}
                 />
-                <span className="font-mono text-[8px] tracking-[0.16em]" style={{ color: "rgba(17,17,17,0.3)" }}>
+                <span className="font-mono tracking-[0.16em]" style={{ fontSize: "var(--text-label-sm)", color: "#9AA1AB" }}>
                   {t(locale, "profese.liveDemoBadge")}
                 </span>
               </div>
 
               {/* Right: profession + ambient label */}
               <div className="flex items-center gap-2 relative z-[1]">
-                <span className="font-mono text-[8px] tracking-[0.06em]" style={{ color: "rgba(17,17,17,0.35)" }}>
+                <span className="font-mono tracking-[0.06em]" style={{ fontSize: "var(--text-label-sm)", color: "#C7CDD6" }}>
                   {d.name}
                 </span>
                 <span
-                  className="font-mono text-[7px] tracking-[0.06em]"
-                  style={{ color: "rgba(17,17,17,0.15)", animation: "ambient-glow 4s ease-in-out infinite" }}
+                  className="font-mono tracking-[0.06em]"
+                  style={{ fontSize: "var(--text-label-sm)", color: "#6E7683" }}
                 >
-                  &middot; {isCs ? "aktivní" : "active"}
+                  &middot; {t(locale, "ui.active")}
                 </span>
               </div>
             </div>
@@ -199,8 +211,8 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
             <h1
               className="font-heading mb-4"
               style={{
-                fontSize: "clamp(36px, 6vw, 80px)",
-                lineHeight: 1.05,
+                fontSize: "var(--text-h1-lg)",
+                lineHeight: "var(--leading-display)",
                 fontWeight: 500,
               }}
             >
@@ -208,7 +220,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
             </h1>
 
             {/* Description */}
-            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch] mb-6" style={{ color: "#5F6368" }}>
+            <p className="font-body text-[clamp(15px,1.2vw,17px)] leading-relaxed max-w-[56ch] mb-6" style={{ color: "#9AA1AB" }}>
               {d.desc}
             </p>
 
@@ -217,22 +229,22 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
               {d.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-mono text-[10px] tracking-[0.04em] px-3 py-1.5 rounded-full border transition-all duration-300"
+                  className="font-mono text-label tracking-[0.04em] px-3 py-1.5 rounded-full border transition-all duration-300"
                   style={{
                     color: prof.colors.accent,
-                    opacity: 0.35,
-                    borderColor: `${prof.colors.accent}10`,
-                    background: `${prof.colors.accent}05`,
+                    opacity: 0.9,
+                    borderColor: `${prof.colors.accent}22`,
+                    background: `${prof.colors.accent}0c`,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.opacity = "0.7";
-                    e.currentTarget.style.borderColor = `${prof.colors.accent}30`;
-                    e.currentTarget.style.background = `${prof.colors.accent}0e`;
+                    e.currentTarget.style.opacity = "1";
+                    e.currentTarget.style.borderColor = `${prof.colors.accent}3d`;
+                    e.currentTarget.style.background = `${prof.colors.accent}14`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.opacity = "0.35";
-                    e.currentTarget.style.borderColor = `${prof.colors.accent}10`;
-                    e.currentTarget.style.background = `${prof.colors.accent}05`;
+                    e.currentTarget.style.opacity = "0.9";
+                    e.currentTarget.style.borderColor = `${prof.colors.accent}22`;
+                    e.currentTarget.style.background = `${prof.colors.accent}0c`;
                   }}
                 >
                   {tag}
@@ -242,7 +254,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
 
             {/* Features */}
             <div className="mb-5">
-              <span className="font-body text-[10px] tracking-[0.2em] uppercase" style={{ color: prof.colors.accent, opacity: 0.4 }}>
+              <span className="font-body text-label tracking-[0.2em] uppercase" style={{ color: prof.colors.accent, opacity: 0.4 }}>
                 &mdash; {t(locale, "profese.keyFeatures")}
               </span>
             </div>
@@ -254,21 +266,21 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
               {d.features.map((f) => (
                 <div
                   key={f.label}
-                  className="p-4 rounded-lg transition-all duration-300"
-                  style={{ background: "rgba(17,17,17,0.02)", border: "1px solid rgba(17,17,17,0.06)" }}
+                  className="p-4 rounded-xl transition-all duration-300"
+                  style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = `${prof.colors.accent}30`;
+                    e.currentTarget.style.borderColor = `${prof.colors.accent}40`;
                     e.currentTarget.style.background = `${prof.colors.accent}08`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(17,17,17,0.06)";
-                    e.currentTarget.style.background = "rgba(17,17,17,0.02)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.02)";
                   }}
                 >
-                  <div className="font-body text-[11px] tracking-[0.08em] uppercase mb-2" style={{ color: prof.colors.accent, opacity: 0.25 }}>
+                  <div className="font-body text-label-lg tracking-[0.08em] uppercase mb-2" style={{ color: prof.colors.accent }}>
                     {f.label}
                   </div>
-                  <p className="font-body text-[13px] leading-relaxed" style={{ color: "rgba(17,17,17,0.5)" }}>
+                  <p className="font-body text-[13px] leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
                     {f.desc}
                   </p>
                 </div>
@@ -280,14 +292,12 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
               <Link
                 href={`/${locale}/contact`}
                 className="group inline-flex items-center gap-2.5 font-body transition-all duration-500"
-                style={{ color: prof.colors.accent, opacity: 0.4 }}
+                style={{ color: prof.colors.accent }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = "0.7";
-                  e.currentTarget.style.textShadow = `0 0 24px ${prof.colors.accent}10`;
+                  e.currentTarget.style.color = "#F4F6F8";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "0.4";
-                  e.currentTarget.style.textShadow = "none";
+                  e.currentTarget.style.color = prof.colors.accent;
                 }}
               >
                 <span className="text-[13px] font-medium tracking-[-0.01em]">
@@ -307,25 +317,26 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
             <div className="flex flex-col items-center gap-4 mt-14 mb-8">
               <div className="flex items-center gap-3">
                 <div
-                  className="font-mono text-[9px] tracking-[0.15em] uppercase transition-all duration-500"
+                  className="font-mono text-label-sm tracking-[0.15em] uppercase transition-all duration-500"
                   style={{
                     opacity: demoState === "connected" ? 0.8 : 0.5,
-                    color: demoState === "connected" ? "rgba(17,17,17,0.8)" : "rgba(17,17,17,0.5)",
+                    color: demoState === "connected" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.5)",
                   }}
                 >
-                  {demoState === "connecting" ? t(locale, "profese.connecting") : demoState === "connected" ? (isCs ? "Ukončit" : "End call") : t(locale, "profese.tryDemo")}
+                  {demoState === "connecting" ? t(locale, "profese.connecting") : demoState === "connected" ? t(locale, "ui.endCall") : t(locale, "profese.tryDemo")}
                 </div>
 
                 <button
                   onClick={() => setShowHint((v) => !v)}
+                  aria-expanded={showHint}
                   className="flex items-center justify-center w-5 h-5 rounded-full transition-all duration-300"
                   style={{
                     background: showHint ? `${prof.colors.accent}08` : "transparent",
-                    color: showHint ? prof.colors.accent : "rgba(17,17,17,0.3)",
+                    color: showHint ? prof.colors.accent : "rgba(255,255,255,0.3)",
                     opacity: showHint ? 0.7 : 0.4,
                   }}
-                  onMouseEnter={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.7"; e.currentTarget.style.color = "#5F6368"; } }}
-                  onMouseLeave={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.4"; e.currentTarget.style.color = "rgba(17,17,17,0.3)"; } }}
+                  onMouseEnter={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.7"; e.currentTarget.style.color = "#9AA1AB"; } }}
+                  onMouseLeave={(e) => { if (!showHint) { e.currentTarget.style.opacity = "0.4"; e.currentTarget.style.color = "rgba(255,255,255,0.3)"; } }}
                   aria-label="Info"
                 >
                   <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
@@ -339,18 +350,25 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
               <button
                 onClick={handleMicClick}
                 disabled={demoState === "connecting"}
+                aria-label={
+                  demoState === "connecting"
+                    ? t(locale, "profese.connecting")
+                    : isConnected
+                      ? t(locale, "ui.endCall")
+                      : t(locale, "profese.tryDemo")
+                }
                 className="group relative flex items-center justify-center transition-all duration-500"
                 style={{
                   width: demoState === "connected" ? "48px" : "52px",
                   height: demoState === "connected" ? "48px" : "52px",
                   borderRadius: "50%",
                   background: demoState === "connected"
-                    ? "rgba(17,17,17,0.08)"
+                    ? "rgba(255,255,255,0.08)"
                     : demoState === "connecting"
                       ? `${prof.colors.accent}12`
                       : `${prof.colors.accent}08`,
                   border: `1px solid ${
-                    demoState === "connected" ? "rgba(17,17,17,0.15)" : `${prof.colors.accent}15`
+                    demoState === "connected" ? "rgba(255,255,255,0.15)" : `${prof.colors.accent}15`
                   }`,
                   cursor: demoState === "connecting" ? "default" : "pointer",
                 }}
@@ -360,7 +378,6 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                     className="absolute inset-0 rounded-full"
                     style={{
                       border: `1px solid ${prof.colors.accent}10`,
-                      animation: "pulse-ring 2.5s ease-in-out infinite",
                     }}
                   />
                 )}
@@ -370,7 +387,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="rgba(17,17,17,0.7)"
+                    stroke="rgba(255,255,255,0.7)"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -389,7 +406,7 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    style={{ opacity: demoState === "connecting" ? 0.65 : 0.45 }}
+                    style={{ opacity: demoState === "connecting" ? 0.9 : 0.85 }}
                   >
                     <rect x="9" y="2" width="6" height="11" rx="3" />
                     <path d="M5 10a7 7 0 0 0 14 0" />
@@ -402,21 +419,23 @@ export default function ProfessionDetailContent({ locale, slug }: Props) {
               <div
                 className="transition-all duration-500"
                 style={{
-                  opacity: showHint ? 1 : 0,
-                  transform: showHint ? "translateY(0)" : "translateY(-4px)",
+                  opacity: showHint || configError ? 1 : 0,
+                  transform: showHint || configError ? "translateY(0)" : "translateY(-4px)",
                   maxWidth: "260px",
                 }}
               >
                 <div
-                  className="rounded-lg px-3.5 py-2.5 text-[11px] font-body leading-relaxed"
+                  className="rounded-xl px-3.5 py-2.5 text-label-lg font-body leading-relaxed"
                   style={{
-                    background: "rgba(255,255,255,0.9)",
-                    border: `1px solid ${prof.colors.accent}10`,
-                    color: "rgba(17,17,17,0.5)",
+                    background: "#17181D",
+                    border: `1px solid ${configError ? "rgba(239,68,68,0.35)" : "rgba(255,255,255,0.1)"}`,
+                    color: configError ? "#F87171" : "#C7CDD6",
                   }}
                 >
-                  {isConnected ? (
-                    <span>{isCs ? "Kliknutím ukončíte hovor" : "Click to end the call"}</span>
+                  {configError ? (
+                    <span>{configError}</span>
+                  ) : isConnected ? (
+                    <span>{t(locale, "ui.endCallHint")}</span>
                   ) : (
                     <span>{t(locale, "profese.tapToTalk")}</span>
                   )}

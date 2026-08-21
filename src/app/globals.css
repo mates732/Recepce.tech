@@ -1,21 +1,74 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #F7F8FA;
-  --color-surface: #FFFFFF;
-  --color-card: #FCFCFD;
-  --color-primary: #111111;
-  --color-secondary: #5F6368;
-  --color-border: rgba(17,17,17,0.08);
-  --color-border-hi: rgba(17,17,17,0.12);
-  --color-accent: #111111;
-  --color-accent-secondary: #5F6368;
-  --color-accent-soft: rgba(17,17,17,0.06);
-  --color-accent-secondary-soft: rgba(17,17,17,0.04);
+  /* ── Laboratory palette ──────────────────────────────────
+     Deep neutral base + one disciplined accent (vermilion).
+     Color is rare and intentional — a signal on the lab bench,
+     not decoration. Neutrals carry the structure; the accent
+     marks the important moments. */
 
-  --font-heading: "Playfair Display", Georgia, serif;
+  --color-bg: #0A0A0B;
+  --color-surface: #121316;
+  --color-card: #17181D;
+  --color-primary: #F4F6F8;
+  --color-secondary: #9AA1AB;
+  --color-muted: #6E7683;
+  --color-border: rgba(255,255,255,0.08);
+  --color-border-hi: rgba(255,255,255,0.16);
+
+  /* Primary accent — vermilion / signal red-orange.
+     Warm signal on a cold dark base. Editorial, precise,
+     unmistakably non-AI. */
+  --color-accent: #FF4A2E;
+  --color-accent-hover: #FF6B3D;
+  --color-accent-deep: #E8341F;
+  --color-accent-soft: rgba(255,74,46,0.12);
+  --color-accent-soft-2: rgba(255,74,46,0.07);
+  --color-accent-border: rgba(255,74,46,0.45);
+  --color-accent-glow: rgba(255,74,46,0.4);
+  --color-accent-glow-soft: rgba(255,74,46,0.12);
+
+  /* Functional states — traffic-light semantics, not brand.
+     Green = live, amber = attention, red = problem. */
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-danger: #F87171;
+
+  --font-heading: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+
+  /* ── Typografická škála ─────────────────────────────────────
+     Fluidní kroky: min ~ mobil, vw = plynulý růst, max ~ desktop.
+     Jeden zdroj velikostí — komponenty nepoužívají náhodné clamps. */
+
+  /* Nadpisy (Space Grotesk) */
+  --text-display:  clamp(56px, 12vw, 140px); /* statement */
+  --text-hero:     clamp(36px, 7vw, 90px);   /* domácí/product hero */
+  --text-hero-md:  clamp(36px, 6vw, 72px);   /* kompaktnější product hero */
+  --text-h1:       clamp(32px, 5vw, 64px);   /* sekce a hlavní tituly */
+  --text-h1-lg:    clamp(36px, 6vw, 80px);   /* velké tituly stránek */
+  --text-h1-md:    clamp(28px, 4.5vw, 52px); /* tituly stránek */
+  --text-h1-sm:    clamp(28px, 4vw, 40px);   /* kompaktní tituly (admin) */
+  --text-h2:       clamp(22px, 2.5vw, 28px); /* podtituly bloků */
+  --text-h2-lg:    clamp(24px, 3.5vw, 44px); /* citace a velké podtituly */
+  --text-h3:       clamp(18px, 2vw, 28px);   /* názvy karet/kroků */
+  --text-h4:       clamp(16px, 1.5vw, 20px); /* kompaktní názvy */
+
+  /* Tělo (Inter) */
+  --text-lead:     clamp(15px, 1.2vw, 18px); /* úvodní/vedoucí text */
+  --text-body:     clamp(14px, 1.2vw, 17px); /* standardní text */
+  --text-small:    clamp(13px, 1vw, 15px);   /* drobný text */
+  --text-label:    10px;                     /* mono štítky */
+  --text-label-sm: 9px;
+  --text-label-lg: 11px;
+  --text-label-fluid: clamp(11px, 1vw, 13px); /* fluidní mono štítky */
+
+  /* Řádkování */
+  --leading-display: 1.05; /* velké nadpisy */
+  --leading-heading: 1.1;  /* nadpisy */
+  --leading-body: 1.5;     /* odstavce */
+  --leading-copy: 1.7;     /* dlouhý text */
 }
 
 :root {
@@ -38,14 +91,14 @@
     height: 100%;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    background: #F7F8FA;
+    background: #0A0A0B;
   }
 
   html::-webkit-scrollbar { display: none; }
 
   body {
-    background: #F7F8FA;
-    color: #111111;
+    background: #0A0A0B;
+    color: #F4F6F8;
     font-family: "Inter", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -59,7 +112,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
     font-weight: 500;
     letter-spacing: -0.02em;
     line-height: 1.1;
@@ -70,7 +123,7 @@
   }
 
   ::selection {
-    background: rgba(17,17,17,0.12);
+    background: rgba(255,74,46,0.35);
   }
 
   a { color: inherit; text-decoration: none; }
@@ -78,9 +131,16 @@
   input, textarea, select { font-family: "Inter", system-ui, sans-serif; }
 
   :focus-visible {
-    outline: 2px solid #111111;
+    outline: 2px solid #FF4A2E;
     outline-offset: 2px;
     border-radius: 4px;
+  }
+
+  /* MENU trigger — neutrální focus ring místo modrého accentu. */
+  nav button[aria-expanded]:focus-visible {
+    outline: 2px solid rgba(244, 246, 248, 0.6);
+    outline-offset: 2px;
+    border-radius: 9999px;
   }
 }
 
@@ -91,7 +151,7 @@
 }
 
 @utility heading {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -105,25 +165,82 @@
 }
 
 @utility glass {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.04);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(17,17,17,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 @utility glass-strong {
-  background: rgba(255,255,255,0.85);
+  background: rgba(18,19,22,0.72);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(17,17,17,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 @utility card-shadow {
-  box-shadow: 0 1px 3px rgba(17,17,17,0.04), 0 4px 12px rgba(17,17,17,0.04);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.25);
 }
 
 @utility card-shadow-hover {
-  box-shadow: 0 2px 8px rgba(17,17,17,0.06), 0 12px 32px rgba(17,17,17,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.35);
+}
+
+@utility glow {
+  box-shadow: 0 0 40px var(--color-accent-glow), 0 0 120px var(--color-accent-glow-soft);
+}
+
+@utility lab-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* Sledovací světlo karty — jemný radial highlight následuje kurzor. */
+@utility card-light {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 74, 46, 0.07),
+      transparent 45%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Plynulý podtržítkový link. */
+@utility link-line {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ds-ease-reveal);
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 /* ── Keyframes ─────────────────────────────────────────────── */
@@ -133,13 +250,59 @@
   50% { opacity: 0.3; transform: scale(0.8); }
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* ── Data flow — částice cestující architekturou ───────────── */
+@keyframes flow-particle {
+  0%   { top: -6px; opacity: 0; }
+  12%  { opacity: 0.9; }
+  88%  { opacity: 0.9; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.flow-particle {
+  position: absolute;
+  left: -1.5px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  animation: flow-particle 8s linear infinite;
+  will-change: top, opacity;
+}
+
+/* ── Control room — jemný scan přes panel ───────────────────── */
+@keyframes scan-line {
+  0%   { top: -2%; opacity: 0; }
+  8%   { opacity: 0.5; }
+  92%  { opacity: 0.5; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  animation: scan-line 9s linear infinite;
+  will-change: top, opacity;
+}
+
 .gradient-text {
-  background: linear-gradient(135deg, #111111, #5F6368);
+  background: linear-gradient(120deg, var(--color-accent-hover), var(--color-accent) 45%, var(--color-accent-deep) 90%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -154,5 +317,3 @@
   }
   html { scroll-behavior: auto; }
 }
-
-

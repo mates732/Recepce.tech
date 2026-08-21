@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
+import { createMetadata } from "@/lib/seo";
+import { getPage } from "@/content/repository";
 import AboutContent from "@/components/AboutContent";
 
 interface Props {
@@ -8,12 +10,14 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return {
-    title: locale === "cs" ? "Matyáš Vojan — O mně" : "Matyáš Vojan — About",
-    description: locale === "cs"
-      ? "Stavím inteligentní systémy, AI produkty a prémiové weby."
-      : "Building intelligent systems, AI products, and premium websites.",
-  };
+  const seo = getPage("about")?.seo;
+  return createMetadata(locale as Locale, {
+    title: seo?.title.cs ?? "",
+    titleEn: seo?.title.en ?? "",
+    description: seo?.description.cs ?? "",
+    descriptionEn: seo?.description.en ?? "",
+    path: "/about",
+  });
 }
 
 export default async function AboutPage({ params }: Props) {

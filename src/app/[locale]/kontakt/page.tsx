@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
 import { createMetadata } from "@/lib/seo";
 import { getPage } from "@/content/repository";
-import CommunicationContent from "@/components/CommunicationContent";
+import ContactContent from "@/components/ContactContent";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -10,17 +10,17 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const seo = getPage("communication")?.seo;
+  const seo = getPage("contact")?.seo;
   return createMetadata(locale as Locale, {
     title: seo?.title.cs ?? "",
     titleEn: seo?.title.en ?? "",
     description: seo?.description.cs ?? "",
     descriptionEn: seo?.description.en ?? "",
-    path: "/systems/communication",
+    path: "/kontakt",
   });
 }
 
-export default async function CommunicationPage({ params }: Props) {
+export default async function ContactPage({ params }: Props) {
   const { locale } = await params;
-  return <CommunicationContent locale={locale as Locale} />;
+  return <ContactContent locale={locale as Locale} />;
 }

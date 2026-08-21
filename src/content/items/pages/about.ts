@@ -57,44 +57,36 @@ export const ABOUT_PAGE: PageContent<"about"> = {
     },
     products: [
       {
-        title: "Phone System",
+        title: "Inteligentní telefonní komunikace",
         desc: {
-          cs: "Telefonní komunikace. Přirozené hovory, rezervace schůzek, kvalifikace kontaktů. 24/7 telefonní recepce.",
-          en: "Phone communication. Natural conversations, appointment booking, lead qualification. 24/7 phone reception.",
+          cs: "Moderní telefonní systém pro firmy. Vyřizování hovorů, rezervace schůzek, předávání informací a správa zákaznických požadavků kdykoliv.",
+          en: "A modern phone system for businesses. Handling calls, booking meetings, sharing information and managing customer requests anytime.",
         },
-        href: "/systems/communication/voice",
+        href: "/projekty/asistenti/telefonni-asistent",
       },
       {
-        title: "Channel Communication",
+        title: "Propojená komunikace napříč kanály",
         desc: {
-          cs: "Komunikace pro web, WhatsApp a SMS. Zákaznická podpora, znalostní báze, zachytávání kontaktů.",
-          en: "Communication for web, WhatsApp and SMS. Customer support, knowledge base, lead capture.",
+          cs: "Jednotná komunikační vrstva pro web, zprávy a další kontaktní body. Firmy zůstávají dostupné a zákazníci vždy najdou správnou cestu.",
+          en: "A unified communication layer for web, messaging and other touchpoints. Businesses stay accessible and customers always find the right path.",
         },
-        href: "/systems/communication/chat",
+        href: "/projekty/asistenti/chat-asistent",
       },
       {
-        title: "Cortex",
+        title: "Obchodní inteligence pro růst",
         desc: {
-          cs: "Prodejní systém. Vyhledá firmy. Vyhodnotí příležitosti. Osloví automaticky.",
-          en: "A sales system. Finds leads. Evaluates opportunities. Reaches out automatically.",
+          cs: "Systém pro vyhledávání příležitostí, analýzu trhu a práci s firemními daty. Pomáhá objevovat nové možnosti a zefektivnit obchodní procesy.",
+          en: "A system for opportunity discovery, market analysis and working with business data. Helps uncover new possibilities and streamline business processes.",
         },
-        href: "/cortex",
+        href: "/projekty/cortex",
       },
       {
-        title: "Premium Websites",
+        title: "Digitální produkty nové generace",
         desc: {
-          cs: "Weby, které si lidé pamatují. Prémiové prezentace navržené od nuly.",
-          en: "Websites people remember. Premium presentations designed from scratch.",
+          cs: "Webové prostředí navržené jako kompletní digitální zkušenost. Spojení designu, výkonu a technologií v jeden funkční celek.",
+          en: "A web environment designed as a complete digital experience. Merging design, performance and technology into one functional whole.",
         },
-        href: "/webs",
-      },
-      {
-        title: "Automation",
-        desc: {
-          cs: "Automatizace firemních procesů. Workflow. Integrace. Úspora času.",
-          en: "Business process automation. Workflows. Integrations. Time savings.",
-        },
-        href: "/contact",
+        href: "/projekty/weby",
       },
     ],
   },

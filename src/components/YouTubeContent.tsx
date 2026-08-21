@@ -64,7 +64,7 @@ export default function YouTubeContent({ locale, channelUrl }: Props) {
   }, [channelId, retryKey]);
 
   return (
-    <div style={{ background: "#0A0A0B" }}>
+    <div>
       <div
         style={{
           padding:

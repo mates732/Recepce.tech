@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
 import { createMetadata } from "@/lib/seo";
 import { getPage } from "@/content/repository";
-import ContactContent from "@/components/ContactContent";
+import ChatContent from "@/components/ChatContent";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -10,17 +10,17 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const seo = getPage("contact")?.seo;
+  const seo = getPage("chat")?.seo;
   return createMetadata(locale as Locale, {
     title: seo?.title.cs ?? "",
     titleEn: seo?.title.en ?? "",
     description: seo?.description.cs ?? "",
     descriptionEn: seo?.description.en ?? "",
-    path: "/contact",
+    path: "/projekty/asistenti/chat-asistent",
   });
 }
 
-export default async function ContactPage({ params }: Props) {
+export default async function ChatAsistentPage({ params }: Props) {
   const { locale } = await params;
-  return <ContactContent locale={locale as Locale} />;
+  return <ChatContent locale={locale as Locale} />;
 }

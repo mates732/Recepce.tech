@@ -10,12 +10,12 @@ export const CORTEX_PAGE: PageContent<"cortex"> = {
   publishedAt: "2026-08-11",
   seo: {
     title: {
-      cs: "Cortex — Interní systém pro výzkum a oslovení",
-      en: "Cortex — Internal System for Research & Outreach",
+      cs: "Obchodní inteligence pro růst",
+      en: "Business Intelligence for Growth",
     },
     description: {
-      cs: "Cortex je interní platforma pro analýzu firem, vyhledávání příležitostí a automatizaci oslovení.",
-      en: "Cortex is an internal platform for company analysis, opportunity discovery and automated outreach.",
+      cs: "Systém pro vyhledávání příležitostí, analýzu trhu a práci s firemními daty. Pomáhá objevovat nové možnosti a zefektivnit obchodní procesy.",
+      en: "A system for opportunity discovery, market analysis and working with business data. Helps uncover new possibilities and streamline business processes.",
     },
   },
   data: {
@@ -26,7 +26,7 @@ export const CORTEX_PAGE: PageContent<"cortex"> = {
       },
       {
         label: { cs: "Technologie", en: "Technology" },
-        value: { cs: "AI · Automatizace · Web scraping", en: "AI · Automation · Web scraping" },
+        value: { cs: "Automatizace · Web scraping · Data", en: "Automation · Web scraping · Data" },
       },
       {
         label: { cs: "Výsledek", en: "Result" },
@@ -40,7 +40,7 @@ export const CORTEX_PAGE: PageContent<"cortex"> = {
     hero: {
       label: { cs: "Interní systém", en: "Internal System" },
       title: "Cortex",
-      tagline: { cs: "Cortex nikdy nezačíná AI.", en: "Cortex never starts with AI." },
+      tagline: { cs: "Cortex nikdy nezačíná od technologie.", en: "Cortex never starts with technology." },
     },
     screenshot: {
       src: "/images/cortex/cortex-dashboard.png",
@@ -112,7 +112,7 @@ export const CORTEX_PAGE: PageContent<"cortex"> = {
     annotations: [
       { label: { cs: "Ověřené důkazy", en: "Verified evidence" }, note: { cs: "Více než 10 signálů potvrzeno", en: "More than 10 signals confirmed" }, appearAt: 0.2, top: "15%", left: "8%" },
       { label: { cs: "Skóre důvěry", en: "Confidence score" }, note: { cs: "94 %", en: "94 %" }, appearAt: 0.35, top: "55%", right: "10%" },
-      { label: { cs: "AI doporučení", en: "AI recommendation" }, note: { cs: "Generováno z důkazů", en: "Generated from evidence" }, appearAt: 0.5, top: "35%", left: "55%" },
+      { label: { cs: "Doporučení", en: "Recommendation" }, note: { cs: "Generováno z důkazů", en: "Generated from evidence" }, appearAt: 0.5, top: "35%", left: "55%" },
       { label: { cs: "Připraveno k revizi", en: "Ready for review" }, note: { cs: "Čeká na schválení", en: "Awaiting approval" }, appearAt: 0.65, top: "72%", left: "15%" },
       { label: { cs: "Příležitost", en: "Opportunity" }, note: { cs: "Detekována a ohodnocena", en: "Detected and scored" }, appearAt: 0.8, top: "20%", right: "18%" },
     ],
@@ -125,7 +125,7 @@ export const CORTEX_PAGE: PageContent<"cortex"> = {
       ],
     },
     quoteSplit: {
-      primary: { cs: "AI píše.", en: "AI writes." },
+      primary: { cs: "Systém píše.", en: "The system writes." },
       secondary: { cs: "Důkazy rozhodují.", en: "Evidence decides." },
     },
     editorial: {
@@ -136,7 +136,7 @@ export const CORTEX_PAGE: PageContent<"cortex"> = {
       label: { cs: "Právě probíhá", en: "In Progress" },
       steps: [
         { icon: "▶", label: { cs: "Důkazy", en: "Evidence" }, sub: { cs: "8 signálů shromážděno a ověřeno", en: "8 signals collected and verified" } },
-        { icon: "▶", label: { cs: "Usuzování", en: "Reasoning" }, sub: { cs: "AI analyzuje validovaný kontext", en: "AI analyses validated context" } },
+        { icon: "▶", label: { cs: "Usuzování", en: "Reasoning" }, sub: { cs: "Analyzuje validovaný kontext", en: "Analyses validated context" } },
         { icon: "▶", label: { cs: "Rozhodnutí", en: "Decision" }, sub: { cs: "Nejvhodnější postup vybrán", en: "Most suitable action selected" } },
         { icon: "▶", label: { cs: "Generování", en: "Generation" }, sub: { cs: "Personalizované doporučení vytvořeno", en: "Personalised recommendation created" } },
         { icon: "✓", label: { cs: "Připraveno ke kontrole", en: "Ready for review" }, sub: { cs: "Čeká na manuální schválení", en: "Awaiting manual approval" } },

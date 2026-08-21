@@ -23,7 +23,6 @@ export default function ProjectsContent({ locale }: Props) {
     <div
       className="relative"
       style={{
-        background: "#0A0A0B",
         minHeight: "100vh",
         padding: "clamp(80px, 10vw, 120px) clamp(24px, 5vw, 80px)",
       }}

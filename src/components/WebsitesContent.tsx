@@ -27,7 +27,6 @@ export default function WebsitesContent({ locale }: Props) {
     <div
       className="relative flex flex-col items-center justify-center"
       style={{
-        background: "#0A0A0B",
         minHeight: "100vh",
         padding: "clamp(80px, 10vw, 120px) clamp(24px, 5vw, 80px)",
       }}

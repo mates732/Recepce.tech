@@ -9,7 +9,7 @@ export const CHAT_PAGE: PageContent<"chat"> = {
   updatedAt: "2026-08-11",
   publishedAt: "2026-08-11",
   seo: {
-    title: { cs: "Kanálová komunikace — Chat pro web i kanály", en: "Channel Communication — Chat for Web & Channels" },
+    title: { cs: "Propojená komunikace napříč kanály", en: "Connected Communication Across Channels" },
     description: {
       cs: "Systém, který vyhledává, přemýšlí a dokončuje práci — aniž byste opustili konverzaci.",
       en: "A system that searches, thinks and completes work — without leaving the conversation.",
@@ -35,18 +35,18 @@ export const CHAT_PAGE: PageContent<"chat"> = {
         href: "/demo",
       },
     ],
-    badge: { cs: "Kanálová komunikace", en: "Channel Communication" },
+    badge: { cs: "Propojená komunikace", en: "Connected Communication" },
     crossLink: {
-      label: { cs: "Otevřít telefonní systém", en: "Open Phone System" },
-      href: "/systems/communication/voice",
+      label: { cs: "Otevřít telefonní komunikaci", en: "Open Phone Communication" },
+      href: "/projekty/asistenti/telefonni-asistent",
     },
     heroTitle: [
       { cs: "Komunikuje všude,", en: "Communicates wherever" },
       { cs: "kde vaši zákazníci píší.", en: "your customers write." },
     ],
     heroDesc: {
-      cs: "Komunikační systém, který odpovídá na webu, WhatsAppu i SMS. Jeden systém, všechny kanály.",
-      en: "A communication system that answers on web, WhatsApp and SMS. One system, all channels.",
+      cs: "Jednotná komunikační vrstva pro web, zprávy a další kontaktní body. Firmy zůstávají dostupné a zákazníci vždy najdou správnou cestu.",
+      en: "A unified communication layer for web, messaging and other touchpoints. Businesses stay accessible and customers always find the right path.",
     },
     cta: { cs: "Vyzkoušet demo", en: "Try the demo" },
     channelsLabel: { cs: "Textové kanály", en: "Text channels" },

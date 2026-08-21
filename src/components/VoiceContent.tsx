@@ -19,7 +19,7 @@ export default function VoiceContent({ locale }: Props) {
   const data = getPage("voice")?.data;
 
   return (
-    <div className="relative overflow-hidden" style={{ background: "#121316" }}>
+    <div className="relative">
       <HeroSection locale={locale} shouldReduceMotion={!!shouldReduceMotion} data={data} />
       <FactsSection locale={locale} data={data} />
       <CapabilitiesSection locale={locale} shouldReduceMotion={!!shouldReduceMotion} data={data} />
@@ -69,7 +69,7 @@ function HeroSection({ locale, shouldReduceMotion, data }: { locale: Locale; sho
   const cta = data?.cta;
 
   return (
-    <section ref={sectionRef} className="relative flex flex-col items-center justify-center overflow-hidden" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 200px) clamp(24px, 5vw, 80px)", background: "#121316" }}>
+    <section ref={sectionRef} className="relative flex flex-col items-center justify-center" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 200px) clamp(24px, 5vw, 80px)" }}>
       <motion.div style={{ y: shouldReduceMotion ? 0 : y, opacity: shouldReduceMotion ? 1 : opacity }} className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
         {crossLink && (
           <Link
@@ -148,7 +148,7 @@ function CapabilitiesSection({ locale, shouldReduceMotion, data }: { locale: Loc
   const items = data?.capabilities ?? [];
 
   return (
-    <section className="relative" style={{ padding: "clamp(28px, 3vw, 40px) clamp(24px, 5vw, 80px)", background: "#121316" }}>
+    <section className="relative" style={{ padding: "clamp(28px, 3vw, 40px) clamp(24px, 5vw, 80px)" }}>
       <div className="max-w-6xl mx-auto">
         <div className="h-px w-full" style={{ background: "#1B1D22" }} />
         <div className="flex items-center justify-center flex-nowrap overflow-hidden" style={{ padding: "clamp(20px, 2.5vw, 32px) 0" }}>
@@ -189,7 +189,7 @@ function LanguagesSection({ locale, shouldReduceMotion, data }: { locale: Locale
   const langs = data?.languages[locale] ?? [];
 
   return (
-    <section className="relative" style={{ padding: "0 clamp(24px, 5vw, 80px) clamp(28px, 3vw, 40px)", background: "#0A0A0B" }}>
+    <section className="relative" style={{ padding: "0 clamp(24px, 5vw, 80px) clamp(28px, 3vw, 40px)" }}>
       <div className="max-w-6xl mx-auto">
         <div className="h-px w-full" style={{ background: "#1B1D22" }} />
         <div className="flex items-center justify-center flex-nowrap overflow-hidden" style={{ padding: "clamp(20px, 2.5vw, 32px) 0" }}>
@@ -239,7 +239,7 @@ function IntelligenceSection({ locale, shouldReduceMotion, data }: { locale: Loc
   }));
 
   return (
-    <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)", background: "#121316" }}>
+    <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)" }}>
       <motion.div style={{ y }} className="max-w-6xl mx-auto">
         <motion.span
           initial={{ opacity: 0, y: 10 }}

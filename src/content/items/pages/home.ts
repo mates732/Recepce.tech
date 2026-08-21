@@ -74,7 +74,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: ["Persona a tón hlasu", "Kontext v reálném čase", "Přerušování a dialogy"],
             en: ["Persona & tone", "Real-time context", "Interruptions & dialogue"],
           },
-          href: "/systems/communication/voice",
+          href: "/projekty/asistenti/voice",
         },
         {
           name: { cs: "Znalostní systémy", en: "Knowledge Systems" },
@@ -87,7 +87,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: ["Vyhledávání v dokumentech", "Zdrojované odpovědi", "Aktualizace znalostí"],
             en: ["Document retrieval", "Cited answers", "Knowledge updates"],
           },
-          href: "/systems/communication",
+          href: "/projekty/asistenti",
         },
         {
           name: { cs: "Automatizační workflow", en: "Automation Workflows" },
@@ -100,7 +100,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: ["CRM aktualizace", "Obohacení leadů", "Reporting"],
             en: ["CRM updates", "Lead enrichment", "Reporting"],
           },
-          href: "/cortex",
+          href: "/projekty/cortex",
         },
         {
           name: { cs: "Webové systémy", en: "Website Systems" },
@@ -113,7 +113,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: ["Design pro produktový launch", "Copy asistovaná technologií", "Výkon na prvním místě"],
             en: ["Product-launch design", "Tech-assisted copy", "Performance-first"],
           },
-          href: "/webs",
+          href: "/projekty/weby",
         },
       ],
     },
@@ -125,24 +125,18 @@ export const HOME_PAGE: PageContent<"home"> = {
       },
       systems: [
         {
-          name: { cs: "Cortex", en: "Cortex" },
-          status: "Production",
-          problem: {
-            cs: "Hledání a oslovování nových firem zabere prodejnímu týmu hodiny denně.",
-            en: "Finding and reaching out to new companies takes hours every day.",
+          name: { cs: "Telefonní systém", en: "Phone System" },
+          title: { cs: "Telefonní systém", en: "Phone System" },
+          subtitle: { cs: "Komunikace, která je vždy dostupná.", en: "Communication that is always available." },
+          description: {
+            cs: "Moderní telefonní řešení pro firmy. Správa hovorů, rezervací a zákaznických požadavků v jednom systému.",
+            en: "A modern phone solution for businesses. Managing calls, bookings and customer requests in one system.",
           },
-          ai: {
-            cs: "Automatizované vyhledávání a oslovení firem",
-            en: "Automated company research & outreach",
+          metadata: {
+            cs: ["24/7 dostupnost", "Přirozená komunikace", "Správa požadavků"],
+            en: ["24/7 availability", "Natural communication", "Request management"],
           },
-          impact: {
-            cs: "Pomáhá najít firmy, které odpovídají vašemu ideálnímu zákazníkovi.",
-            en: "Helps find companies that match your ideal customer.",
-          },
-          href: "/cortex",
-        },
-        {
-          name: { cs: "Telefonní komunikace", en: "Phone Communication" },
+          badge: "24/7",
           status: "Production",
           problem: {
             cs: "První kontakt se zákazníkem často končí hlasovou schránkou.",
@@ -156,10 +150,21 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: "Žádný hovor nezůstane bez odpovědi — a tým šetří čas.",
             en: "No call goes unanswered — and the team saves time.",
           },
-          href: "/systems/communication/voice",
+          href: "/projekty/asistenti/telefonni-asistent",
         },
         {
-          name: { cs: "Komunikace napříč kanály", en: "Channel Communication" },
+          name: { cs: "Komunikační systém", en: "Communication System" },
+          title: { cs: "Komunikační systém", en: "Communication System" },
+          subtitle: { cs: "Jednotné místo pro zákaznické kanály.", en: "One place for customer channels." },
+          description: {
+            cs: "Propojení webu, zpráv a dalších kontaktních bodů do jednoho přehledného prostředí.",
+            en: "Connecting web, messaging and other touchpoints into one clear environment.",
+          },
+          metadata: {
+            cs: ["Více kanálů", "Rychlá odezva", "Centralizovaná komunikace"],
+            en: ["Multiple channels", "Fast response", "Centralized communication"],
+          },
+          badge: "Demo",
           status: "Production",
           problem: {
             cs: "Zákazníci na webu čekají na odpověď — a odcházejí.",
@@ -173,24 +178,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: "Odpovídá na webu, WhatsAppu i e-mailem — 24/7.",
             en: "Answers on web, WhatsApp and email — 24/7.",
           },
-          href: "/systems/communication/chat",
-        },
-        {
-          name: { cs: "Automatizační systémy", en: "Automation Systems" },
-          status: "Beta",
-          problem: {
-            cs: "Interní procesy zabírají čas, který patří rozvoji firmy.",
-            en: "Internal processes take time that belongs to growing the business.",
-          },
-          ai: {
-            cs: "Automatizace opakujících se procesů",
-            en: "Automation of repetitive processes",
-          },
-          impact: {
-            cs: "Opakující se práce běží sama — přesně a konzistentně.",
-            en: "Repetitive work runs itself — accurately and consistently.",
-          },
-          href: "/projekty",
+          href: "/projekty/asistenti/chat-asistent",
         },
       ],
     },
@@ -511,16 +499,16 @@ export const HOME_PAGE: PageContent<"home"> = {
         },
         {
           category: { cs: "Interní systém", en: "Internal system" },
-          name: { cs: "Cortex", en: "Cortex" },
+          name: { cs: "Obchodní inteligence pro růst", en: "Business Intelligence for Growth" },
           description: {
-            cs: "Interní systém pro výzkum firem a evidence-based oslovení.",
-            en: "An internal system for company research and evidence-based outreach.",
+            cs: "Systém pro vyhledávání příležitostí, analýzu trhu a práci s firemními daty. Pomáhá objevovat nové možnosti a zefektivnit obchodní procesy.",
+            en: "A system for opportunity discovery, market analysis and working with business data. Helps uncover new possibilities and streamline business processes.",
           },
           keyPoints: {
-            cs: ["Automatizovaný výzkum a oslovení", "Důkazy místo odhadů", "AI · automatizace · scraping"],
-            en: ["Automated research & outreach", "Evidence instead of guesses", "AI · automation · scraping"],
+            cs: ["Automatizovaný výzkum a oslovení", "Důkazy místo odhadů", "Automatizace · scraping · data"],
+            en: ["Automated research & outreach", "Evidence instead of guesses", "Automation · scraping · data"],
           },
-          href: "/cortex",
+          href: "/projekty/cortex",
           visual: "/images/cortex/cortex-dashboard.png",
           visualStyle: "image",
         },
@@ -551,7 +539,7 @@ export const HOME_PAGE: PageContent<"home"> = {
           },
         },
         {
-          name: { cs: "Cortex", en: "Cortex" },
+          name: { cs: "Obchodní inteligence pro růst", en: "Business Intelligence for Growth" },
           status: "Beta",
           problem: {
             cs: "Firmy hledají nové zákazníky bez jasného systému.",
@@ -568,7 +556,7 @@ export const HOME_PAGE: PageContent<"home"> = {
           },
         },
         {
-          name: { cs: "Telefonní systém", en: "Phone System" },
+          name: { cs: "Inteligentní telefonní komunikace", en: "Intelligent Phone Communication" },
           status: "Testing",
           problem: {
             cs: "Telefonická komunikace zabírá týmu čas.",
@@ -585,17 +573,17 @@ export const HOME_PAGE: PageContent<"home"> = {
           },
         },
         {
-          name: { cs: "Kanálová komunikace", en: "Channel Communication" },
+          name: { cs: "Propojená komunikace napříč kanály", en: "Connected Communication Across Channels" },
           status: "Production",
           problem: {
             cs: "Dotazy se hromadí na více kanálech najednou.",
             en: "Questions pile up across multiple channels at once.",
           },
           solution: {
-            cs: "Jedna inteligence ve všech kanálech — web, WhatsApp, e-mail.",
-            en: "One intelligence across all channels — web, WhatsApp, email.",
+            cs: "Jednotná komunikační vrstva pro web, zprávy a další kontaktní body.",
+            en: "A unified communication layer for web, messaging and other touchpoints.",
           },
-          capabilities: { cs: ["Jedna inteligence napříč kanály", "Odpovědi 24/7"], en: ["One intelligence across channels", "24/7 answers"] },
+          capabilities: { cs: ["Jednotná komunikace napříč kanály", "Odpovědi 24/7"], en: ["Unified communication across channels", "24/7 answers"] },
           impact: {
             cs: "Žádný dotaz nezůstane bez odpovědi.",
             en: "No question goes unanswered.",
@@ -692,9 +680,9 @@ export const HOME_PAGE: PageContent<"home"> = {
       },
       systems: [
         { name: { cs: "Recepční systém", en: "Reception System" }, status: "Production" },
-        { name: { cs: "Cortex", en: "Cortex" }, status: "Beta" },
-        { name: { cs: "Telefonní systém", en: "Phone System" }, status: "Testing" },
-        { name: { cs: "Kanálová komunikace", en: "Channel Communication" }, status: "Production" },
+        { name: { cs: "Obchodní inteligence pro růst", en: "Business Intelligence for Growth" }, status: "Beta" },
+        { name: { cs: "Inteligentní telefonní komunikace", en: "Intelligent Phone Communication" }, status: "Testing" },
+        { name: { cs: "Propojená komunikace napříč kanály", en: "Connected Communication Across Channels" }, status: "Production" },
         { name: { cs: "Automatizační systémy", en: "Automation Systems" }, status: "Beta" },
         { name: { cs: "Výzkumné systémy", en: "Research Systems" }, status: "Building" },
       ],
@@ -825,7 +813,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: "Prodejní systém. Vyhledá firmy. Vyhodnotí příležitosti. Osloví automaticky.",
             en: "A sales system. Finds leads. Evaluates opportunities. Reaches out automatically.",
           },
-          href: "/cortex",
+          href: "/projekty/cortex",
         },
         {
           title: { cs: "Komunikační systémy", en: "Communication Systems" },
@@ -833,7 +821,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: "Hlasová a chatová komunikace pro firmy. 24/7 zákaznická podpora a recepce.",
             en: "Voice and chat communication for businesses. 24/7 customer support and reception.",
           },
-          href: "/systems/communication",
+          href: "/projekty/asistenti",
         },
         {
           title: { cs: "Weby", en: "Websites" },
@@ -841,7 +829,7 @@ export const HOME_PAGE: PageContent<"home"> = {
             cs: "Prémiové webové prezentace, které vypadají jako produktový launch, ne jako šablona.",
             en: "Premium web presentations that feel like product launches. Not templates.",
           },
-          href: "/webs",
+          href: "/projekty/weby",
         },
         {
           title: { cs: "YouTube", en: "YouTube" },

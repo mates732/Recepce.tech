@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, type UIEvent } from "react";
+import { useEffect, useRef, useState, useCallback, type UIEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useReducedMotion, useTransform } from "framer-motion";
-import { useElementScrollProgress, OFFSET_FULL } from "@/lib/scroll";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useMotionValueEvent,
+  type MotionValue,
+} from "framer-motion";
 import type { Locale } from "@/lib/types";
 import { getPage } from "@/content/repository";
 
@@ -18,6 +25,8 @@ interface CaseCardData {
   visual?: string;
   visualStyle?: "image" | "wordmark";
 }
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 export default function CaseStudySection({ locale }: { locale: Locale }) {
   const data = getPage("home")?.data.caseStudies;
@@ -39,14 +48,23 @@ export default function CaseStudySection({ locale }: { locale: Locale }) {
 
   const shouldReduce = !!useReducedMotion();
   const [pinned, setPinned] = useState(false);
-  const [travel, setTravel] = useState(0);
-  const [p, setP] = useState(0);
+  const [isScrollJacking, setIsScrollJacking] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [hintDone, setHintDone] = useState(false);
   const [active, setActive] = useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
 
-  const tallRef = useRef<HTMLDivElement>(null);
-  const viewportRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+
+  // Refs for synchronous access in wheel handler (avoids state batching lag)
+  const isScrollJackingRef = useRef(false);
+  const trackWidthRef = useRef(0);
+
+  // Horizontal progress motion value (drives the transform)
+  const hjProgress = useMotionValue(0);
+
   // Pinned horizontal scroll only on desktop without reduced motion.
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -56,60 +74,154 @@ export default function CaseStudySection({ locale }: { locale: Locale }) {
     return () => mq.removeEventListener("change", update);
   }, [shouldReduce]);
 
-  // Measure the horizontal travel distance (track width − viewport width).
+  // Measure track width vs viewport width for horizontal travel.
   useEffect(() => {
     if (!pinned || cases.length === 0) return;
     const measure = () => {
       if (!trackRef.current || !viewportRef.current) return;
-      setTravel(
-        Math.max(0, trackRef.current.scrollWidth - viewportRef.current.offsetWidth)
-      );
+      const tw = trackRef.current.scrollWidth;
+      const vw = viewportRef.current.clientWidth;
+      setTrackWidth(Math.max(0, tw - vw));
     };
     measure();
-    const t = window.setTimeout(measure, 160);
+    const t1 = window.setTimeout(measure, 100);
+    const t2 = window.setTimeout(measure, 400);
+    const imgs = trackRef.current?.querySelectorAll("img") ?? [];
+    const onImgLoad = () => measure();
+    imgs.forEach((img) => {
+      if (img.complete) return;
+      img.addEventListener("load", onImgLoad, { once: true });
+    });
     window.addEventListener("resize", measure);
     return () => {
-      window.clearTimeout(t);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      imgs.forEach((img) => img.removeEventListener("load", onImgLoad));
       window.removeEventListener("resize", measure);
     };
   }, [pinned, cases.length]);
 
-  const progress = useElementScrollProgress(tallRef, OFFSET_FULL, 0);
-  const x = useTransform(progress, (v) => -v * travel);
+  // ─── useScroll: tracks container position in viewport ───
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
 
-  // Sync progress + active card from the pinned scroll.
+  // ─── Transform: hjProgress → horizontal x ───
+  // Always called at top level (no conditional).
+  const x = useTransform(hjProgress, (v) => -v * trackWidth);
+
+  // Sync refs with state (synchronous access in wheel handler).
+  useEffect(() => { isScrollJackingRef.current = isScrollJacking; }, [isScrollJacking]);
+  useEffect(() => { trackWidthRef.current = trackWidth; }, [trackWidth]);
+
+  // ─── Scroll-jacking: ONE permanent wheel handler ───
+  // Uses refs so it never needs re-attachment — avoids state batching gaps.
   useEffect(() => {
-    if (!pinned || cases.length === 0) return;
-    const unsub = progress.on("change", (v) => {
-      setP(v);
-      setActive(
-        Math.min(
-          cases.length - 1,
-          Math.max(0, Math.round(v * (cases.length - 1)))
-        )
-      );
+    if (!pinned) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // Only intercept when scroll-jacking is active.
+      if (!isScrollJackingRef.current) return;
+      const tw = trackWidthRef.current;
+      if (tw <= 0) return;
+
+      const delta = e.deltaY;
+      if (Math.abs(delta) < 1) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const current = hjProgress.get();
+      const step = (delta / tw) * 2.5;
+      const next = Math.max(0, Math.min(1, current + step));
+
+      hjProgress.set(next);
+
+      // Release downward: scroll past section bottom
+      if (next >= 1) {
+        isScrollJackingRef.current = false;
+        setIsScrollJacking(false);
+        const el = containerRef.current;
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const exitY = rect.top + window.scrollY + rect.height - window.innerHeight;
+          window.scrollTo({ top: Math.max(0, exitY), behavior: "auto" });
+        }
+      }
+      // Release upward: scroll past section top
+      if (next <= 0) {
+        isScrollJackingRef.current = false;
+        setIsScrollJacking(false);
+        const el = containerRef.current;
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const entryY = rect.top + window.scrollY - window.innerHeight + 1;
+          window.scrollTo({ top: Math.max(0, entryY), behavior: "auto" });
+        }
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, [pinned, hjProgress]);
+
+  // ─── Sync progress + active card from hjProgress ───
+  useMotionValueEvent(hjProgress, "change", (v) => {
+    setProgress(v);
+    setActive(
+      Math.min(
+        cases.length - 1,
+        Math.max(0, Math.round(v * (cases.length - 1)))
+      )
+    );
+  });
+
+  // ─── Detect when section enters viewport → start scroll-jacking ───
+  // 1) On mount: if section already visible, activate immediately.
+  useEffect(() => {
+    if (!pinned || trackWidth <= 0) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0 && hjProgress.get() < 0.01) {
+      isScrollJackingRef.current = true;
+      setIsScrollJacking(true);
+      hjProgress.set(0);
+    }
+  }, [pinned, trackWidth, hjProgress]);
+
+  // 2) On scroll: detect when section enters viewport.
+  useEffect(() => {
+    if (!pinned || trackWidth <= 0) return;
+    const unsub = scrollYProgress.on("change", (v) => {
+      if (v > 0 && v < 0.1 && !isScrollJackingRef.current && hjProgress.get() < 0.01) {
+        isScrollJackingRef.current = true;
+        setIsScrollJacking(true);
+        hjProgress.set(0);
+      }
     });
     return unsub;
-  }, [pinned, progress, cases.length]);
+  }, [pinned, trackWidth, isScrollJacking, scrollYProgress, hjProgress]);
 
-  // Dismiss the interaction hint after the first wheel/touch interaction.
+  // Dismiss interaction hint.
   useEffect(() => {
     if (hintDone) return;
-    const onWheel = () => setHintDone(true);
-    const onTouch = () => setHintDone(true);
-    window.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("touchstart", onTouch, { passive: true });
+    const dismiss = () => setHintDone(true);
+    window.addEventListener("wheel", dismiss, { passive: true });
+    window.addEventListener("touchstart", dismiss, { passive: true });
     return () => {
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("wheel", dismiss);
+      window.removeEventListener("touchstart", dismiss);
     };
   }, [hintDone]);
 
-  // Mobile / native mode: track scroll drives progress + active card.
+  // Mobile: native horizontal scroll.
   const onTrackScroll = (e: UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
     const max = el.scrollWidth - el.clientWidth;
-    setP(max > 0 ? el.scrollLeft / max : 0);
+    const p = max > 0 ? el.scrollLeft / max : 0;
+    setProgress(p);
     const mid = el.scrollLeft + el.clientWidth / 2;
     let idx = 0;
     Array.from(el.children).forEach((child, i) => {
@@ -119,36 +231,35 @@ export default function CaseStudySection({ locale }: { locale: Locale }) {
     setActive(idx);
   };
 
-  const goToIndex = (i: number) => {
-    const idx = Math.max(0, Math.min(cases.length - 1, i));
-    if (!pinned) {
-      const track = trackRef.current;
-      const card = track?.children[idx] as HTMLElement | undefined;
-      if (track && card) {
-        track.scrollTo({
-          left: card.offsetLeft - 24,
-          behavior: shouldReduce ? "auto" : "smooth",
-        });
+  const goToIndex = useCallback(
+    (i: number) => {
+      const idx = Math.max(0, Math.min(cases.length - 1, i));
+      if (!pinned) {
+        const track = trackRef.current;
+        const card = track?.children[idx] as HTMLElement | undefined;
+        if (track && card) {
+          track.scrollTo({
+            left: card.offsetLeft - 24,
+            behavior: shouldReduce ? "auto" : "smooth",
+          });
+        }
+        return;
       }
-      return;
-    }
-    const el = tallRef.current;
-    if (!el) return;
-    const n = cases.length - 1;
-    const target = n > 0 ? idx / n : 0;
-    const rect = el.getBoundingClientRect();
-    const absTop = rect.top + window.scrollY;
-    const scrollable = Math.max(0, el.offsetHeight - window.innerHeight);
-    window.scrollTo({
-      top: absTop + target * scrollable,
-      behavior: shouldReduce ? "auto" : "smooth",
-    });
-  };
+      // Pinned: set hjProgress to target index position.
+      const n = cases.length - 1;
+      const target = n > 0 ? idx / n : 0;
+      hjProgress.set(target);
+      // If scroll-jacking not yet active, activate it.
+      if (!isScrollJacking) setIsScrollJacking(true);
+    },
+    [pinned, cases.length, shouldReduce, hjProgress, isScrollJacking]
+  );
 
   if (cases.length === 0) return null;
 
   const n = cases.length;
-  const galleryHeight = `calc(${(0.6 + n * 0.65).toFixed(2)} * 100vh)`;
+  const estimatedTravelVw = Math.max(0, n * 44 - 100);
+  const heightFactor = Math.max(1.2, 1 + estimatedTravelVw / 100);
 
   const trackStyle: React.CSSProperties = pinned
     ? { height: "100%", padding: "clamp(64px, 11vh, 96px) 0" }
@@ -228,7 +339,10 @@ export default function CaseStudySection({ locale }: { locale: Locale }) {
       </div>
 
       {/* ─── Horizontal project archive ─── */}
-      <div ref={tallRef} style={pinned ? { height: galleryHeight } : undefined}>
+      <div
+        ref={containerRef}
+        style={pinned ? { height: `calc(${heightFactor.toFixed(2)} * 100vh)` } : undefined}
+      >
         <div
           ref={viewportRef}
           className={pinned ? "sticky top-0 overflow-hidden" : ""}
@@ -279,11 +393,14 @@ export default function CaseStudySection({ locale }: { locale: Locale }) {
             </div>
           )}
 
-          {/* Track */}
+          {/* Track: x driven by hjProgress (scroll-jacked) */}
           <motion.div
             ref={trackRef}
             className="relative flex"
-            style={{ ...trackStyle, ...(pinned ? { x } : {}) }}
+            style={{
+              ...trackStyle,
+              ...(pinned ? { x } : {}),
+            }}
             onScroll={pinned ? undefined : onTrackScroll}
           >
             <div
@@ -335,12 +452,12 @@ export default function CaseStudySection({ locale }: { locale: Locale }) {
                 role="progressbar"
                 aria-valuemin={0}
                 aria-valuemax={100}
-                aria-valuenow={Math.round(p * 100)}
+                aria-valuenow={Math.round(progress * 100)}
               >
                 <div
                   className="absolute top-0 left-0 h-[2px]"
                   style={{
-                    width: `${Math.max(2, p * 100)}%`,
+                    width: `${Math.max(2, progress * 100)}%`,
                     background: "var(--color-accent)",
                     transform: "translateY(-50%)",
                     boxShadow: "0 0 12px rgba(255,74,46,0.5)",
@@ -386,7 +503,6 @@ function CaseCard({
           : "0 2px 12px rgba(255,255,255,0.04)",
       }}
     >
-      {/* Visual */}
       <div className="relative flex-1 overflow-hidden" style={{ minHeight: "46%" }}>
         {card.visualStyle === "image" && card.visual ? (
           <Image
@@ -412,7 +528,6 @@ function CaseCard({
         </span>
       </div>
 
-      {/* Content */}
       <div
         className="flex flex-col gap-3 p-6 sm:p-7"
         style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
@@ -441,7 +556,6 @@ function CaseCard({
         <p className="font-body text-sm leading-relaxed" style={{ color: "#9AA1AB" }}>
           {card.description}
         </p>
-
         <ul className="flex flex-col gap-1.5 mt-1">
           {card.keyPoints.map((point) => (
             <li
@@ -458,7 +572,6 @@ function CaseCard({
             </li>
           ))}
         </ul>
-
         <span
           className="group inline-flex items-center gap-2 font-mono text-label-fluid tracking-[0.16em] uppercase transition-colors duration-300 mt-3"
           style={{ color: "#9AA1AB" }}
@@ -512,7 +625,7 @@ function CaseCard({
   );
 }
 
-/* ─── Wordmark visual (used when no screenshot exists) ─── */
+/* ─── Wordmark visual ─── */
 
 function WordmarkVisual({ name }: { name: string }) {
   return (

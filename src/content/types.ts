@@ -152,6 +152,11 @@ export interface HomePageData {
     subtitle: Localized;
     systems: {
       name: Localized;
+      title?: Localized;
+      subtitle?: Localized;
+      description?: Localized;
+      metadata?: Localized<string[]>;
+      badge?: string;
       status: string;
       problem: Localized;
       ai: Localized;

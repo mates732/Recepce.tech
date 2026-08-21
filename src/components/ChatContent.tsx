@@ -19,7 +19,7 @@ export default function ChatContent({ locale }: Props) {
   const data = getPage("chat")?.data;
 
   return (
-    <div className="relative overflow-hidden" style={{ background: "#121316" }}>
+    <div className="relative">
       <HeroSection locale={locale} shouldReduceMotion={!!shouldReduceMotion} data={data} />
       <FactsSection locale={locale} data={data} />
       <ChannelsSection locale={locale} shouldReduceMotion={!!shouldReduceMotion} data={data} />
@@ -69,7 +69,7 @@ function HeroSection({ locale, shouldReduceMotion, data }: { locale: Locale; sho
   const crossLink = data?.crossLink;
 
   return (
-    <section ref={sectionRef} className="relative flex flex-col items-center justify-center overflow-hidden" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 200px) clamp(24px, 5vw, 80px)", background: "#121316" }}>
+    <section ref={sectionRef} className="relative flex flex-col items-center justify-center" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 200px) clamp(24px, 5vw, 80px)" }}>
       <motion.div style={{ y: shouldReduceMotion ? 0 : y, opacity: shouldReduceMotion ? 1 : opacity }} className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
         {crossLink && (
           <Link
@@ -299,7 +299,6 @@ function FlowSection({ locale, data }: { locale: Locale; data?: ChatPageData }) 
       style={{
         minHeight: "100vh",
         padding: "clamp(80px, 10vw, 120px) clamp(24px, 5vw, 80px)",
-        background: "#0A0A0B",
       }}
     >
       <div className="w-full max-w-4xl mx-auto text-center">

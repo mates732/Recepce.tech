@@ -99,42 +99,134 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/:locale/ai-receptionist",
-        destination: "/:locale/systems/communication",
+        destination: "/:locale/projekty/asistenti",
         permanent: true,
       },
       {
         source: "/ai-receptionist",
-        destination: "/systems/communication",
+        destination: "/projekty/asistenti",
         permanent: true,
       },
       {
         source: "/:locale/ai.assistent",
-        destination: "/:locale/systems/communication",
+        destination: "/:locale/projekty/asistenti",
         permanent: true,
       },
       {
         source: "/ai.assistent",
-        destination: "/systems/communication",
+        destination: "/projekty/asistenti",
         permanent: true,
       },
       {
         source: "/:locale/projekty/ai-sistent/voice-assistant",
-        destination: "/:locale/systems/communication/voice",
+        destination: "/:locale/projekty/asistenti/voice",
         permanent: true,
       },
       {
         source: "/projekty/ai-sistent/voice-assistant",
-        destination: "/systems/communication/voice",
+        destination: "/projekty/asistenti/voice",
         permanent: true,
       },
       {
         source: "/:locale/projekty/ai-sistent/chat-assistant",
-        destination: "/:locale/systems/communication/chat",
+        destination: "/:locale/projekty/asistenti/chat",
         permanent: true,
       },
       {
         source: "/projekty/ai-sistent/chat-assistant",
-        destination: "/systems/communication/chat",
+        destination: "/projekty/asistenti/chat",
+        permanent: true,
+      },
+      // Redirect old English paths to new Czech-friendly paths
+      {
+        source: "/:locale/about",
+        destination: "/:locale/o-mne",
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/o-mne",
+        permanent: true,
+      },
+      {
+        source: "/:locale/contact",
+        destination: "/:locale/kontakt",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "/kontakt",
+        permanent: true,
+      },
+      {
+        source: "/:locale/cortex",
+        destination: "/:locale/projekty/cortex",
+        permanent: true,
+      },
+      {
+        source: "/cortex",
+        destination: "/projekty/cortex",
+        permanent: true,
+      },
+      {
+        source: "/:locale/webs",
+        destination: "/:locale/projekty/weby",
+        permanent: true,
+      },
+      {
+        source: "/webs",
+        destination: "/projekty/weby",
+        permanent: true,
+      },
+      {
+        source: "/:locale/systems/communication",
+        destination: "/:locale/projekty/asistenti",
+        permanent: true,
+      },
+      {
+        source: "/systems/communication",
+        destination: "/projekty/asistenti",
+        permanent: true,
+      },
+      {
+        source: "/:locale/systems/communication/voice",
+        destination: "/:locale/projekty/asistenti/voice",
+        permanent: true,
+      },
+      {
+        source: "/systems/communication/voice",
+        destination: "/projekty/asistenti/voice",
+        permanent: true,
+      },
+      {
+        source: "/:locale/systems/communication/chat",
+        destination: "/:locale/projekty/asistenti/chat",
+        permanent: true,
+      },
+      {
+        source: "/systems/communication/chat",
+        destination: "/projekty/asistenti/chat",
+        permanent: true,
+      },
+      // Redirect old voice/chat paths to Czech-friendly asistenti sub-paths
+      {
+        source: "/:locale/projekty/asistenti/voice",
+        destination: "/:locale/projekty/asistenti/telefonni-asistent",
+        permanent: true,
+      },
+      {
+        source: "/projekty/asistenti/voice",
+        destination: "/projekty/asistenti/telefonni-asistent",
+        permanent: true,
+      },
+      {
+        source: "/:locale/projekty/asistenti/chat",
+        destination: "/:locale/projekty/asistenti/chat-asistent",
+        permanent: true,
+      },
+      {
+        source: "/projekty/asistenti/chat",
+        destination: "/projekty/asistenti/chat-asistent",
         permanent: true,
       },
     ];

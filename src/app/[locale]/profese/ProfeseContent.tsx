@@ -35,23 +35,7 @@ export default function ProfeseContent({ locale }: Props) {
   const d = prof ? (isCs ? prof.cs : prof.en) : null;
 
   return (
-    <div className="relative min-h-screen" style={{ background: "#0A0A0B" }}>
-      {/* ─── Ambient orbs ─── */}
-      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
-        <div
-          className="absolute top-[8%] left-[12%] w-[700px] h-[700px] rounded-full"
-          style={{
-            background: `radial-gradient(circle, rgba(160,160,160,0.06) 0%, transparent 70%)`,
-          }}
-        />
-        <div
-          className="absolute top-[35%] right-[8%] w-[550px] h-[550px] rounded-full"
-          style={{
-            background: `radial-gradient(circle, rgba(96,96,96,0.04) 0%, transparent 70%)`,
-          }}
-        />
-      </div>
-
+    <div className="relative min-h-screen">
       {/* ─── Hero ─── */}
       <section className="relative z-10 flex flex-col items-center text-center" style={{ padding: "clamp(80px,12vh,120px) clamp(24px,5vw,48px) 0" }}>
         <div className="font-mono text-label tracking-[0.15em] uppercase mb-4 select-none" style={{ color: "rgba(255,255,255,0.25)" }}>

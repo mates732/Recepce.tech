@@ -120,7 +120,6 @@ export default function ContactContent({ locale }: Props) {
       className="relative min-h-screen"
       style={{
         padding: "clamp(120px, 15vw, 200px) clamp(24px, 5vw, 80px)",
-        background: "#0A0A0B",
       }}
     >
       <div className="mx-auto relative z-10" style={{ maxWidth: "960px" }}>

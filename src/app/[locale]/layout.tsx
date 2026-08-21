@@ -8,6 +8,7 @@ import PageTransitionProvider from "@/components/PageTransitionProvider";
 import LocaleHtmlLang from "@/components/LocaleHtmlLang";
 import MotionProvider from "@/components/MotionProvider";
 import CursorGlow from "@/components/CursorGlow";
+import AmbientField from "@/components/lab/AmbientField";
 
 interface Props {
   children: React.ReactNode;
@@ -44,6 +45,9 @@ export default async function LocaleLayout({ children, params }: Props) {
     <MotionProvider>
       <LocaleHtmlLang locale={loc} />
       <CursorGlow />
+      <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+        <AmbientField />
+      </div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={jsonLdScript(websiteJsonLd(locale as Locale))}

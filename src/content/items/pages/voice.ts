@@ -9,7 +9,7 @@ export const VOICE_PAGE: PageContent<"voice"> = {
   updatedAt: "2026-08-11",
   publishedAt: "2026-08-11",
   seo: {
-    title: { cs: "Telefonní systém — Hlasová komunikace", en: "Phone System — Voice Communication" },
+    title: { cs: "Inteligentní telefonní komunikace", en: "Intelligent Phone Communication" },
     description: {
       cs: "Systém, který rozumí přirozené řeči. Přijímá hovory, rezervuje schůzky a odpovídá na dotazy 24/7.",
       en: "A system that understands natural speech. Answers calls, books appointments and responds to questions 24/7.",
@@ -35,19 +35,19 @@ export const VOICE_PAGE: PageContent<"voice"> = {
         href: "/demo",
       },
     ],
-    badge: { cs: "Telefonní systém", en: "Phone System" },
+    badge: { cs: "Telefonní komunikace", en: "Phone Communication" },
     crossLink: {
-      label: { cs: "Otevřít kanálovou komunikaci", en: "Open Channel Communication" },
-      href: "/systems/communication/chat",
+      label: { cs: "Otevřít propojenou komunikaci", en: "Open Connected Communication" },
+      href: "/projekty/asistenti/chat-asistent",
     },
     heroTitle: [
-      { cs: "Telefonní systém,", en: "A phone system," },
-      { cs: "který skutečně", en: "that actually" },
-      { cs: "rozumí lidem.", en: "understands people." },
+      { cs: "Inteligentní", en: "Intelligent" },
+      { cs: "telefonní", en: "phone" },
+      { cs: "komunikace.", en: "communication." },
     ],
     heroDesc: {
-      cs: "Telefonní hovor není jen hovor. Je to první dojem zákazníka. Tady na něj nikdo nečeká ve frontě.",
-      en: "A phone call isn't just a call. It's a customer's first impression. No one waits in line here.",
+      cs: "Moderní telefonní systém pro firmy. Vyřizování hovorů, rezervace schůzek, předávání informací a správa zákaznických požadavků kdykoliv.",
+      en: "A modern phone system for businesses. Handling calls, booking meetings, sharing information and managing customer requests anytime.",
     },
     cta: { cs: "Poslechnout si demo", en: "Hear it in action" },
     capabilities: [

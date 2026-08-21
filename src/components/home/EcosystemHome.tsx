@@ -7,7 +7,7 @@ import LaboratorySection from "@/components/sections/LaboratorySection";
 import LiveSystemsSection from "@/components/sections/LiveSystemsSection";
 import SystemsAuditSection from "@/components/sections/SystemsAuditSection";
 import SystemsSection from "@/components/sections/SystemsSection";
-import CaseStudySection from "@/components/sections/CaseStudySection";
+
 import TrustProofSection from "@/components/sections/TrustProofSection";
 import AudienceSection from "@/components/sections/AudienceSection";
 import WhatWeBuildSection from "@/components/sections/WhatWeBuildSection";
@@ -18,7 +18,7 @@ import ProcessSection from "@/components/sections/ProcessSection";
 import YoutubeSection from "@/components/sections/YoutubeSection";
 import AboutSection from "@/components/sections/AboutSection";
 import FinalCtaSection from "@/components/sections/FinalCtaSection";
-import AmbientField from "@/components/lab/AmbientField";
+
 
 interface EcosystemHomeProps {
   locale: Locale;
@@ -30,7 +30,7 @@ const SECTION_COMPONENTS: Record<SectionType, (props: { locale: Locale }) => Rea
   liveSystems: (props) => <LiveSystemsSection {...props} />,
   systemsAudit: (props) => <SystemsAuditSection {...props} />,
   systems: (props) => <SystemsSection {...props} />,
-  caseStudies: (props) => <CaseStudySection {...props} />,
+  caseStudies: () => null,
   trustProof: (props) => <TrustProofSection {...props} />,
   audience: (props) => <AudienceSection {...props} />,
   whatWeBuild: (props) => <WhatWeBuildSection {...props} />,
@@ -55,7 +55,6 @@ export default function EcosystemHome({ locale }: EcosystemHomeProps) {
 
   return (
     <div className="relative">
-      <AmbientField />
       {order.map((type) => {
         const render = SECTION_COMPONENTS[type];
         if (!render) return null;

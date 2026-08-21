@@ -19,7 +19,7 @@ export default function CortexContent({ locale }: Props) {
   const data = getPage("cortex")?.data;
 
   return (
-    <div className="relative" style={{ background: "#0A0A0B" }}>
+    <div className="relative">
       <HeroScene locale={locale} data={data} />
       <FactsScene locale={locale} data={data} />
       <WhyScene locale={locale} data={data} />
@@ -218,7 +218,7 @@ function ChatScene({ locale, data }: { locale: Locale; data?: CortexPageData }) 
   }, [revealed]);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "100vh", background: "#121316" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "100vh" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(32px, 5vw, 80px)" }}>
         <div className="w-full max-w-[680px] mx-auto flex flex-col" style={{ height: "min(65vh, 560px)" }}>
           <div
@@ -310,7 +310,7 @@ function ScreenshotWithAnnotationsScene({ locale, data }: { locale: Locale; data
   );
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "350vh", background: "#0A0A0B" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "350vh" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(24px, 4vw, 60px)" }}>
         <div className="relative w-full max-w-5xl mx-auto rounded-2xl overflow-hidden aspect-[16/9] max-md:aspect-[4/3]" style={{ background: "#121316", border: "1px solid rgba(255,255,255,0.06)" }}>
           <motion.div className="absolute inset-0" style={{ opacity: screenshotOpacity, scale: screenshotScale }}>
@@ -364,7 +364,7 @@ function ConfidenceScene({ locale, data }: { locale: Locale; data?: CortexPageDa
   }));
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "200vh", background: "#0A0A0B" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "200vh" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(48px, 6vw, 80px) clamp(24px, 5vw, 80px)" }}>
         <div className="max-w-lg mx-auto text-center">
           <motion.p
@@ -489,7 +489,7 @@ function CinematicRevealScene({ locale, data }: { locale: Locale; data?: CortexP
   const total = steps.length;
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "250vh", background: "#0A0A0B" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "250vh" }}>
       <div className="sticky top-0 flex items-center justify-center" style={{ height: "100vh", padding: "clamp(48px, 6vw, 80px) clamp(24px, 5vw, 80px)" }}>
         <div className="max-w-md mx-auto">
           <motion.p

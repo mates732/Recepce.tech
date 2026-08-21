@@ -17,7 +17,7 @@ export default function AboutContent({ locale }: Props) {
   const data = getPage("about")?.data;
 
   return (
-    <div className="relative overflow-hidden" style={{ background: "#0A0A0B" }}>
+    <div className="relative">
       <StatementSection locale={locale} shouldReduceMotion={!!shouldReduceMotion} data={data} />
       <WorksSection locale={locale} shouldReduceMotion={!!shouldReduceMotion} data={data} />
       <PersonalSection locale={locale} shouldReduceMotion={!!shouldReduceMotion} data={data} />
@@ -36,7 +36,7 @@ function StatementSection({ locale, shouldReduceMotion, data }: { locale: Locale
   const opacity = useTransform(progress, [0, 0.7], [1, 0]);
 
   return (
-    <section ref={sectionRef} className="relative flex flex-col items-center justify-center" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 180px) clamp(24px, 5vw, 80px)", background: "#0A0A0B" }}>
+    <section ref={sectionRef} className="relative flex flex-col items-center justify-center" style={{ minHeight: "100dvh", padding: "clamp(120px, 15vw, 180px) clamp(24px, 5vw, 80px)" }}>
       <motion.div style={{ y: shouldReduceMotion ? 0 : y, opacity: shouldReduceMotion ? 1 : opacity }} className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -70,7 +70,7 @@ function WorksSection({ locale, shouldReduceMotion, data }: { locale: Locale; sh
   const items = (data?.works.items ?? []).map((item) => item[locale]);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ padding: "clamp(120px, 16vw, 200px) clamp(24px, 5vw, 80px)", background: "#121316" }}>
+    <section ref={sectionRef} className="relative" style={{ padding: "clamp(120px, 16vw, 200px) clamp(24px, 5vw, 80px)" }}>
       <div className="max-w-5xl mx-auto">
         {items.map((text, i) => (
           <motion.div
@@ -103,7 +103,7 @@ function PersonalSection({ locale, shouldReduceMotion, data }: { locale: Locale;
   const y = useParallax(sectionRef, 30, -30);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ padding: "clamp(120px, 16vw, 200px) clamp(24px, 5vw, 80px)", background: "#0A0A0B" }}>
+    <section ref={sectionRef} className="relative" style={{ padding: "clamp(120px, 16vw, 200px) clamp(24px, 5vw, 80px)" }}>
       <motion.div style={{ y }} className="max-w-5xl mx-auto">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
@@ -148,7 +148,7 @@ function PrinciplesSection({ locale, shouldReduceMotion, data }: { locale: Local
   const principles = (data?.principles.items ?? []).map((p) => p[locale]);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)", background: "#121316" }}>
+    <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)" }}>
       <motion.div style={{ y }} className="max-w-5xl mx-auto">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
@@ -192,7 +192,7 @@ function ProductMapSection({ locale, shouldReduceMotion, data }: { locale: Local
   const products = data?.products ?? [];
 
   return (
-    <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)", background: "#121316" }}>
+    <section ref={sectionRef} className="relative" style={{ padding: "clamp(100px, 14vw, 180px) clamp(24px, 5vw, 80px)" }}>
       <motion.div style={{ y }} className="max-w-5xl mx-auto">
         {/* Brand card */}
         <motion.div

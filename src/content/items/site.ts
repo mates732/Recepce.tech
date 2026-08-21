@@ -48,29 +48,27 @@ export const SITE_ITEM: SiteContent = {
     business: {
       name: { cs: "Matyáš Vojan", en: "Matyáš Vojan" },
     },
-  },
-  navigation: [
+  },  navigation: [
     { id: "home", labels: { cs: "Domů", en: "Home" }, href: "/" },
     {
       id: "projects",
       labels: { cs: "Projekty", en: "Projects" },
       children: [
-        { id: "cortex", labels: { cs: "Cortex", en: "Cortex" }, href: "/cortex" },
-    {
-      id: "communication",
+        { id: "cortex", labels: { cs: "Cortex", en: "Cortex" }, href: "/projekty/cortex" },
+    { id: "communication",
       labels: { cs: "Asistenti", en: "Assistants" },
       children: [
-        { id: "overview", labels: { cs: "Přehled", en: "Overview" }, href: "/systems/communication" },
-        { id: "voice", labels: { cs: "Hlasový asistent", en: "Voice Assistant" }, href: "/systems/communication/voice" },
-        { id: "chat", labels: { cs: "Chat asistent", en: "Chat Assistant" }, href: "/systems/communication/chat" },
+        { id: "overview", labels: { cs: "Přehled", en: "Overview" }, href: "/projekty/asistenti" },
+        { id: "voice", labels: { cs: "Telefonní asistent", en: "Phone Assistant" }, href: "/projekty/asistenti/telefonni-asistent" },
+        { id: "chat", labels: { cs: "Chat asistent", en: "Chat Assistant" }, href: "/projekty/asistenti/chat-asistent" },
       ],
     },
-        { id: "websites", labels: { cs: "Weby", en: "Websites" }, href: "/webs" },
+        { id: "websites", labels: { cs: "Weby", en: "Websites" }, href: "/projekty/weby" },
         { id: "youtube", labels: { cs: "YouTube", en: "YouTube" }, href: "/youtube" },
       ],
     },
-    { id: "about", labels: { cs: "O mně", en: "About" }, href: "/about" },
-    { id: "contact", labels: { cs: "Kontakt", en: "Contact" }, href: "/contact" },
+    { id: "about", labels: { cs: "O mně", en: "About" }, href: "/o-mne" },
+    { id: "contact", labels: { cs: "Kontakt", en: "Contact" }, href: "/kontakt" },
   ],
   footer: {
     tagline: {
@@ -81,8 +79,8 @@ export const SITE_ITEM: SiteContent = {
     navLinks: [
       { id: "home", labels: { cs: "Domů", en: "Home" }, href: "/" },
       { id: "projects", labels: { cs: "Projekty", en: "Projects" }, href: "/projekty" },
-      { id: "about", labels: { cs: "O mně", en: "About" }, href: "/about" },
-      { id: "contact", labels: { cs: "Kontakt", en: "Contact" }, href: "/contact" },
+      { id: "about", labels: { cs: "O mně", en: "About" }, href: "/o-mne" },
+      { id: "contact", labels: { cs: "Kontakt", en: "Contact" }, href: "/kontakt" },
     ],
     connectHeading: { cs: "Spojení", en: "Connect" },
     madeIn: { cs: "Vytvořeno v České republice", en: "Made in the Czech Republic" },

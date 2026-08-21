@@ -5,18 +5,18 @@ import { list } from "@/content/repository";
 
 const STATIC_ROUTES = [
   "",
-  "/about",
-  "/systems/communication",
-  "/systems/communication/chat",
-  "/systems/communication/voice",
-  "/contact",
-  "/cortex",
+  "/o-mne",
+  "/kontakt",
+  "/projekty/cortex",
+  "/projekty/asistenti",
+  "/projekty/asistenti/chat",
+  "/projekty/asistenti/voice",
+  "/projekty/weby",
   "/demo",
   "/profese",
   "/projekty",
   "/projekty/ponici",
   "/projekty/zlaty-hreben",
-  "/webs",
   "/youtube",
 ] as const;
 

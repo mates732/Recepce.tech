@@ -168,7 +168,7 @@ export default function Navbar({ locale }: NavbarProps) {
     const gap = weight === "primary" ? "gap-1" : "gap-0.5";
     const alignClass = align === "right" ? "items-end" : "items-center";
     return (
-      <div className={`flex flex-row flex-wrap ${alignClass} ${gap} ${className}`}>
+      <div className={`flex flex-col ${alignClass} ${gap} ${className}`}>
         {label && (
           <span className="text-label-sm tracking-[0.2em] uppercase mb-4" style={{ color: "rgba(244,246,248,0.15)", fontWeight: 500 }}>
             {label}
@@ -204,13 +204,13 @@ export default function Navbar({ locale }: NavbarProps) {
     </AnimatePresence>
   );
 
-  const Divider = () => (
+  const Divider = ({ orientation = "vertical", className = "" }: { orientation?: "vertical" | "horizontal"; className?: string }) => (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="w-px self-stretch mx-3 sm:mx-4"
+      className={orientation === "horizontal" ? `w-full h-px my-3 sm:my-4 ${className}` : `w-px self-stretch mx-3 sm:mx-4 ${className}`}
       style={{ background: "rgba(255,255,255,0.06)" }}
     />
   );
@@ -310,28 +310,61 @@ export default function Navbar({ locale }: NavbarProps) {
               style={{ paddingTop: "clamp(80px, 12vh, 100px)" }}
             >
               {/* Menu items — scrollable so they never overlap the bottom layer */}
-              <div className="flex-1 min-h-0 flex w-full overflow-y-auto">
+              <div className="flex-1 min-h-0 flex w-full overflow-hidden">
                 <motion.div
                   layout
                   transition={{ duration: 0.3, ease: [0.22, 0.8, 0.2, 1] }}
-                  className="m-auto flex flex-wrap items-start justify-center gap-x-4 gap-y-5 py-4 px-1"
+                  className="relative h-full w-full max-md:flex max-md:flex-nowrap max-md:overflow-x-hidden"
+                  style={{ transform: level === "root" ? "translateX(0)" : level === "projects" ? "translateX(-100%)" : "translateX(-200%)" }}
                 >
+                  {/* Root level */}
+                  <div className="flex w-full max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1">
+                    <Column items={navTree} weight={rootWeight} />
+                  </div>
+
+                  {/* Projects level */}
+                  <div className="hidden max-md:flex max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1">
+                    <Column items={childItems.projects} weight={projectsWeight} align="center" />
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      onClick={() => setLevel("root")}
+                      className="mt-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                      style={{ color: "#6E7683" }}
+                    >
+                      ← {t(locale, "ui.back")}
+                    </motion.button>
+                  </div>
+
+                  {/* Communication level */}
+                  <div className="hidden max-md:flex max-md:flex-[0_0_100%] max-md:min-w-full flex-col items-center justify-center py-4 px-1">
+                    <Column items={leftColumnItems} weight={projectsWeight} align="center" />
+                    <Divider orientation="horizontal" className="my-4 w-full" />
+                    <Column items={childItems["communication"]} weight="primary" align="center" />
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      onClick={() => setLevel("projects")}
+                      className="mt-4 text-label tracking-[0.15em] uppercase cursor-pointer transition-all duration-200 hover:opacity-60 whitespace-nowrap"
+                      style={{ color: "#6E7683" }}
+                    >
+                      ← {t(locale, "ui.back")}
+                    </motion.button>
+                  </div>
+                </motion.div>
+
+                {/* Desktop: side-by-side columns */}
+                <div className="hidden md:flex md:flex-wrap md:items-start md:justify-center md:gap-x-4 md:gap-y-5 md:py-4 md:px-1 md:m-auto md:w-full">
                   <Column items={navTree} weight={rootWeight} className={showCommunication ? "max-md:hidden" : ""} />
 
                   {showCommunication ? (
                     <>
                       <Divider />
-                      <Column
-                        items={leftColumnItems}
-                        weight={projectsWeight}
-                        align="center"
-                      />
+                      <Column items={leftColumnItems} weight={projectsWeight} align="center" />
                       <Divider />
-                      <Column
-                        items={childItems["communication"]}
-                        weight="primary"
-                        align="right"
-                      />
+                      <Column items={childItems["communication"]} weight="primary" align="right" />
                       <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -346,11 +379,7 @@ export default function Navbar({ locale }: NavbarProps) {
                   ) : showProjects ? (
                     <>
                       <Divider />
-                      <Column
-                        items={childItems.projects}
-                        weight={projectsWeight}
-                        align={level === "projects" ? "right" : "center"}
-                      />
+                      <Column items={childItems.projects} weight={projectsWeight} align={level === "projects" ? "right" : "center"} />
                       <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -363,7 +392,7 @@ export default function Navbar({ locale }: NavbarProps) {
                       </motion.button>
                     </>
                   ) : null}
-                </motion.div>
+                </div>
               </div>
 
               {/* Language switcher — just the texts on the background */}

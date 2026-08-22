@@ -48,7 +48,6 @@ export const CHAT_PAGE: PageContent<"chat"> = {
       cs: "Jednotná komunikační vrstva pro web, zprávy a další kontaktní body. Firmy zůstávají dostupné a zákazníci vždy najdou správnou cestu.",
       en: "A unified communication layer for web, messaging and other touchpoints. Businesses stay accessible and customers always find the right path.",
     },
-    cta: { cs: "Vyzkoušet demo", en: "Try the demo" },
     channelsLabel: { cs: "Textové kanály", en: "Text channels" },
     channels: {
       cs: "Web · WhatsApp · SMS · Messenger · Instagram · Telegram · E-mail",

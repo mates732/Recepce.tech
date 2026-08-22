@@ -119,24 +119,7 @@ function HeroSection({ locale, shouldReduceMotion, data }: { locale: Locale; sho
         >
           {data?.heroDesc[locale]}
         </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center justify-center mt-12"
-        >
-          {data?.cta && (
-            <Link
-              href={`/${locale}/demo`}
-              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium transition-all duration-300"
-              style={{ color: "#0A0A0B", background: "var(--color-accent)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-            >
-              {data.cta[locale]}
-            </Link>
-          )}
-        </motion.div>
+
       </motion.div>
     </section>
   );

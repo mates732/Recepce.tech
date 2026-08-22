@@ -374,7 +374,7 @@ export interface ChatPageData {
   crossLink: { label: Localized; href: string };
   heroTitle: Localized[];
   heroDesc: Localized;
-  cta: Localized;
+  cta?: Localized;
   channelsLabel: Localized;
   channels: Localized;
   conversation: {

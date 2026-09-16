@@ -1,37 +1,30 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-sans',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-mono',
+  variable: '--font-inter',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
-  title: 'Mindspace — The Engine | Matyáš Vojan',
+  title: {
+    default: 'Recepce.tech — weby a virtuální asistenti',
+    template: '%s — Recepce.tech',
+  },
   description:
-    'Vstupte do mysli, kde se myšlenky mění v 110% realitu. AI vývojář, 3D vizualizace, neurální síť.',
-  keywords: [
-    'Matyáš Vojan',
-    'AI vývojář',
-    'Mindspace',
-    'React Three Fiber',
-    'Next.js',
-    'AI Agent',
-  ],
+    'Recepce.tech spojuje dvě věci: weby s vlastním charakterem a virtuální asistenty, kteří zvednou telefon. Vyberte si svět, který vás zajímá.',
+  metadataBase: new URL('https://www.recepce.tech'),
   openGraph: {
-    title: 'Mindspace — The Engine',
+    title: 'Recepce.tech — weby a virtuální asistenti',
     description:
-      'Interaktivní digitální simulace mysli — AI, 3D, a 110% dotažení.',
-    type: 'website',
+      'Weby s vlastním charakterem a asistenti, kteří zvednou telefon — dva světy jedné značky.',
+    url: 'https://www.recepce.tech',
+    siteName: 'Recepce.tech',
     locale: 'cs_CZ',
+    type: 'website',
   },
 };
 
@@ -41,10 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="cs"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
-    >
+    <html lang="cs" data-scroll-behavior="smooth" className={`${inter.variable} antialiased`}>
       <body>{children}</body>
     </html>
   );

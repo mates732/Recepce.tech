@@ -4,34 +4,32 @@ import { useEffect } from 'react';
 
 export default function Error({
   error,
-  unstable_retry,
+  reset,
 }: {
   error: Error & { digest?: string };
-  unstable_retry: () => void;
+  reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    // no-op: nelogujeme, nespouštíme nic navíc.
   }, [error]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6">
-      <div className="text-center">
-        <span className="mb-4 inline-block font-mono text-xs tracking-[0.3em] text-[#ff6b6b]/50">
-          [ ERROR ]
-        </span>
-        <h2 className="mb-4 text-2xl font-bold text-white/80">
-          Něco se pokazilo
-        </h2>
-        <p className="mb-8 font-mono text-sm text-white/30">
-          {error.message || 'Neočekávaná chyba'}
-        </p>
-        <button
-          onClick={() => unstable_retry()}
-          className="rounded-xl border border-white/10 bg-white/[0.03] px-6 py-3 font-mono text-xs tracking-wider text-white/40 transition-all duration-300 hover:border-[#00d4ff]/20 hover:text-[#00d4ff]/60"
-        >
-          Zkusit znovu
-        </button>
-      </div>
-    </div>
+    <main style={{ color: 'var(--color-ink)', minHeight: '60vh', display: 'grid', placeContent: 'center', textAlign: 'center' }}>
+      <span style={{ display: 'inline-block', padding: '6px 10px', border: '1px solid var(--color-border)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+        Chyba
+      </span>
+      <h1 style={{ marginTop: '22px', fontSize: 'clamp(2rem, 8vw, 4rem)', lineHeight: 1.05, textWrap: 'balance' }}>
+        Něco se pokazilo.
+      </h1>
+      <p style={{ marginTop: '12px', color: 'var(--color-muted)', maxWidth: '380px', margin: '12px auto 0' }}>
+        Nic se neděje — zkuste to znovu.
+      </p>
+      <button
+        onClick={() => reset()}
+        style={{ marginTop: '24px', padding: '10px 18px', background: 'var(--color-accent)', color: 'var(--color-accent-bright)', border: 'none', fontWeight: 600, cursor: 'pointer' }}
+      >
+        Zkusit znovu
+      </button>
+    </main>
   );
 }

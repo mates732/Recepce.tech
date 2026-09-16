@@ -9,15 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@daily-co/daily-js": "^0.92.2",
+    "@react-three/drei": "^10",
+    "@react-three/fiber": "^9",
+    "@react-three/postprocessing": "^3",
+    "@vapi-ai/web": "^1.4.2",
+    "framer-motion": "^12",
+    "gsap": "^3.12",
     "next": "16.2.11",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "@react-three/fiber": "^9",
-    "@react-three/drei": "^10",
-    "@react-three/postprocessing": "^3",
     "three": "^0.174",
-    "framer-motion": "^12",
-    "gsap": "^3.12",
     "zustand": "^5"
   },
   "devDependencies": {
@@ -30,5 +32,8 @@
     "eslint-config-next": "16.2.11",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@daily-co/daily-js": "^0.92.2"
   }
 }

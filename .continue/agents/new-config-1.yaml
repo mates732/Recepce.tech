@@ -1,0 +1,16 @@
+name: Recepce Coding
+version: 1.0.0
+schema: v1
+
+models:
+  - name: DeepSeek V4 Flash Cloud
+    provider: ollama
+    model: deepseek-v4-flash:cloud
+    apiBase: https://ollama.com
+    apiKey: bøafc2329aa1442fae58a5c90b22500b.S-P_G
+UihXBk8I1PMS2a830Aa
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete

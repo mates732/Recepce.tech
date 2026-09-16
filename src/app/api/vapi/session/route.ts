@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const publicKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
+  const publicKey = process.env.PUBLIC_VAPI_PUBLIC_KEY;
   const { assistantId } = getVapiConfig(slug);
 
   if (!publicKey || !assistantId) {

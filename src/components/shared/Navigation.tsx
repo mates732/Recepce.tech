@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation';
 import ProductToggle from '@/components/shared/ProductToggle';
 import type { ProductToggleMode } from '@/components/shared/ProductToggle';
 
+/* Odkazy na produkty (/virtualni-asistenti, /weby) jsou pouze v navbaru
+   přes ProductToggle — v menu je záměrně neduplikujeme. */
 const MENU_ITEMS = [
-  { label: 'Virtuální asistenti', href: '/virtualni-asistenti' },
-  { label: 'Weby', href: '/weby' },
   { label: 'Demo', href: '/demo' },
   { label: 'O mně', href: '/o-mne' },
 ];

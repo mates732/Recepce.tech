@@ -65,8 +65,57 @@ const DEMO_PROJECTS: DemoProject[] = [
     ],
   },
   {
-    id: 'noname-barbershop',
+    id: 'therapy-point',
     number: '02',
+    client: 'Therapy Point',
+    type: 'Virtuální recepce',
+    location: 'Praha',
+    headline: 'Promluvte si s asistentem.',
+    description:
+      'Pro Therapy Point jsme připravili hlasového asistenta pro první kontakt s pacientem.',
+    suggestionMode: 'inspiration',
+    suggestions: [
+      'Potřebuju termín na rehabilitaci.',
+      'Jaké služby nabízíte?',
+      'Kde máte pobočky?',
+      'Kolik stojí terapie a jak je to s pojišťovnou?',
+    ],
+    problems: [
+      {
+        id: 'terminy',
+        title: 'Termíny',
+        detail:
+          'Asistent pomáhá pacientům s hledáním vhodného termínu rehabilitace nebo terapie.',
+      },
+      {
+        id: 'sluzby',
+        title: 'Služby',
+        detail:
+          'Odpovídá na dotazy k fyzioterapii, osteopatii, rehabilitaci a dalším nabízeným službám.',
+      },
+      {
+        id: 'pobocky',
+        title: 'Pobočky',
+        detail:
+          'Pomáhá pacientům zorientovat se v jednotlivých pobočkách, jejich adresách a možnostech návštěvy.',
+      },
+      {
+        id: 'ceny-a-pojistovny',
+        title: 'Ceny a pojišťovny',
+        detail:
+          'Poskytuje základní informace o cenách terapií, FT poukazech a možnostech úhrady.',
+      },
+      {
+        id: 'prvni-kontakt',
+        title: 'První kontakt',
+        detail:
+          'Zachytí požadavek pacienta i mimo provozní dobu recepce a v případě potřeby předá kontakt živé recepci.',
+      },
+    ],
+  },
+  {
+    id: 'noname-barbershop',
+    number: '03',
     client: 'NoName Barbershop',
     type: 'Virtuální recepce',
     location: 'Praha',
@@ -105,7 +154,7 @@ const DEMO_PROJECTS: DemoProject[] = [
   },
   {
     id: 'paws-and-care',
-    number: '03',
+    number: '04',
     client: 'Paws & Care',
     type: 'Virtuální recepce',
     location: 'Praha',
@@ -366,6 +415,52 @@ function ProblemList({ items }: { items: DemoProject['problems'] }) {
   );
 }
 
+function TherapyPointChat() {
+  const [message, setMessage] = useState('');
+  const [reply, setReply] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function send(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const value = message.trim();
+    if (!value || loading) return;
+
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch('/api/therapy-point', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: value }),
+      });
+      const data = (await response.json()) as { reply?: string; error?: string };
+      if (!response.ok || !data.reply) throw new Error(data.error);
+      setReply(data.reply);
+      setMessage('');
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Odpověď se nepodařilo doručit.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="mt-8 border-t border-border pt-7">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-faint">Therapy Point</p>
+      <p className="mt-2 text-sm leading-relaxed text-muted">Napište dotaz a vyzkoušejte živou odpověď asistenta.</p>
+      {reply && <p className="mt-4 rounded-2xl border border-border bg-surface-muted px-4 py-3 text-sm leading-relaxed text-ink">{reply}</p>}
+      {error && <p role="alert" className="mt-4 text-xs leading-relaxed text-red-700">{error}</p>}
+      <form onSubmit={send} className="mt-4 flex gap-2">
+        <input value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Napište zprávu…" aria-label="Zpráva pro Therapy Point" className="h-11 min-w-0 flex-1 rounded-lg border border-border bg-surface px-4 text-sm text-ink placeholder:text-faint focus:border-border-strong focus:outline-none" />
+        <button type="submit" disabled={loading || !message.trim()} className="h-11 rounded-lg bg-accent px-4 text-sm font-medium text-accent-bright disabled:cursor-not-allowed disabled:opacity-50">
+          {loading ? 'Čekám…' : 'Odeslat'}
+        </button>
+      </form>
+    </div>
+  );
+}
+
 function DemoPanel({ project }: { project: DemoProject }) {
   return (
     <motion.article
@@ -394,6 +489,7 @@ function DemoPanel({ project }: { project: DemoProject }) {
         </p>
 
         <ProblemList items={project.problems} />
+        <TherapyPointChat />
       </section>
     </motion.article>
   );

@@ -11,6 +11,48 @@ interface VapiCallButtonProps {
 
 type CallState = 'idle' | 'connecting' | 'active' | 'error';
 
+function formatError(error: unknown) {
+  if (error instanceof Response) {
+    return `Vapi start failed (${error.status} ${error.statusText || 'Response'}).`;
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  return 'Hovor se nepodařilo spustit.';
+}
+
+async function formatResponseError(response: Response) {
+  const contentType = response.headers.get('content-type') ?? '';
+  let bodyText = '';
+
+  try {
+    if (contentType.includes('application/json')) {
+      const json = (await response.json()) as Record<string, unknown>;
+      bodyText =
+        typeof json.error === 'string'
+          ? json.error
+          : typeof json.message === 'string'
+            ? json.message
+            : JSON.stringify(json);
+    } else {
+      bodyText = await response.text();
+    }
+  } catch {
+    bodyText = '';
+  }
+
+  const statusLabel = `${response.status} ${response.statusText || 'Response'}`.trim();
+  return bodyText
+    ? `Vapi start failed (${statusLabel}): ${bodyText}`
+    : `Vapi start failed (${statusLabel}).`;
+}
+
 export default function VapiCallButton({ slug, assistantName }: VapiCallButtonProps) {
   const [state, setState] = useState<CallState>('idle');
   const [error, setError] = useState('');
@@ -63,15 +105,25 @@ export default function VapiCallButton({ slug, assistantName }: VapiCallButtonPr
         vapiRef.current = null;
         setState('idle');
       });
-      vapi.on('error', () => {
-        setError('Hovor se nepodařilo spustit. Zkontrolujte mikrofon a zkuste to znovu.');
-        setState('error');
+      vapi.on('error', (event: unknown) => {
+        console.error('[VapiCallButton] vapi error event:', event);
       });
 
-      await vapi.start(data.assistantId);
+      try {
+        await vapi.start(data.assistantId);
+      } catch (startError) {
+        if (startError instanceof Response) {
+          const message = await formatResponseError(startError);
+          console.error('[VapiCallButton] vapi start response:', message);
+          throw new Error(message);
+        }
+
+        throw startError;
+      }
     } catch (callError) {
+      console.error('[VapiCallButton] startCall error:', callError);
       disposeVapi();
-      setError(callError instanceof Error ? callError.message : 'Hovor se nepodařilo spustit.');
+      setError(formatError(callError));
       setState('error');
     }
   }

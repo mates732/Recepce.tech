@@ -1,5 +1,6 @@
 const assistantIds = {
   atombike: process.env.VAPI_ASSISTANT_ID_ATOMBIKE,
+  'therapy-point': process.env.VAPI_ASSISTANT_ID_THERAPY_POINT,
   'noname-barbershop': process.env.VAPI_ASSISTANT_ID_NONAME_BARBERSHOP,
   'paws-and-care': process.env.VAPI_ASSISTANT_ID_PAWS_AND_CARE,
 } as const;

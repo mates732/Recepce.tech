@@ -109,7 +109,7 @@ export default function HomeGateway() {
                   CO DĚLÁME
                 </p>
                 <h2 className="mt-5 max-w-2xl text-[clamp(1.8rem,3.6vw,2.9rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-ink">
-                  Dvě pilíře. Jedna digitální recepce.
+                  Dva pilíře. Jedna digitální recepce.
                 </h2>
               </div>
               <span

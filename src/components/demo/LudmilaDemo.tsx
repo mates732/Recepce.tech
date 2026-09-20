@@ -94,21 +94,22 @@ export default function LudmilaDemo() {
         </div>
       </section>
 
-      {/* Živé demo v rámu */}
+      {/* Živé demo v rámu — jemný reveal, jinak beze změny */}
       <section
         id="ukazka"
-        className="mx-auto w-full max-w-6xl scroll-mt-20 px-6 pb-24 md:pb-16 lg:px-8 lg:pb-20"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-6 pb-28 md:pb-16 lg:px-8 lg:pb-20"
       >
-        <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-[0_24px_60px_-32px_rgba(53,51,48,0.5)] sm:rounded-2xl">
-          {/* Browser chrome — reálná doména dema + odkaz mimo rám */}
-          <div className="flex items-center gap-2 border-b border-border bg-surface-muted/70 px-3 py-2.5 sm:px-4">
-            <div className="flex items-center gap-1.5" aria-hidden="true">
-              <span className="h-2.5 w-2.5 rounded-full bg-panel-edge" />
-              <span className="h-2.5 w-2.5 rounded-full bg-panel-edge" />
-              <span className="h-2.5 w-2.5 rounded-full bg-panel-edge" />
-            </div>
+        <Reveal y={16}>
+          <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-[0_24px_60px_-32px_rgba(53,51,48,0.5)] sm:rounded-2xl">
+            {/* Browser chrome — reálná doména dema + odkaz mimo rám */}
+            <div className="flex items-center gap-2 border-b border-border bg-surface-muted/70 px-3 py-2.5 sm:px-4">
+              <div className="flex items-center gap-1.5" aria-hidden="true">
+                <span className="h-2.5 w-2.5 rounded-full bg-panel-edge" />
+                <span className="h-2.5 w-2.5 rounded-full bg-panel-edge" />
+                <span className="h-2.5 w-2.5 rounded-full bg-panel-edge" />
+              </div>
 
-            <div className="ml-1 flex min-w-0 flex-1 items-center gap-2">
+              <div className="ml-1 flex min-w-0 flex-1 items-center gap-2">
               {/* Stav náhledu držíme v liště — nikdy nezakrývá obsah dema. */}
               <span className="hidden h-3.5 w-3.5 shrink-0 rounded-full bg-accent/20 sm:inline-block" />
               <span className="truncate text-[11px] font-medium text-ink">
@@ -142,6 +143,7 @@ export default function LudmilaDemo() {
             />
           </div>
         </div>
+        </Reveal>
 
         {/* Jak si demo vyzkoušet — editorial řádky, ikona vlevo, label + text */}
         <Reveal y={16}>

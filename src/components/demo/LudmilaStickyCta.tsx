@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon } from '@/components/shared/Icon';
 
 /**
@@ -8,33 +8,52 @@ import { Icon } from '@/components/shared/Icon';
  *
  * Zobrazuje se jen na mobilu (< 768 px) a jen tam, kde dává smysl:
  *  - až po odscrollování hero sekce (nekryje vlastní CTA v hero),
- *  - ne, když je v záběru rám s demem (demo má vlastní lištu s mikrofonem),
- *  - ne, když je v záběru patička webu (nekryje odkazy v patičce).
+ *  - nikdy ve stejnou chvíli, kdy je na obrazovce lišta dema v rámu
+ *    (demo má vlastní „Zeptat se recepční / Zavolat“ — dvě stejné CTA
+ *    na jedné obrazovce by působily jako chyba),
+ *  - ne, když by zasahovala do patičky webu.
  * Respektuje safe-area iPhonu a `prefers-reduced-motion`.
  */
 const PHONE = '+420720943766';
 const PHONE_LABEL = '+420 720 943 766';
+
+/** Od kolika px scrollu se lišta začne řešit (hero musí zmizet). */
 const SCROLL_THRESHOLD = 260;
+/** Výška lišty dema uvnitř iframu — její akce visí na spodní hraně rámu. */
+const DEMO_BAR_HEIGHT = 62;
+/** Výška naší lišty bez safe-area (pt-2.5 + 44 px tlačítka + pb-2.5). */
+const OWN_BAR_HEIGHT = 64;
+/** Hysteréze, aby lišta na hraně pásma při scrollu neblikala. */
+const COLLISION_SLACK = 32;
 
 export default function LudmilaStickyCta() {
   const [visible, setVisible] = useState(false);
+  /** Je zrovna naše lišta stažená kvůli kolizi s lištou dema? (kvůli hysterézi) */
+  const colliding = useRef(false);
 
   useEffect(() => {
-    const frame = document.querySelector('#ukazka iframe');
+    const frame = document.querySelector<HTMLIFrameElement>('#ukazka iframe');
     const footer = document.querySelector('footer');
 
     const update = () => {
-      const frameBottom = frame ? frame.getBoundingClientRect().bottom : Number.NEGATIVE_INFINITY;
-      const footerTop = footer ? footer.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+      const viewport = window.innerHeight;
+      const frameBox = frame ? frame.getBoundingClientRect() : null;
+      const footerBox = footer ? footer.getBoundingClientRect() : null;
 
-      // Vlastní rychlé akce má i demo v iframu — když jsou na obrazovce
-      // (dole v záběru), naše lišta se schová, aby se dvě CTA nepřekrývaly.
-      const demoBarOnScreen =
-        frameBottom > window.innerHeight - 150 && frameBottom < window.innerHeight + 80;
-      // Patička webu: lišta se schová, aby nekryla její odkazy.
-      const footerOnScreen = footerTop < window.innerHeight - 64;
+      /* Lišta dema je `position: fixed` uvnitř iframu → drží se na spodní
+         hraně rámu, tedy v pásu [frameBottom - 62, frameBottom]. Naše lišta
+         zabírá [viewport - 64, viewport]. Překryjí se proto jen tehdy, když
+         je spodní hrana rámu od spodku viewportu blíž než jedna výška lišty. */
+      const delta = frameBox ? frameBox.bottom - viewport : Number.POSITIVE_INFINITY;
+      const slack = colliding.current ? COLLISION_SLACK : 0;
+      const barsCollide =
+        delta < DEMO_BAR_HEIGHT + slack && delta > -(OWN_BAR_HEIGHT + slack);
+      colliding.current = barsCollide;
 
-      setVisible(window.scrollY > SCROLL_THRESHOLD && !demoBarOnScreen && !footerOnScreen);
+      /* Patička: lišta se schová, jakmile do ní zasahuje. */
+      const footerOverlaps = footerBox ? footerBox.top < viewport - OWN_BAR_HEIGHT : false;
+
+      setVisible(window.scrollY > SCROLL_THRESHOLD && !barsCollide && !footerOverlaps);
     };
 
     update();

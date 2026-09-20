@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/shared/Button';
 import { Icon } from '@/components/shared/Icon';
 import Reveal from '@/components/home/Reveal';
+import LudmilaStickyCta from '@/components/demo/LudmilaStickyCta';
 
 /**
  * Živé demo pro Textil Ludmila.
@@ -96,7 +97,7 @@ export default function LudmilaDemo() {
       {/* Živé demo v rámu */}
       <section
         id="ukazka"
-        className="mx-auto w-full max-w-6xl scroll-mt-20 px-6 pb-16 lg:px-8 lg:pb-20"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-6 pb-24 md:pb-16 lg:px-8 lg:pb-20"
       >
         <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-[0_24px_60px_-32px_rgba(53,51,48,0.5)] sm:rounded-2xl">
           {/* Browser chrome — reálná doména dema + odkaz mimo rám */}
@@ -177,6 +178,9 @@ export default function LudmilaDemo() {
           .
         </p>
       </section>
+
+      {/* Mobilní sticky CTA — jen na telefonu, viz komponenta. */}
+      <LudmilaStickyCta />
     </>
   );
 }

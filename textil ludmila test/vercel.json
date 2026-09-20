@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/config", "destination": "/api/config" },
+    { "source": "/vapi-token", "destination": "/api/vapi-token" },
+    { "source": "/track", "destination": "/api/track" }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "textil-ludmila-vapi-test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Testovací stránka pro Vapi hlasového asistenta (Textil Ludmila)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node dev/server.mjs",
+    "start": "node dev/server.mjs",
+    "deploy": "vercel deploy --prod",
+    "deploy:preview": "vercel"
+  }
+}

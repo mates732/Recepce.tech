@@ -1,0 +1,18 @@
+# Soukromé klíče – nikdy do repozitáře (na Vercelu se nastavují
+# jako Environment Variables projektu).
+.env
+
+# Závislosti a buildy
+node_modules/
+.vercel
+
+# Systémové soubory
+.DS_Store
+.env*
+
+# Python bytecode (dev server.py)
+__pycache__/
+*.pyc
+
+# Lokální tracking data dema
+.data/

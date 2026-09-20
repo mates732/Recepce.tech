@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Textil Ludmila – metrový textil, závěsy na míru a stínění oken | Praha 6</title>
+  <meta name="description" content="Prodejna metrového a bytového textilu v Praze 6. Více než 300 druhů látek, šití závěsů na míru, přistínění a zatemnění oken, dodávky pro hotely a koleje. Zeptejte se našeho digitálního recepčního.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://textil-ludmila-vapi.vercel.app/demo">
+  <meta property="og:title" content="Textil Ludmila – textilní služby, které začínají dobrým přístupem">
+  <meta property="og:description" content="Metrový textil, bytové prádlo, šití závěsů na míru a přistínění oken. Prodejna v Praze 6, více než 300 druhů látek.">
+  <meta property="og:image" content="https://textil-ludmila-vapi.vercel.app/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="cs_CZ">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Textil Ludmila – demo webu s digitálním recepčním">
+  <meta name="twitter:image" content="https://textil-ludmila-vapi.vercel.app/assets/img/og-image.jpg">
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/demo.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#recepce">Přeskočit na digitálního recepčního</a>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#" aria-label="Textil Ludmila – domů">
+        <span class="brand-mark" aria-hidden="true">TL</span>
+        <span>TEXTIL LUDMILA<small>Praha 6</small></span>
+      </a>
+      <span class="nav-demo-chip">DEMO</span>
+
+      <nav class="nav-links" aria-label="Hlavní navigace">
+        <a href="#sluzby">Služby</a>
+        <a href="#o-nas">O nás</a>
+        <a href="#jak-to-funguje">Jak to funguje</a>
+        <a href="#kontakt">Kontakt</a>
+        <a class="btn btn-primary btn-nav" href="#recepce">Nezávazně se zeptat</a>
+      </nav>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Otevřít menu">
+        <span></span>
+      </button>
+    </div>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobilní navigace">
+      <a href="#sluzby">Služby</a>
+      <a href="#o-nas">O nás</a>
+      <a href="#jak-to-funguje">Jak to funguje</a>
+      <a href="#kontakt">Kontakt</a>
+      <a class="btn btn-primary" href="#recepce">Nezávazně se zeptat</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ==================== HERO ==================== -->
+    <section class="hero" data-track="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="demo-badge reveal">
+            <span class="dot" aria-hidden="true"></span>
+            Toto demo jsme připravili přímo pro&nbsp;<strong>Textil Ludmila</strong>
+          </p>
+
+          <h1 class="reveal d1">Textilní služby, které začínají dobrým&nbsp;přístupem.</h1>
+
+          <p class="lead reveal d2">
+            Potřebujete poradit s výběrem látky, objednat šití na míru nebo zjistit,
+            jak to u nás funguje? Jsme tu pro vás.
+          </p>
+
+          <div class="hero-ctas reveal d3">
+            <a class="btn btn-primary btn-lg" href="#recepce">Chci se zeptat</a>
+            <a class="btn btn-ghost btn-lg" href="#sluzby">Zjistit více</a>
+          </div>
+
+          <div class="hero-trust reveal d4">
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              Prodejna Praha 6
+            </span>
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              Po–Pá 9:00–18:00
+            </span>
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              300+ druhů látek
+            </span>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal d2">
+          <div class="hero-photo">
+            <img src="assets/img/hero-fabrics.jpg" alt="Svazky textilních látek v prodejně – ukázková fotografie" fetchpriority="high">
+          </div>
+          <div class="hero-float">
+            <span class="dot" aria-hidden="true"></span>
+            <span>Digitální recepční je k dispozici<small>Odpoví i mimo otevírací dobu</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DIGITÁLNÍ RECEPTČNÍ ==================== -->
+    <section class="recepce" id="recepce" data-track="recepce">
+      <div class="container recepce-inner">
+        <div>
+          <span class="kicker reveal">Digitální recepční</span>
+          <h2 class="reveal d1">Vyzkoušejte si svého digitálního&nbsp;recepčního</h2>
+          <p class="lead reveal d2">
+            Zákazníci se nemusí proklikávat webem a hledat odpovědi. Stačí se zeptat.
+          </p>
+
+          <ul class="flow-points reveal d3">
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><strong>Odpoví okamžitě</strong> – večer, o víkendu i mezi dvěma zákazníky.</span>
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><strong>Zná služby firmy</strong> a pošle zákazníka správným směrem.</span>
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><strong>Vypadá jako součást webu</strong> – ne jako cizí vložený widget.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="widget reveal d2" id="assistantWidget">
+          <div class="widget-head">
+            <div class="widget-avatar" aria-hidden="true">TL</div>
+            <div>
+              <div class="widget-title">Digitální recepční</div>
+              <div class="widget-status" id="wStatus" aria-live="polite">Načítám…</div>
+            </div>
+          </div>
+
+          <div class="widget-body" id="wBody">
+            <div class="w-bubble assistant">
+              <span class="who">Recepční</span>
+              Dobrý den, tady digitální recepční Textil Ludmila. Zeptejte se mě
+              na služby, otevírací dobu nebo kontakt.
+            </div>
+
+            <div class="w-chips" id="wChips" role="group" aria-label="Doporučené otázky">
+              <button class="w-chip" data-question="Jaké služby nabízíte?">Jaké služby nabízíte?</button>
+              <button class="w-chip" data-question="Jak vás můžu kontaktovat?">Jak vás můžu kontaktovat?</button>
+              <button class="w-chip" data-question="Kdy máte otevřeno?">Kdy máte otevřeno?</button>
+              <button class="w-chip" data-question="Potřebuji poradit s objednávkou.">Potřebuji poradit s objednávkou.</button>
+            </div>
+
+            <div class="w-transcript" id="wTranscript" hidden></div>
+          </div>
+
+          <div class="widget-foot">
+            <div class="widget-foot-row">
+              <button class="btn btn-primary btn-call" id="wCallBtn">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Promluvit si s recepční
+              </button>
+              <a class="btn btn-chat" href="mailto:info@textilludmila.cz" id="wMailBtn" data-track-action="email">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                Napsat recepčnímu
+              </a>
+            </div>
+            <p class="w-note">Hovor probíhá přímo v prohlížeči – jen potvrďte přístup k mikrofonu.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== UKÁZKA: ZÁKAZNÍK × RECEPČNÍ ==================== -->
+    <section class="showcase" data-track="ukazka">
+      <div class="container flow-grid">
+        <div>
+          <span class="kicker reveal">Show, don't tell</span>
+          <h2 class="reveal d1">Zákazník má otázku.<br>Recepční odpoví.</h2>
+
+          <ul class="flow-points reveal d2">
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><strong>Bez prokliků a hledání.</strong> Zákazník píše nebo mluví přirozeně.</span>
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><strong>Reálné informace.</strong> Recepční odpovídá podle údajů firmy.</span>
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span><strong>Vstřícný tón.</strong> Stejný přístup, jaký byste chtěli na prodejně.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="chat-demo" aria-label="Ukázková konverzace se digitálním recepčním">
+          <div class="chat-line customer">
+            <div class="chat-ava" aria-hidden="true">ZÁK</div>
+            <div class="chat-msg">Dobrý den, hledám látku na závěsy do obýváku. Můžete mi poradit s výběrem?</div>
+          </div>
+          <div class="chat-line agent">
+            <div class="chat-ava" aria-hidden="true">TL</div>
+            <div class="chat-msg">Dobrý den, ráda! V prodejně na Na Hutích 13 v Praze 6 máme více než 300 druhů látek přímo na metrech. Řekněte mi, jakou barvu a materiál hledáte – nebo se rovnou zastavte na vzorky.</div>
+          </div>
+          <div class="chat-line customer">
+            <div class="chat-ava" aria-hidden="true">ZÁK</div>
+            <div class="chat-msg">Něco v teplých tónech. A šijete i na míru?</div>
+          </div>
+          <div class="chat-line agent">
+            <div class="chat-ava" aria-hidden="true">TL</div>
+            <div class="chat-msg">Ano – závěsy i interiérové doplňky šijeme na míru. Navíc vám poradíme s přistíněním, třeba roletami nebo plisé. Můžeme se domluvit i na konzultaci přímo u vás.</div>
+          </div>
+          <p class="chat-note">Ukázka z dema – odpovědi vycházejí z reálných informací Textil Ludmila.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLUŽBY ==================== -->
+    <section class="services" id="sluzby" data-track="sluzby">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker reveal">Služby</span>
+          <h2 class="reveal d1">S čím vám můžeme pomoci</h2>
+          <p class="lead reveal d2">Od metru látky přes šití na míru až po kompletní vybavení interiérů.</p>
+        </div>
+
+        <div class="services-grid">
+          <article class="service-card reveal">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 10 5-10 5L2 7Z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></svg>
+            </div>
+            <h3>Metrový textil a látky</h3>
+            <p>Více než 300 druhů látek skladem v prodejně na Praze 6 – na vzorcích, na metrech, pro šití i tvoření.</p>
+            <a class="service-link" href="#recepce" data-ask="Můžete mi říct víc o metrovém textilu a látkách?">
+              Zeptat se recepční
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="service-card reveal d1">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+            </div>
+            <h3>Bytový textil a prádlo</h3>
+            <p>Povlečení, ručníky, přikrývky a polštáře, ubrusy i chrániče matrací – kusové zboží i značkové kousky.</p>
+            <a class="service-link" href="#recepce" data-ask="Můžete mi říct víc o bytovém textilu a prádle?">
+              Zeptat se recepční
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="service-card reveal d2">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg>
+            </div>
+            <h3>Závěsy a šití na míru</h3>
+            <p>Okenní dekorace, závěsy a drapérie i interiérové doplňky ušijeme na míru podle vašeho interiéru.</p>
+            <a class="service-link" href="#recepce" data-ask="Můžete mi říct víc o šití závěsů na míru?">
+              Zeptat se recepční
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 8h18"/><path d="M3 13h18"/><path d="M3 18h18"/></svg>
+            </div>
+            <h3>Přistínění a zatemnění</h3>
+            <p>Plisé, Duette, římské rolety, žaluzie, Facette i Silhouette. Značky Gardinia, Alugard, Luxaflex a Mottura.</p>
+            <a class="service-link" href="#recepce" data-ask="Můžete mi říct víc o přistínění a zatemnění oken?">
+              Zeptat se recepční
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="service-card reveal d1">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3>Poradenství a montáž</h3>
+            <p>Profesionální konzultace, návrh řešení a montáž přímo u vás – včetně motorových systémů.</p>
+            <a class="service-link" href="#recepce" data-ask="Můžete mi říct víc o poradenství a montáži?">
+              Zeptat se recepční
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="service-card reveal d2">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M12 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M12 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg>
+            </div>
+            <h3>Hotely a velkoobchod</h3>
+            <p>Sekce INTERIORS dodává kompletní vybavení hotelů, nemocnic a studentských kolejí.</p>
+            <a class="service-link" href="#recepce" data-ask="Můžete mi říct víc o vybavování hotelů a velkoobchodu?">
+              Zeptat se recepční
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </article>
+        </div>
+
+        <p class="services-note">Nabídka vychází ze skutečných služeb firmy – texty doladíme podle aktuálního sortimentu.</p>
+      </div>
+    </section>
+
+    <!-- ==================== JAK TO FUNGUJE ==================== -->
+    <section id="jak-to-funguje" data-track="jak-to-funguje">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker reveal">Jak to funguje</span>
+          <h2 class="reveal d1">Tři kroky. Žádné hledání.</h2>
+        </div>
+
+        <div class="steps">
+          <div class="step reveal">
+            <div class="step-num" aria-hidden="true">01</div>
+            <h3>Zákazník přijde na web</h3>
+            <p>Ať už z vyhledávače, z doporučení nebo z visitky – web je tu pro něj.</p>
+          </div>
+          <div class="step reveal d1">
+            <div class="step-num" aria-hidden="true">02</div>
+            <h3>Zeptá se na to, co potřebuje</h3>
+            <p>Otomáčkou nebo psaním. Netlačí ho do formulářů ani do menu.</p>
+          </div>
+          <div class="step reveal d2">
+            <div class="step-num" aria-hidden="true">03</div>
+            <h3>Recepční poradí nebo nasměruje</h3>
+            <p>Odpoví podle informací firmy – nebo ho pošle správným směrem.</p>
+          </div>
+        </div>
+
+        <p class="steps-benefit reveal d3">
+          I když se zákazník ozve večer nebo neví přesně, koho potřebuje, <strong>nemusí hledat odpověď sám.</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== O NÁS ==================== -->
+    <section id="o-nas" data-track="o-nas">
+      <div class="container about-grid">
+        <div class="about-photo reveal">
+          <img src="assets/img/sewing-hands.jpg" alt="Ruce při práci s látkou – ukázková fotografie" loading="lazy">
+        </div>
+        <div>
+          <span class="kicker reveal">O nás</span>
+          <h2 class="reveal d1">Firma s prodejnou na&nbsp;Praze&nbsp;6</h2>
+          <p class="lead reveal d2">
+            TEXTIL LUDMILA s.r.o. provozuje prodejnu metrového, bytového textilu a prádla
+            v Praze 6 (Dejvice/Bubeneč). Vedle prodeje šije závěsy a interiérové doplňky na míru,
+            řeší přistínění a zatemnění oken a přes velkoobchodní sekci INTERIORS dodává kompletní
+            vybavení hotelů, nemocnic a studentských kolejí.
+          </p>
+
+          <div class="about-values reveal d3">
+            <div class="about-value"><b>300+</b><span>druhů látek skladem</span></div>
+            <div class="about-value"><b>Praha 6</b><span>prodejna Na Hutích</span></div>
+            <div class="about-value"><b>Na míru</b><span>šité dekorace a doplňky</span></div>
+          </div>
+
+          <p class="about-source reveal d4">Informace převzaty z textilludmila.cz – nic jsme si nevymysleli.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KONTAKT ==================== -->
+    <section class="contact" id="kontakt" data-track="kontakt">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker reveal">Kontakt</span>
+          <h2 class="reveal d1">Máte otázku? Ozvěte se nám.</h2>
+          <p class="lead reveal d2">Nebo se nejprve zeptejte digitálního recepčního výše – odpoví hned.</p>
+        </div>
+
+        <div class="contact-grid">
+          <a class="contact-card reveal" href="tel:+420720943766" aria-label="Zavolat na +420 720 943 766">
+            <div class="contact-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <h3>Telefon</h3>
+              <p class="big">+420 720 943 766</p>
+              <p>Na mobilu stačí klepnout.</p>
+            </div>
+          </a>
+
+          <a class="contact-card reveal d1" href="mailto:info@textilludmila.cz">
+            <div class="contact-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div>
+              <h3>E-mail</h3>
+              <p class="big">info@textilludmila.cz</p>
+              <p>Pro nezávazné dotazy i poptávky.</p>
+            </div>
+          </a>
+
+          <a class="contact-card reveal d2" href="https://www.google.com/maps/search/?api=1&amp;query=Na+Hut%C3%ADch+693%2F13%2C+160+00+Praha+6" target="_blank" rel="noopener">
+            <div class="contact-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <h3>Prodejna</h3>
+              <p class="big">Na Hutích 693/13</p>
+              <p>160 00 Praha 6 (Dejvice/Bubeneč) · Zobrazit na mapě</p>
+            </div>
+          </a>
+
+          <div class="contact-card contact-hours reveal d3">
+            <div class="contact-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div style="flex:1">
+              <h3>Otevírací doba</h3>
+              <table class="hours-table">
+                <tbody>
+                  <tr><td>Pondělí – pátek</td><td>9:00–18:00</td></tr>
+                  <tr><td>Sobota a neděle</td><td>Zavřeno</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-cta reveal d3">
+          <a class="btn btn-primary btn-lg" href="tel:+420720943766">Kontaktovat Textil Ludmila</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ZÁVĚR DEMA ==================== -->
+    <section class="demo-end" data-track="demo-end">
+      <div class="container">
+        <span class="kicker reveal" style="color:#d8a184">Závěr dema</span>
+        <h2 class="reveal d1">Tohle nemusí zůstat jen demo.</h2>
+        <p class="reveal d2">
+          Digitální recepční může být přímo součástí vašeho webu a pomáhat zákazníkům
+          i mimo běžnou pracovní dobu.
+        </p>
+        <div class="reveal d3" style="margin-top:32px">
+          <a class="btn btn-light btn-lg" href="https://recepce.tech" target="_blank" rel="noopener">Chci se dozvědět více</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FEEDBACK ==================== -->
+    <section class="feedback" data-track="feedback">
+      <div class="container">
+        <h2 class="reveal">Jak se vám demo líbilo?</h2>
+        <div id="feedbackArea" class="reveal d1">
+          <div class="feedback-buttons">
+            <button class="fb-btn" data-value="up" aria-label="Líbí se mi">
+              <span>👍</span><small>Líbí se mi</small>
+            </button>
+            <button class="fb-btn" data-value="neutral" aria-label="Neutrální">
+              <span>😒</span><small>Neutrální</small>
+            </button>
+            <button class="fb-btn" data-value="down" aria-label="Nelíbí se mi">
+              <span>👎</span><small>Nelíbí se mi</small>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="container footer-grid">
+      <a class="brand" href="#" aria-label="Textil Ludmila">
+        <span class="brand-mark" aria-hidden="true">TL</span>
+        <span>TEXTIL LUDMILA<small>Praha 6</small></span>
+      </a>
+      <p class="footer-note">
+        Personalizované demo webu s digitálním recepčním, připravené společností Recepce.tech.
+        Skutečné údaje firmy: <a href="https://www.textilludmila.cz" target="_blank" rel="noopener">textilludmila.cz</a>.
+      </p>
+      <div class="copyright">
+        <span>© 2026 Recepce.tech · Ukázka – není oficiálním webem firmy</span>
+        <span>Fotografie: Unsplash (licence zdarma)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MOBILNÍ SPODNÍ PANEL ==================== -->
+  <div class="mobile-bar" aria-label="Rychlé akce">
+    <a class="btn btn-primary" href="#recepce">Zeptat se recepční</a>
+    <a class="btn btn-ghost" href="tel:+420720943766">Zavolat</a>
+  </div>
+
+  <script src="assets/demo.js" type="module"></script>
+</body>
+</html>

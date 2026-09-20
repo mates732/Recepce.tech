@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textil Ludmila - Asistent</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            padding: 32px 16px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 660px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+            padding: 24px;
+        }
+
+        h1 { margin: 0 0 4px; font-size: 20px; }
+        .subtitle { margin: 0 0 20px; color: #666; font-size: 13px; }
+
+        #warning {
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            color: #7a5c00;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        #status { margin: 0 0 16px; font-size: 14px; color: #444; min-height: 20px; }
+        #status.recording { color: #d32f2f; font-weight: bold; }
+
+        .row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+        #startButton {
+            padding: 16px 32px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #startButton:hover { background-color: #45a049; }
+        #startButton:disabled { background-color: #9e9e9e; cursor: wait; }
+        #startButton.stop { background-color: #e53935; }
+        #startButton.stop:hover { background-color: #c62828; }
+
+        #volume {
+            width: 160px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        #volumeBar { width: 0%; height: 100%; background: #4CAF50; transition: width .1s linear; }
+
+        .panel { margin-top: 20px; border-top: 1px solid #eee; padding-top: 12px; }
+
+        .panel h2 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: #888;
+            margin: 0 0 8px;
+        }
+
+        #transcript {
+            max-height: 260px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            line-height: 1.35;
+            white-space: pre-wrap;
+        }
+
+        .bubble.user { align-self: flex-end; background: #e3f2fd; }
+        .bubble.assistant { align-self: flex-start; background: #f1f1f1; }
+        .bubble.partial { opacity: .6; }
+        .bubble .who { display: block; font-size: 11px; color: #777; margin-bottom: 2px; }
+
+        #console {
+            max-height: 160px;
+            overflow-y: auto;
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+            font-size: 12px;
+            color: #333;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        #console div { white-space: pre-wrap; }
+        #console .err { color: #c62828; }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>Textil Ludmila - test asistenta</h1>
+        <p class="subtitle">
+            Klikněte na tlačítko a mluvte s asistentem. Stránka potřebuje přístup k mikrofonu
+            a měla by běžet na <code>http://localhost</code> (spusťte <code>start-server.command</code>).
+        </p>
+
+        <div id="warning" hidden></div>
+
+        <p id="status">Načítám Vapi SDK…</p>
+
+        <div class="row">
+            <button id="startButton" disabled>Načítám SDK…</button>
+            <div id="volume" title="Úroveň hlasu asistenta"><div id="volumeBar"></div></div>
+        </div>
+
+        <section class="panel">
+            <h2>Přepis hovoru</h2>
+            <div id="transcript"><span class="subtitle">Zatím žádný přepis.</span></div>
+        </section>
+
+        <section class="panel">
+            <h2>Log událostí</h2>
+            <div id="console"></div>
+        </section>
+    </main>
+
+<script type="module">
+        // ------------------------------------------------------------------
+        // Konfigurace
+        // Credentials se načítají ze serveru:
+        //   /config      -> publicKey + assistantId (fallback režim)
+        //   /vapi-token  -> krátkodobý JWT (bezpečný režim, viz server.mjs)
+        // Pro ruční testy lze hodnoty přepsat přes URL, např.:
+        //   index.html?assistantId=JINE_ID&publicKey=JINY_PUBLIC_KEY
+        // ------------------------------------------------------------------
+        // Záložní hodnoty pro případ, že stránka běží na jiném serveru,
+        // který tyto endpointy nenabízí.
+        const FALLBACK_CONFIG = {
+            publicKey: '0e329649-855b-4866-8219-3c5737d30901',
+            assistantId: '95097678-68e0-47f7-b3ac-a013b1a20a95'
+        };
+
+        // Buildy, které fungují přímo v prohlížeči. Npm balíček @vapi-ai/web
+        // obsahuje jen CommonJS (dist/vapi.js), který se přes klasický HTML
+        // script tag v prohlížeči nenačte. Proto načítáme ES modul;
+        // druhá adresa je záložní CDN.
+        const SDK_URLS = [
+            'https://esm.sh/@vapi-ai/web@2.7.1',
+            'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.7.1/+esm'
+        ];
+
+        const params = new URLSearchParams(window.location.search);
+
+        const statusEl = document.getElementById('status');
+        const warningEl = document.getElementById('warning');
+        const buttonEl = document.getElementById('startButton');
+        const consoleEl = document.getElementById('console');
+        const transcriptEl = document.getElementById('transcript');
+        const volumeBar = document.getElementById('volumeBar');
+
+        function log(message, isError) {
+            const line = document.createElement('div');
+            if (isError) line.className = 'err';
+            line.textContent = '[' + new Date().toLocaleTimeString('cs-CZ') + '] ' + message;
+            consoleEl.appendChild(line);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function warn(message) {
+            warningEl.hidden = false;
+            warningEl.textContent = message;
+            log(message, true);
+        }
+
+        // Bezpečně vytáhne čitelnou hlášku z libovolné chyby (včetně
+        // vnořených objektů typu { type, stage, error: { message, ... } }),
+        // aby se v logu nikdy neobjevilo jen „[object Object]“.
+        function describeError(value, depth) {
+            depth = depth || 0;
+            if (value == null) return '';
+            if (typeof value === 'string') return value;
+            if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+            if (value instanceof Error) return value.message || value.name || 'Error';
+            if (depth > 5) {
+                try { return JSON.stringify(value); } catch (e) { return Object.prototype.toString.call(value); }
+            }
+            const keys = ['message', 'msg', 'error', 'errorMsg', 'errorMessage', 'title',
+                          'detail', 'reason', 'code', 'status', 'statusCode', 'stage'];
+            for (const key of keys) {
+                if (value[key] !== undefined && value[key] !== null) {
+                    const text = describeError(value[key], depth + 1);
+                    if (text) return text;
+                }
+            }
+            try { return JSON.stringify(value); } catch (e) { return Object.prototype.toString.call(value); }
+        }
+
+        function setStatus(text, recording) {
+            statusEl.textContent = text;
+            statusEl.classList.toggle('recording', Boolean(recording));
+        }
+
+        // Mikrofon je v prohlížeči dostupný jen v secure contextu
+        // (https:// nebo http://localhost). Na file:// obvykle nefunguje.
+        if (!window.isSecureContext) {
+            warn('Stránka neběží v zabezpečeném kontextu, prohlížeč nedovolí mikrofon. ' +
+                 'Spusťte start-server.command a otevřete http://localhost:8000/index.html');
+        } else if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            warn('Prohlížeč nepodporuje přístup k mikrofonu (navigator.mediaDevices.getUserMedia).');
+        } else {
+            log('Prostředí OK: ' + window.location.origin);
+        }
+
+        // ------------------------------------------------------------------
+        // Načtení credentials pro Vapi
+        // server.mjs čte .env a vystavuje údaje na /config a /vapi-token.
+        // ------------------------------------------------------------------
+        async function loadConfig() {
+            const override = {
+                publicKey: params.get('publicKey'),
+                assistantId: params.get('assistantId')
+            };
+            try {
+                const response = await fetch('/config', { cache: 'no-store' });
+                if (response.ok) {
+                    const fromServer = await response.json();
+                    log('Credentials načteny ze serveru (/config ← .env).');
+                    return {
+                        publicKey: override.publicKey || fromServer.publicKey || FALLBACK_CONFIG.publicKey,
+                        assistantId: override.assistantId || fromServer.assistantId || FALLBACK_CONFIG.assistantId
+                    };
+                }
+                log('/config vrátilo HTTP ' + response.status + ', používám výchozí hodnoty.', true);
+            } catch (error) {
+                log('Nepodařilo se načíst /config: ' +
+                    (error && error.message ? error.message : error) + ' – používám výchozí hodnoty.', true);
+            }
+            return {
+                publicKey: override.publicKey || FALLBACK_CONFIG.publicKey,
+                assistantId: override.assistantId || FALLBACK_CONFIG.assistantId
+            };
+        }
+
+        // Krátkodobý token se bere těsně před každým hovorem – nikdy není
+        // uložený v prohlížeči déle než na dobu jednoho hovoru.
+        // 503 = secure mode není nakonfigurován → vracíme značku, že má
+        // pokračovat fallback cesta bez strašidelných chybových hlášek.
+        async function fetchVapiToken() {
+            const response = await fetch('/vapi-token', { cache: 'no-store' });
+            let data = null;
+            try { data = await response.json(); } catch (e) { /* ne-JSON odpověď */ }
+            if (!response.ok) {
+                if (response.status === 503) {
+                    return {
+                        secureAvailable: false,
+                        message: data && data.error ? data.error : 'není nakonfigurován',
+                    };
+                }
+                throw new Error(data && data.error ? data.error : 'HTTP ' + response.status);
+            }
+            if (!data.token) {
+                if (data.fallbackPublicKey) {
+                    return { secureAvailable: false, fallbackPublicKey: data.fallbackPublicKey };
+                }
+                throw new Error('server nevrátil token');
+            }
+            data.secureAvailable = true;
+            return data;
+        }
+
+        const { publicKey: PUBLIC_KEY, assistantId: ASSISTANT_ID } = await loadConfig();
+        log('Konfigurace: assistantId=' + ASSISTANT_ID +
+            (params.get('publicKey') || params.get('assistantId') ? ' (přepsáno z URL)' : ''));
+
+        // ------------------------------------------------------------------
+        // Načtení Vapi SDK jako ES modulu
+        // ------------------------------------------------------------------
+        let VapiClass = null;
+        for (const url of SDK_URLS) {
+            try {
+                const module = await import(url);
+                VapiClass = module.default;
+                log('Vapi SDK načteno z ' + url);
+                break;
+            } catch (error) {
+                log('SDK se nepodařilo načíst z ' + url + ': ' +
+                    (error && error.message ? error.message : error), true);
+            }
+        }
+
+        if (!VapiClass) {
+            warn('Vapi SDK se nepodařilo načíst z CDN. Zkontrolujte připojení k internetu a obnovte stránku.');
+            buttonEl.textContent = 'SDK nedostupné';
+            setStatus('Chyba: Vapi SDK není k dispozici.');
+        } else if (!ASSISTANT_ID) {
+            warn('Chybí ASSISTANT_ID v souboru .env. Doplňte hodnotu a restartujte server.');
+            buttonEl.textContent = 'Chybí credentials';
+            setStatus('Chyba: chybí Vapi credentials.');
+        } else {
+            initVapiTest();
+        }
+
+        // ------------------------------------------------------------------
+        // Testovací logika – události + tlačítko start/stop
+        // ------------------------------------------------------------------
+        
+        // Funkce pro "probuzení" reproduktoru - vyvolá krátký tón, aby
+        // prohlíšeč povolil autoplay audio ihned po startu hovoru.
+        // Bez toho se reproduktor připojí až když asistent začne mluvit.
+        function unlockAudio() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioContext();
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 880;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.01);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.01);
+                log('Audio reproduktor probuzen (unlock)');
+            } catch (e) {
+                log('Audio unlock selhal: ' + (e && e.message ? e.message : e), true);
+            }
+        }
+
+        function initVapiTest() {
+            // Instanci Vapi vytváříme bez trvalého public key. Před každým
+            // hovorem se načte čerstvý krátkodobý token (secure mode); pokud
+            // server secure mode nemá, použije se fallback s public key.
+            let vapi = null;
+            let vapiMode = null; // 'secure' nebo 'fallback'
+
+            function getVapi(mode, credential) {
+                if (!vapi || vapiMode !== mode) {
+                    if (vapi && vapi.stop) {
+                        try { vapi.stop(); } catch (e) { /* ignorovat */ }
+                    }
+                    vapi = new VapiClass(credential);
+                    vapiMode = mode;
+                    attachVapiListeners(vapi);
+                }
+                return vapi;
+            }
+
+            function attachVapiListeners(instance) {
+                instance.on('call-start', function () {
+                    callActive = true;
+                    setStatus('Hovor běží – mluvte do mikrofonu', true);
+                    buttonEl.textContent = 'Ukončit hovor';
+                    buttonEl.classList.add('stop');
+                    log('call-start (' + vapiMode + ' režim)');
+                });
+
+                instance.on('call-end', function () {
+                    callActive = false;
+                    partial = null;
+                    setStatus('Hovor ukončen');
+                    buttonEl.textContent = 'Spustit asistenta';
+                    buttonEl.classList.remove('stop');
+                    volumeBar.style.width = '0%';
+                    log('call-end');
+                });
+
+                instance.on('speech-start', function () { log('asistent začal mluvit'); });
+                instance.on('speech-end', function () { log('asistent přestal mluvit'); });
+
+                instance.on('volume-level', function (level) {
+                    const percent = Math.max(0, Math.min(1, Number(level) || 0)) * 100;
+                    volumeBar.style.width = Math.round(percent) + '%';
+                });
+
+                instance.on('message', function (message) {
+                    if (!message || typeof message !== 'object') return;
+                    if (message.type === 'transcript') {
+                        renderTranscript(message);
+                    } else if (message.type === 'function-call') {
+                        log('volání funkce: ' + (message.functionCall && message.functionCall.name
+                            ? message.functionCall.name : '?'));
+                    } else if (message.type === 'status-update') {
+                        log('stav hovoru: ' + (message.status || '?'));
+                    }
+                });
+
+                instance.on('call-start-progress', function (progress) {
+                    if (progress && progress.stage) {
+                        log('start hovoru: ' + progress.stage + ' – ' + (progress.status || '?'));
+                    }
+                });
+
+                instance.on('call-start-failed', function (info) {
+                    log('start hovoru selhal: ' + (describeError(info) || 'neznámá příčina'), true);
+                });
+
+                instance.on('error', function (error) {
+                    if (window.console && console.error) {
+                        console.error('[vapi error event]', error);
+                    }
+                    const text = describeError(error) || 'neznámá chyba';
+                    log('chyba (' + (error && error.type ? error.type : 'unknown') + '): ' + text, true);
+
+                    if (error && error.type === 'audio-start-failed') {
+                        setStatus('Prohlížeč zablokoval přehrávání zvuku – klikněte na tlačítko znovu.');
+                    } else if (/doesn'?t allow|not allowed.*assistant/i.test(text) || (/\b403\b|forbidden/i.test(text) && /assistant|key/i.test(text))) {
+                        setStatus('Vapi odmítl hovor (403): public key nepovoluje tohoto asistenta. ' +
+                            'Ověřte, že klíč a asistent patří do stejné organizace, nebo zapněte secure mode (VAPI_PRIVATE_KEY + ORG_ID v .env).');
+                    } else if (/\b401\b|unauthorized|invalid.*key/i.test(text)) {
+                        setStatus('Vapi odmítl klíč (401) – zkontrolujte VAPI_PUBLIC_KEY v .env.');
+                    } else if (/\b404\b|not found/i.test(text) && /assistant/i.test(text)) {
+                        setStatus('Asistent nenalezen (404) – zkontrolujte ASSISTANT_ID v .env.');
+                    } else if (/permission|notallowed|denied/i.test(text) && !/\b403\b/.test(text)) {
+                        setStatus('Přístup k mikrofonu byl zamítnut – povolte mikrofon v prohlížeči.');
+                    }
+                });
+            }
+
+            let callActive = false;
+            let buttonBusy = false;
+            let partial = null;
+            let placeholderCleared = false;
+
+            buttonEl.disabled = false;
+            buttonEl.textContent = 'Spustit asistenta';
+            setStatus('Připraveno ke spuštění');
+
+            function appendBubble(role, label, text) {
+                if (!placeholderCleared) {
+                    transcriptEl.innerHTML = '';
+                    placeholderCleared = true;
+                }
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble ' + role;
+                const who = document.createElement('span');
+                who.className = 'who';
+                who.textContent = label;
+                const body = document.createElement('span');
+                body.className = 'text';
+                body.textContent = text;
+                bubble.append(who, body);
+                transcriptEl.appendChild(bubble);
+                transcriptEl.scrollTop = transcriptEl.scrollHeight;
+                return { role: role, bubble: bubble, body: body };
+            }
+
+            function renderTranscript(message) {
+                const role = message.role === 'user' ? 'user' : 'assistant';
+                const label = role === 'user' ? 'Vy' : 'Asistent';
+                const text = (message.transcript || '').trim();
+                if (!text) return;
+
+                if (message.transcriptType === 'partial') {
+                    const last = transcriptEl.lastElementChild;
+                    if (!partial || partial.role !== role || partial.bubble !== last) {
+                        partial = appendBubble(role, label, text);
+                    }
+                    partial.body.textContent = text;
+                    partial.bubble.classList.add('partial');
+                    transcriptEl.scrollTop = transcriptEl.scrollHeight;
+                    return;
+                }
+
+                // Finální přepis – doplní nebo uzavře rozpracovanou bublinu.
+                const last = transcriptEl.lastElementChild;
+                if (partial && partial.role === role && partial.bubble === last) {
+                    partial.body.textContent = text;
+                    partial.bubble.classList.remove('partial');
+                    partial = null;
+                } else {
+                    appendBubble(role, label, text);
+                }
+            }
+
+            buttonEl.addEventListener('click', async function () {
+                if (buttonBusy) return;
+                buttonBusy = true;
+                buttonEl.disabled = true;
+
+                try {
+                    if (callActive) {
+                        setStatus('Ukončuji hovor…');
+                        await vapi.stop();
+                        log('vapi.stop() dokončeno');
+                    } else {
+                        // PROBUDIT REPRODUKTOR - důležité pro okamžité připojení zvuku
+                        unlockAudio();
+                        await new Promise(r => setTimeout(r, 150));
+
+                        // 1) Secure mode – čerstvý krátkodobý token ze serveru.
+                        try {
+                            setStatus('Získávám bezpečný token…');
+                            const tokenData = await fetchVapiToken();
+
+                            if (tokenData.secureAvailable) {
+                                log('Secure token získán (platnost ' + Math.round((tokenData.expiresIn || 0) / 60) + ' min).');
+                                const instance = getVapi('secure', tokenData.token);
+                                setStatus('Spouštím hovor…');
+                                const result = await instance.start(tokenData.assistantId || ASSISTANT_ID);
+                                if (result === null) {
+                                    throw new Error('start() vrátilo null – hovor se nepodařilo vytvořit, viz chyby výše');
+                                }
+                                log('vapi.start() dokončeno (secure)');
+                            } else {
+                                // Secure mode není aktivní – přejdeme na public key.
+                                log('Secure mode ' + (tokenData.message || 'není aktivní') + ' – používám public key.');
+                                const credential = tokenData.fallbackPublicKey || PUBLIC_KEY;
+                                const instance = getVapi('fallback', credential);
+                                setStatus('Spouštím hovor…');
+                                const result = await instance.start(ASSISTANT_ID);
+                                if (result === null) {
+                                    throw new Error('start() vrátilo null – hovor se nepodařilo vytvořit, viz chyby výše');
+                                }
+                                log('vapi.start() dokončeno (fallback)');
+                            }
+                        } catch (secureError) {
+                            // 2) Pojistka: zkusíme ještě klasický public key start.
+                            const reason = secureError && secureError.message ? secureError.message : String(secureError);
+                            log('Secure start selhal (' + reason + ') – zkouším public key.', true);
+                            const instance = getVapi('fallback', PUBLIC_KEY);
+                            setStatus('Spouštím hovor…');
+                            const result = await instance.start(ASSISTANT_ID);
+                            if (result === null) {
+                                throw new Error('start() vrátilo null – hovor se nepodařilo vytvořit, viz chyby výše');
+                            }
+                            log('vapi.start() dokončeno (fallback)');
+                        }
+                    }
+                } catch (error) {
+                    if (window.console && console.error) {
+                        console.error('[vapi start/stop]', error);
+                    }
+                    const text = describeError(error) || 'neznámá chyba';
+                    log('chyba při ' + (callActive ? 'ukončování' : 'spouštění') + ' hovoru: ' + text, true);
+                    setStatus('Chyba – zkuste to znovu');
+                } finally {
+                    buttonBusy = false;
+                    buttonEl.disabled = false;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

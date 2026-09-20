@@ -84,10 +84,11 @@ export default function Navigation() {
             <ProductToggle mode={mode} />
           </div>
 
-          {/* Burger */}
+          {/* Burger — tap target 44×45,8 px (Apple HIG); negativní marginy drží
+              margin box na 28×41,8, takže se layout/pozice ikony nemění. */}
           <button
             type="button"
-            className="shrink-0 rounded-none p-1 text-ink transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-accent"
+            className="shrink-0 -mx-2 -my-0.5 rounded-none px-3 py-1.5 text-ink transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-accent"
             aria-label="Otevřít nabídku"
             aria-expanded={menuOpen}
             aria-controls="nav-menu"
@@ -116,7 +117,7 @@ export default function Navigation() {
           <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-end px-6 lg:px-8">
             <button
               type="button"
-              className="rounded-none p-1 text-ink transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-accent"
+              className="-mx-2 -my-0.5 rounded-none px-3 py-1.5 text-ink transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-accent"
               aria-label="Zavřít nabídku"
               onClick={handleMenuClose}
             >

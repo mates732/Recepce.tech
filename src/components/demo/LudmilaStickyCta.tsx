@@ -1,74 +1,67 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Icon } from '@/components/shared/Icon';
 
 /**
  * Mobilní sticky CTA pro /Ludmila.
  *
  * Zobrazuje se jen na mobilu (< 768 px) a jen tam, kde dává smysl:
- *  - až po odscrollování hero sekce (nekryje vlastní CTA v hero),
- *  - nikdy ve stejnou chvíli, kdy je na obrazovce lišta dema v rámu
- *    (demo má vlastní „Zeptat se recepční / Zavolat“ — dvě stejné CTA
- *    na jedné obrazovce by působily jako chyba),
+ *  - až po odscrollování karty s tlačítkem (nekryje vlastní CTA),
+ *  - ne, když běží hovor s asistentem (tlačítko hovoru je na stránce),
  *  - ne, když by zasahovala do patičky webu.
  * Respektuje safe-area iPhonu a `prefers-reduced-motion`.
  */
 const PHONE = '+420720943766';
 const PHONE_LABEL = '+420 720 943 766';
 
-/** Od kolika px scrollu se lišta začne řešit (hero musí zmizet). */
-const SCROLL_THRESHOLD = 260;
-/** Výška lišty dema uvnitř iframu — její akce visí na spodní hraně rámu. */
-const DEMO_BAR_HEIGHT = 62;
+/** Od kolika px scrollu se lišta začne řešit (karta s tlačítkem musí zmizet). */
+const SCROLL_THRESHOLD = 420;
 /** Výška naší lišty bez safe-area (pt-2.5 + 44 px tlačítka + pb-2.5). */
 const OWN_BAR_HEIGHT = 64;
-/** Hysteréze, aby lišta na hraně pásma při scrollu neblikala. */
-const COLLISION_SLACK = 32;
 
 export default function LudmilaStickyCta() {
   const [visible, setVisible] = useState(false);
-  /** Je zrovna naše lišta stažená kvůli kolizi s lištou dema? (kvůli hysterézi) */
-  const colliding = useRef(false);
+  const [callActive, setCallActive] = useState(false);
 
   useEffect(() => {
-    const frame = document.querySelector<HTMLIFrameElement>('#ukazka iframe');
     const footer = document.querySelector('footer');
 
     const update = () => {
       const viewport = window.innerHeight;
-      const frameBox = frame ? frame.getBoundingClientRect() : null;
       const footerBox = footer ? footer.getBoundingClientRect() : null;
 
-      /* Lišta dema je `position: fixed` uvnitř iframu → drží se na spodní
-         hraně rámu, tedy v pásu [frameBottom - 62, frameBottom]. Naše lišta
-         zabírá [viewport - 64, viewport]. Překryjí se proto jen tehdy, když
-         je spodní hrana rámu od spodku viewportu blíž než jedna výška lišty. */
-      const delta = frameBox ? frameBox.bottom - viewport : Number.POSITIVE_INFINITY;
-      const slack = colliding.current ? COLLISION_SLACK : 0;
-      const barsCollide =
-        delta < DEMO_BAR_HEIGHT + slack && delta > -(OWN_BAR_HEIGHT + slack);
-      colliding.current = barsCollide;
-
       /* Patička: lišta se schová, jakmile do ní zasahuje. */
-      const footerOverlaps = footerBox ? footerBox.top < viewport - OWN_BAR_HEIGHT : false;
+      const footerOverlaps =
+        footerBox && footerBox.top < viewport - OWN_BAR_HEIGHT;
 
-      setVisible(window.scrollY > SCROLL_THRESHOLD && !barsCollide && !footerOverlaps);
+      setVisible(
+        window.scrollY > SCROLL_THRESHOLD && !footerOverlaps && !callActive,
+      );
+    };
+
+    /* VapiCallButton vyhazuje událost se změnou stavu hovoru — během hovoru
+       lištu skrýváme, aby nepřekážela kartě s probíhajícím hovorem. */
+    const onCallState = (event: Event) => {
+      const detail = (event as CustomEvent<{ active?: boolean }>).detail;
+      setCallActive(Boolean(detail?.active));
     };
 
     update();
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
+    window.addEventListener('vapi-call-state', onCallState);
 
     return () => {
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      window.removeEventListener('vapi-call-state', onCallState);
     };
-  }, []);
+  }, [callActive]);
 
-  /* Kotva na rám s demem; s vypnutými animacemi skáčeme rovnou. */
+  /* Kotva na kartu s recepčním; s vypnutými animacemi skáčeme rovnou. */
   const handleAsk = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const target = document.getElementById('ukazka');
+    const target = document.getElementById('recepce');
     if (!target) return;
     event.preventDefault();
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -86,7 +79,7 @@ export default function LudmilaStickyCta() {
     >
       <div className="flex items-center gap-2.5 px-4 pt-2.5">
         <a
-          href="#ukazka"
+          href="#recepce"
           onClick={handleAsk}
           className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-accent text-sm font-medium text-accent-bright shadow-sm transition-colors duration-200 select-none hover:bg-accent-hover"
         >

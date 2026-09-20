@@ -29,8 +29,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const publicKey = process.env.PUBLIC_VAPI_PUBLIC_KEY;
-  const { assistantId } = getVapiConfig(slug);
+  const { apiKey: sharedKey, assistantId, browserPublicKey } = getVapiConfig(slug);
+  const publicKey = browserPublicKey ?? sharedKey;
 
   if (!publicKey || !assistantId) {
     return Response.json(

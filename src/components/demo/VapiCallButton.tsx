@@ -11,6 +11,16 @@ interface VapiCallButtonProps {
 
 type CallState = 'idle' | 'connecting' | 'active' | 'error';
 
+/* Stránka (např. mobilní sticky CTA na /Ludmila) se může podle stavu hovoru
+   přizpůsobit — vyhazujeme to jako window event, ať komponenta zůstane
+   znovupoužitelná bez prop-drillingu. */
+function notifyCallState(active: boolean) {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent('vapi-call-state', { detail: { active } }),
+  );
+}
+
 function formatError(error: unknown) {
   if (error instanceof Response) {
     return `Vapi start failed (${error.status} ${error.statusText || 'Response'}).`;
@@ -100,10 +110,14 @@ export default function VapiCallButton({ slug, assistantName }: VapiCallButtonPr
 
       const vapi = new Vapi(data.publicKey);
       vapiRef.current = vapi;
-      vapi.on('call-start', () => setState('active'));
+      vapi.on('call-start', () => {
+        setState('active');
+        notifyCallState(true);
+      });
       vapi.on('call-end', () => {
         vapiRef.current = null;
         setState('idle');
+        notifyCallState(false);
       });
       vapi.on('error', (event: unknown) => {
         console.error('[VapiCallButton] vapi error event:', event);
@@ -123,6 +137,7 @@ export default function VapiCallButton({ slug, assistantName }: VapiCallButtonPr
     } catch (callError) {
       console.error('[VapiCallButton] startCall error:', callError);
       disposeVapi();
+      notifyCallState(false);
       setError(formatError(callError));
       setState('error');
     }
@@ -130,6 +145,7 @@ export default function VapiCallButton({ slug, assistantName }: VapiCallButtonPr
 
   function stopCall() {
     disposeVapi();
+    notifyCallState(false);
     setState('idle');
     setError('');
   }

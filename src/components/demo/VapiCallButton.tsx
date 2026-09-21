@@ -108,7 +108,15 @@ export default function VapiCallButton({ slug, assistantName }: VapiCallButtonPr
         throw new Error(data.error ?? 'Demo není nakonfigurované.');
       }
 
-      const vapi = new Vapi(data.publicKey);
+      const vapi = new Vapi(data.publicKey, {
+      config: {
+        sounds: {
+          callStart: true,
+          callEnd: false,
+          notification: false,
+        },
+      },
+    });
       vapiRef.current = vapi;
       vapi.on('call-start', () => {
         setState('active');

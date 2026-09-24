@@ -29,10 +29,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const { apiKey: sharedKey, assistantId, browserPublicKey } = getVapiConfig(slug);
-  const publicKey = browserPublicKey ?? sharedKey;
+  const { assistantId, browserPublicKey } = getVapiConfig(slug);
 
-  if (!publicKey || !assistantId) {
+  if (!browserPublicKey || !assistantId) {
     return Response.json(
       { error: 'This demo is missing its browser configuration.' },
       { status: 503 },
@@ -40,6 +39,6 @@ export async function POST(request: Request) {
   }
 
   // Vapi's browser SDK needs the public key and assistant ID. The private
-  // API key is intentionally never included in this response.
-  return Response.json({ ready: true, publicKey, assistantId });
+  // API key (VAPI_API_KEY) is server-only and is never included in this response.
+  return Response.json({ ready: true, publicKey: browserPublicKey, assistantId });
 }

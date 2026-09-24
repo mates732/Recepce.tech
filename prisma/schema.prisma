@@ -1,0 +1,241 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ClientStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  UNPAID
+  PAUSED
+}
+
+enum CallStatus {
+  ENDED
+  ONGOING
+  FAILED
+  MISSED
+}
+
+enum WebhookEventStatus {
+  RECEIVED
+  PROCESSING
+  PROCESSED
+  FAILED
+  DUPLICATE
+}
+
+enum BillingEventType {
+  SUBSCRIPTION_BASE
+  OVERAGE
+  SETUP_FEE
+  ADJUSTMENT
+  REFUND
+}
+
+enum BillingEventStatus {
+  PENDING
+  CREATED
+  BILLED
+  FAILED
+  VOIDED
+}
+
+enum AuditAction {
+  CLIENT_CREATED
+  CLIENT_UPDATED
+  CLIENT_DELETED
+  VAPI_ASSISTANT_CONNECTED
+  VAPI_WEBHOOK_PROCESSED
+  USAGE_RECALCULATED
+  STRIPE_CUSTOMER_CREATED
+  STRIPE_SUBSCRIPTION_CREATED
+  STRIPE_WEBHOOK_PROCESSED
+  OVERAGE_CALCULATED
+  OVERAGE_BILLED
+  BILLING_RECONCILIATION_PERFORMED
+  BILLING_ERROR
+  ALERT_CREATED
+}
+
+model Client {
+  id                String   @id @default(cuid())
+  name              String
+  slug              String   @unique
+  contactName       String?
+  contactEmail      String?
+  status            ClientStatus @default(ACTIVE)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  billing           ClientBilling?
+  vapiAssistant     VapiAssistant?
+  calls             Call[]
+  usagePeriods      UsagePeriod[]
+  billingEvents     BillingEvent[]
+  auditLogs         AuditLog[]
+
+  @@index([status])
+  @@index([slug])
+}
+
+model ClientBilling {
+  id                        String   @id @default(cuid())
+  clientId                  String   @unique
+  currency                  String   @default("CZK")
+  monthlyPrice              Int
+  includedMinutes           Int
+  overagePricePerMinute     Int
+  stripeCustomerId          String?
+  stripeSubscriptionId      String?
+  stripeSubscriptionItemId  String?
+  billingPeriodStart        DateTime?
+  billingPeriodEnd          DateTime?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  client                    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+}
+
+model VapiAssistant {
+  id                String   @id @default(cuid())
+  clientId          String   @unique
+  assistantId       String
+  phoneNumberId     String?
+  status            String   @default("connected")
+  lastWebhookAt     DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  client            Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([assistantId])
+  @@index([phoneNumberId])
+}
+
+model Call {
+  id                String   @id @default(cuid())
+  clientId          String
+  vapiCallId        String   @unique
+  startedAt         DateTime
+  endedAt           DateTime?
+  durationSeconds   Int?
+  billableMinutes   Int
+  vapiCost          Int?
+  status            CallStatus @default(ENDED)
+  metadata          Json?
+  createdAt         DateTime @default(now())
+
+  client            Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, startedAt])
+  @@index([vapiCallId])
+  @@index([status])
+}
+
+model UsagePeriod {
+  id                String        @id @default(cuid())
+  clientId          String
+  periodStart       DateTime
+  periodEnd         DateTime
+  includedMinutes   Int
+  usedMinutes       Int           @default(0)
+  overageMinutes    Int           @default(0)
+  overageAmount     Int           @default(0)
+  estimatedTotal    Int           @default(0)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  billingEvents BillingEvent[]
+
+  @@unique([clientId, periodStart])
+  @@index([clientId, periodStart, periodEnd])
+}
+
+model WebhookEvent {
+  id                String   @id @default(cuid())
+  provider          String
+  externalEventId   String
+  eventType         String
+  payloadHash       String
+  processedAt       DateTime?
+  status            WebhookEventStatus @default(RECEIVED)
+  error             String?
+  createdAt         DateTime @default(now())
+
+  @@unique([provider, externalEventId])
+  @@index([provider, eventType])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model BillingEvent {
+  id                String            @id @default(cuid())
+  clientId          String
+  periodId          String?
+  type              BillingEventType
+  amount            Int
+  stripeEventId     String?
+  status            BillingEventStatus @default(PENDING)
+  metadata          Json?
+  createdAt         DateTime @default(now())
+
+  client            Client            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  period            UsagePeriod?      @relation(fields: [periodId], references: [id], onDelete: SetNull)
+
+  @@index([clientId, createdAt])
+  @@index([stripeEventId])
+  @@index([status])
+  @@unique([clientId, periodId, type, stripeEventId], where: { stripeEventId: { not: null } })
+}
+
+model AuditLog {
+  id                String      @id @default(cuid())
+  actor             String
+  action            AuditAction
+  entity            String
+  entityId          String
+  metadata          Json?
+  createdAt         DateTime    @default(now())
+
+  client            Client?     @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  clientId          String?
+
+  @@index([actor])
+  @@index([action])
+  @@index([entity, entityId])
+  @@index([createdAt])
+  @@index([clientId])
+}
+
+/// Post-call feedback z veřejných demo stránek (např. /demo, /Ludmila).
+/// Volitelně vázané na asistenta v ops datech; nic citlivého se neukládá.
+model DemoFeedback {
+  id           String   @id @default(cuid())
+  slug         String
+  assistantId  String?
+  rating       Int
+  comment      String?
+  createdAt    DateTime @default(now())
+
+  @@index([slug])
+  @@index([createdAt])
+}

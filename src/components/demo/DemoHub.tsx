@@ -186,6 +186,45 @@ const DEMO_PROJECTS: DemoProject[] = [
       },
     ],
   },
+  {
+    id: 'ugo-stromovka',
+    number: '05',
+    client: 'UGO Salaterie – Stromovka',
+    type: 'Virtuální recepce',
+    location: 'Praha 7 — Stromovka',
+    headline: 'Promluvte si s asistentem.',
+    description:
+      'Pro UGO Salaterie ve Stromovce jsme připravili hlasového asistenta, který zvedá telefon během špičky i mimo provozní dobu — poradí s menu, cenami a alergeny a přijme objednávku k vyzvednutí.',
+    suggestionMode: 'inspiration',
+    suggestions: [
+      'Máte dnes ještě otevřeno?',
+      'Kolik stojí Caesar salát?',
+      'Máte něco bez lepku?',
+      'Chci si objednat dva saláty k vyzvednutí.',
+    ],
+    problems: [
+      {
+        id: 'menu-a-ceny',
+        title: 'Menu a ceny',
+        detail: 'Asistent odpovídá na dotazy k salátům, limonádám, cenám i alergenům.',
+      },
+      {
+        id: 'objednavky',
+        title: 'Objednávky k vyzvednutí',
+        detail: 'Zapíše jméno, počet kusů a čas vyzvednutí; velké zakázky směřuje na e-mail.',
+      },
+      {
+        id: 'provoz',
+        title: 'Provozní doba',
+        detail: 'Zná letní i zimní režim Stromovky a umí ho správně vysvětlit.',
+      },
+      {
+        id: 'predani',
+        title: 'Předání člověku',
+        detail: 'Reklamace a firemní zakázky přepojuje na vedoucího směny.',
+      },
+    ],
+  },
 ];
 
 function DemoSelector({
@@ -489,7 +528,7 @@ function DemoPanel({ project }: { project: DemoProject }) {
         </p>
 
         <ProblemList items={project.problems} />
-        <TherapyPointChat />
+        {project.id === 'therapy-point' && <TherapyPointChat />}
       </section>
     </motion.article>
   );
@@ -531,7 +570,17 @@ export default function DemoHub() {
               selected={activeProject}
               onSelect={(project) => setActiveProjectId(project.id)}
             />
-            <VapiCallButton slug={activeProject.id} assistantName={activeProject.client} />
+            <VapiCallButton
+              slug={activeProject.id}
+              assistantName={activeProject.client}
+              suggestions={activeProject.suggestions}
+              showFeedback
+              cta={{
+                href: '/virtualni-asistenti',
+                label: 'Chci asistenta i pro svůj podnik',
+                note: 'Líbilo se vám to? Podívejte se, co všechno virtuální recepce zvládne.',
+              }}
+            />
           </Reveal>
 
           <AnimatePresence mode="wait" initial={false}>

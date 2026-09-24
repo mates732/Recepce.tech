@@ -34,7 +34,25 @@ export type IconName =
   | 'wrench'
   | 'lock'
   | 'bolt'
-  | 'camera';
+  | 'camera'
+  | 'log-out'
+  | 'grid'
+  | 'book-open'
+  | 'inbox'
+  | 'bar-chart'
+  | 'plus'
+  | 'rotate-ccw'
+  | 'chevron-right'
+  | 'flask'
+  | 'volume-2'
+  | 'alert-circle'
+  | 'external-link'
+  | 'database'
+  | 'link'
+  | 'mic'
+  | 'sliders'
+  | 'shield'
+  | 'briefcase';
 
 const PATHS: Record<IconName, ReactNode> = {
   phone: (
@@ -225,6 +243,122 @@ const PATHS: Record<IconName, ReactNode> = {
     <>
       <path d="M14.5 4h-5L7.5 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.5l-2 -3z" />
       <circle cx="12" cy="13" r="3" />
+    </>
+  ),
+  'log-out': (
+    <>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
+    </>
+  ),
+  grid: (
+    <>
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
+    </>
+  ),
+  'book-open': (
+    <>
+      <path d="M12 6.8C10.4 5.2 8.3 4.5 6 4.5c-.9 0-1.8.1-2.5.4V19c.7-.3 1.6-.4 2.5-.4 2.3 0 4.4.7 6 2.2 1.6-1.5 3.7-2.2 6-2.2.9 0 1.8.1 2.5.4V4.9c-.7-.3-1.6-.4-2.5-.4-2.3 0-4.4.7-6 2.3z" />
+      <path d="M12 6.8v14" />
+    </>
+  ),
+  inbox: (
+    <>
+      <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+      <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+    </>
+  ),
+  'bar-chart': (
+    <>
+      <path d="M12 20V10" />
+      <path d="M18 20V4" />
+      <path d="M6 20v-4" />
+    </>
+  ),
+  plus: (
+    <>
+      <path d="M12 5v14" />
+      <path d="M5 12h14" />
+    </>
+  ),
+  'rotate-ccw': (
+    <>
+      <path d="M3 4v6h6" />
+      <path d="M3.5 15a9 9 0 1 0 2.1-9.4L3 10" />
+    </>
+  ),
+  'chevron-right': <path d="m9 6 6 6-6 6" />,
+  flask: (
+    <>
+      <path d="M10 2v6.3L4.7 18a2 2 0 0 0 1.8 3h11a2 2 0 0 0 1.8-3L14 8.3V2" />
+      <path d="M8.5 2h7" />
+      <path d="M7 15h10" />
+    </>
+  ),
+  'volume-2': (
+    <>
+      <path d="M11 5 6 9H2v6h4l5 4z" />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+      <path d="M18.5 5.5a9.5 9.5 0 0 1 0 13" />
+    </>
+  ),
+  'alert-circle': (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v4" />
+      <path d="M12 16h.01" />
+    </>
+  ),
+  'external-link': (
+    <>
+      <path d="M15 3h6v6" />
+      <path d="M10 14 21 3" />
+      <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" />
+    </>
+  ),
+  database: (
+    <>
+      <ellipse cx="12" cy="5" rx="8" ry="3" />
+      <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+      <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+    </>
+  ),
+  link: (
+    <>
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </>
+  ),
+  mic: (
+    <>
+      <rect x="9" y="2" width="6" height="12" rx="3" />
+      <path d="M19 10v1a7 7 0 0 1-14 0v-1" />
+      <path d="M12 18v4" />
+    </>
+  ),
+  sliders: (
+    <>
+      <path d="M4 21v-7" />
+      <path d="M4 10V3" />
+      <path d="M12 21v-9" />
+      <path d="M12 8V3" />
+      <path d="M20 21v-5" />
+      <path d="M20 12V3" />
+      <path d="M1 14h6" />
+      <path d="M9 8h6" />
+      <path d="M17 16h6" />
+    </>
+  ),
+  shield: <path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z" />,
+  briefcase: (
+    <>
+      <rect x="2.5" y="7" width="19" height="13" rx="2" />
+      <path d="M8.5 7V5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2" />
+      <path d="M2.5 13h19" />
     </>
   ),
 };

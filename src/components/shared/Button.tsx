@@ -6,6 +6,10 @@ type Size = 'md' | 'lg';
 
 interface ButtonProps {
   href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  target?: string;
+  rel?: string;
+  disabled?: boolean;
   variant?: Variant;
   size?: Size;
   className?: string;
@@ -33,6 +37,9 @@ const SIZES: Record<Size, string> = {
 
 export function Button({
   href,
+  type: buttonType = 'button',
+  target,
+  disabled,
   variant = 'primary',
   size = 'md',
   className = '',
@@ -46,7 +53,7 @@ export function Button({
 
   if (!href) {
     return (
-      <button type="button" onClick={onClick} className={classes} aria-label={ariaLabel} style={styleAttr}>
+      <button type={buttonType} onClick={onClick} disabled={disabled} className={classes} aria-label={ariaLabel} style={styleAttr}>
         {children}
       </button>
     );
@@ -56,7 +63,7 @@ export function Button({
 
   if (isExternal) {
     return (
-      <a href={href} className={classes} aria-label={ariaLabel} style={styleAttr}>
+      <a href={href} target={target} rel={target ? 'noopener noreferrer' : undefined} className={classes} aria-label={ariaLabel} style={styleAttr}>
         {children}
       </a>
     );

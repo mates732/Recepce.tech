@@ -6,15 +6,21 @@ import { Icon } from '@/components/shared/Icon';
 import VoiceDemo from '@/components/demo/VoiceDemo';
 import {
   DEMO_SHOWCASES,
+  findShowcaseBySlug,
   getDefaultShowcase,
   type DemoShowcase,
 } from '@/lib/demo-showcase';
+import type { VapiDemoSlug } from '@/lib/vapi/server';
+import { useRouter } from 'next/navigation';
 
 /**
  * Přepínač ukázek + hlasová demo karta. Vždy je vidět jen jedno demo —
- * návštěvník si vybere v rozbalovacím seznamu (přístupné klávesnici,
- * stejný vzor jako původní DemoSelector).
+ * každé má vlastní URL /demo/[slug]; přepínač na ni naviguje (sdílitelný
+ * odkaz na konkrétní demo, přístupné klávesnici).
  */
+interface DemoShowcaseSwitcherProps {
+  activeSlug: VapiDemoSlug;
+}
 
 const DEMO_CTA = {
   href: '/#kontakt',
@@ -217,8 +223,19 @@ function DemoPicker({
   );
 }
 
-export default function DemoShowcase() {
-  const [selected, setSelected] = useState<DemoShowcase>(getDefaultShowcase);
+export default function DemoShowcaseSwitcher({ activeSlug }: DemoShowcaseSwitcherProps) {
+  const router = useRouter();
+  const selected = useMemo(
+    () => findShowcaseBySlug(activeSlug) ?? getDefaultShowcase(),
+    [activeSlug],
+  );
+
+  const selectSlug = useCallback(
+    (slug: VapiDemoSlug) => {
+      router.push(`/demo/${slug}`);
+    },
+    [router],
+  );
 
   return (
     <div className="mx-auto w-full max-w-3xl">
@@ -227,7 +244,7 @@ export default function DemoShowcase() {
         <DemoPicker
           showcases={DEMO_SHOWCASES}
           selected={selected}
-          onSelect={setSelected}
+          onSelect={(item) => selectSlug(item.slug)}
         />
       </div>
 
@@ -241,7 +258,7 @@ export default function DemoShowcase() {
           transition={{ duration: 0.24, ease: 'easeOut' }}
           className="mt-8"
         >
-          <VoiceDemo showcase={selected} showFeedback cta={DEMO_CTA} />
+          <VoiceDemo showcase={selected} showFeedback cta={DEMO_CTA} key={selected.slug} />
 
           {/* Konkrétní scénář vybraného dema */}
           <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-border bg-surface-muted/40 px-5 py-5 text-center sm:px-6">

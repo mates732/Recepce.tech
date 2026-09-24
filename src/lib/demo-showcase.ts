@@ -16,6 +16,8 @@ export interface DemoSuggestion {
 export interface DemoShowcase {
   slug: VapiDemoSlug;
   client: string;
+  /** Krátká značka pro hero label (např. „RECEPCE.TECH × UGO“). */
+  brand: string;
   location: string;
   initials: string;
   /** Konkrétní scénář pro vybrané demo (sekce pod kartou). */
@@ -27,6 +29,7 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
   {
     slug: 'ugo-stromovka',
     client: 'UGO Salaterie',
+    brand: 'UGO',
     location: 'Stromovka · Praha 7',
     initials: 'UG',
     scenario:
@@ -44,6 +47,7 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
   {
     slug: 'atombike',
     client: 'Atombike Cycle Hospital',
+    brand: 'ATOMBIKE',
     location: 'Praha 6',
     initials: 'AC',
     scenario:
@@ -58,6 +62,7 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
   {
     slug: 'therapy-point',
     client: 'Therapy Point',
+    brand: 'THERAPY POINT',
     location: 'Praha',
     initials: 'TP',
     scenario:
@@ -72,6 +77,7 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
   {
     slug: 'noname-barbershop',
     client: 'NoName Barbershop',
+    brand: 'NONAME BARBERSHOP',
     location: 'Praha',
     initials: 'NB',
     scenario:
@@ -86,6 +92,7 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
   {
     slug: 'paws-and-care',
     client: 'Paws & Care',
+    brand: 'PAWS & CARE',
     location: 'Praha',
     initials: 'PC',
     scenario:
@@ -100,6 +107,7 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
   {
     slug: 'ludmila',
     client: 'Textil Ludmila',
+    brand: 'TEXTIL LUDMILA',
     location: 'Praha 6',
     initials: 'TL',
     scenario:
@@ -113,7 +121,17 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
   },
 ];
 
-/** Primární demo — UGO je pro klienta první volba. */
+/** Primární demo — UGO je pro klienta první volba (/demo bez slugu). */
 export function getDefaultShowcase(): DemoShowcase {
   return DEMO_SHOWCASES[0];
+}
+
+/** Najde ukázku podle URL slugu, jinak undefined (→ 404). */
+export function findShowcaseBySlug(slug: string): DemoShowcase | undefined {
+  return DEMO_SHOWCASES.find((item) => item.slug === slug);
+}
+
+/** Všechny URL demo stránek — pro generateStaticParams. */
+export function getAllShowcaseSlugs(): string[] {
+  return DEMO_SHOWCASES.map((item) => item.slug);
 }

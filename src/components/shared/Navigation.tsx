@@ -71,12 +71,14 @@ export default function Navigation() {
         }`}
       >
         <nav className="mx-auto flex h-14 w-full max-w-6xl items-center justify-center gap-6 px-6 lg:px-8">
-          {/* Logo */}
+          {/* Logo — brand symbol R· */}
           <Link
             href="/"
-            className="flex items-center text-[13px] font-semibold tracking-[0.11em] text-ink transition-colors hover:text-accent"
+            aria-label="Recepce.tech — domů"
+            className="flex shrink-0 items-center transition-opacity duration-200 hover:opacity-70"
           >
-            RECEPCE.TECH
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/nav-icon.svg" alt="R·" className="h-7 w-7" />
           </Link>
 
           {/* Product toggle */}

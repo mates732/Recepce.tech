@@ -2,24 +2,26 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Reveal from '@/components/home/Reveal';
 import { Icon } from '@/components/shared/Icon';
-import DemoLabCard from '@/components/demo/DemoLabCard';
+import DemoCallPreview from '@/components/demo/DemoCallPreview';
 import { SHOWROOM_ORDER } from '@/lib/demo-showcase';
 
 /**
- * Recepce.tech Demo Lab — showroom existujících dem. /demo je jen katalog:
- * karty odkazují na již existující URL /demo/[slug], které se tady
- * nevytvářejí ani neupravují. UGO je featured (2 sloupce).
+ * RECEPCE.TECH DEMO LAB — editorial showcase existujících dem.
+ *
+ * Žádný SaaS katalog: asymetrické řady, velká typografie, hodně whitespace,
+ * preview jako miniatura reálného call rozhraní. Každá řada odkazuje na
+ * již existující URL /demo/[slug] — ta se tady nevytvářejí ani nemění.
  */
 
 export const metadata: Metadata = {
   title: { absolute: 'Demo Lab — vyzkoušejte si AI recepci | Recepce.tech' },
   description:
-    'Živé ukázky AI recepčních Recepce.tech — gastro, retail, beauty i zdravotnictví. Vyberte scénář a zavolejte si s asistentem hned.',
+    'Skutečné AI recepční. Skutečné scénáře. Vyberte si a rovnou si je vyzkoušejte — gastro, retail, beauty i zdravotnictví.',
   alternates: { canonical: '/demo' },
   openGraph: {
     title: 'Demo Lab — vyzkoušejte si AI recepci | Recepce.tech',
     description:
-      'Živé ukázky AI recepčních Recepce.tech — vyberte scénář a zavolejte si s asistentem hned.',
+      'Skutečné AI recepční. Skutečné scénáře. Vyberte si a rovnou si je vyzkoušejte.',
     url: 'https://www.recepce.tech/demo',
     siteName: 'Recepce.tech',
     locale: 'cs_CZ',
@@ -27,126 +29,126 @@ export const metadata: Metadata = {
   },
 };
 
-const CTA_LINKS = [
-  {
-    href: '/#kontakt',
-    label: 'Vytvořit vlastní řešení',
-    primary: true,
-  },
-  {
-    href: '/virtualni-asistenti',
-    label: 'Zjistit více',
-    primary: false,
-  },
-];
-
 export default function DemoPage() {
-  const featured = SHOWROOM_ORDER.find((item) => item.featured);
-  const rest = SHOWROOM_ORDER.filter((item) => item.slug !== featured?.slug);
-
   return (
     <>
-      {/* ── KOMPAKTNÍ HERO ───────────────────────────────────────────── */}
-      <section className="border-b border-border">
-        <div className="mx-auto w-full max-w-6xl px-6 pb-10 pt-12 lg:px-8 lg:pb-12 lg:pt-16">
-          <Reveal className="mx-auto max-w-3xl">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
-              RECEPCE.TECH / DEMO LAB
+      {/* ── HERO — kompaktní, editorial ──────────────────────────────── */}
+      <section className="border-b border-border/60">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-12 pt-14 lg:px-8 lg:pb-16 lg:pt-20">
+          <Reveal>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted">
+              Recepce.tech / Demo Lab
             </p>
-
-            <h1 className="text-balance mt-4 text-[2.1rem] font-semibold leading-[1.06] tracking-[-0.03em] text-ink sm:mt-5 sm:text-[2.8rem] lg:text-[3.4rem]">
+            <h1 className="text-balance mt-6 max-w-3xl text-[2.4rem] font-semibold leading-[1.02] tracking-[-0.035em] text-ink sm:text-[3.2rem] lg:text-[4.2rem]">
               Vyzkoušejte si Recepce.tech.
             </h1>
-
-            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
-              <p className="text-[15px] leading-relaxed text-muted sm:text-base">
-                Vyberte si scénář a otevřete si živé demo.
-              </p>
-              <p className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-faint">
-                <span
-                  className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"
-                  aria-hidden="true"
-                />
-                Live demos
-              </p>
-            </div>
+            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted sm:text-lg">
+              Skutečné AI recepční. Skutečné scénáře.{' '}
+              <span className="text-ink">Vyberte si.</span>
+            </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── DEMO GRID — featured přes 2 sloupce + standardní karty ───── */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-10 lg:px-8 lg:py-14">
-        <Reveal y={16}>
-          <div className="grid gap-4 sm:grid-cols-2 lg:gap-5">
-            {featured && (
-              <div className="sm:col-span-2">
-                <DemoLabCard showcase={featured} featured />
-              </div>
-            )}
-            {rest.map((showcase) => (
-              <DemoLabCard key={showcase.slug} showcase={showcase} />
-            ))}
+      {/* ── DEMO ŘADY — asymetrický editorial layout ─────────────────── */}
+      <section>
+        {SHOWROOM_ORDER.map((demo, index) => {
+          const reversed = index % 2 === 1;
 
-            {/* Doplňková CTA karta — dotváří mřížku do sudého počtu */}
-            <Reveal y={16} className="h-full">
-              <div className="flex h-full flex-col justify-between rounded-2xl border border-dashed border-border bg-surface-muted/30 p-5">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
-                    VAŠE FIRMA
-                  </p>
-                  <h3 className="mt-2 text-base font-semibold tracking-[-0.01em] text-ink">
-                    Chybí tu váš scénář?
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">
-                    Každá recepce se nastavuje podle konkrétního provozu —
-                    připravíme ukázku i pro váš business.
-                  </p>
-                </div>
-                <Link
-                  href="/#kontakt"
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-ink transition-colors duration-200 hover:text-accent"
+          return (
+            <Reveal key={demo.slug} y={22}>
+              <Link
+                href={`/demo/${demo.slug}`}
+                className="group block border-b border-border/60 transition-colors duration-300 hover:bg-surface-muted/25"
+              >
+                <div
+                  className={`mx-auto grid w-full max-w-6xl items-center gap-8 px-6 py-12 lg:grid-cols-12 lg:gap-12 lg:px-8 lg:py-16 ${
+                    reversed ? '' : ''
+                  }`}
                 >
-                  Napsat nám
-                  <Icon name="arrow-right" className="h-4 w-4" />
-                </Link>
-              </div>
-            </Reveal>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* ── CTA NA VLASTNÍ ŘEŠENÍ ────────────────────────────────────── */}
-      <section className="border-t border-border bg-surface-muted/40">
-        <div className="mx-auto w-full max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
-          <Reveal>
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
-                Vlastní řešení
-              </p>
-              <h2 className="text-balance mt-3 text-2xl font-semibold tracking-[-0.02em] text-ink sm:text-3xl">
-                Chcete vlastní AI recepční?
-              </h2>
-              <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-ink/80 sm:text-base">
-                Tohle jsou jen ukázky. Vaše recepční může být vytvořená přesně
-                podle vašeho businessu.
-              </p>
-
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                {CTA_LINKS.map((cta) => (
-                  <Link
-                    key={cta.href}
-                    href={cta.href}
-                    className={`inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-sm font-semibold transition-colors duration-200 ${
-                      cta.primary
-                        ? 'bg-accent text-accent-bright hover:bg-accent-hover'
-                        : 'border border-border-strong text-ink hover:bg-surface-muted'
+                  {/* Textový blok */}
+                  <div
+                    className={`lg:col-span-5 ${
+                      reversed ? 'lg:order-2 lg:pl-6' : 'lg:order-1 lg:pr-6'
                     }`}
                   >
-                    {cta.label}
-                    <Icon name="arrow-right" className="h-4 w-4" />
-                  </Link>
-                ))}
-              </div>
+                    <div className="flex items-baseline gap-5">
+                      <span className="text-[13px] font-semibold tracking-[0.08em] text-faint">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <div>
+                        <h2 className="text-[1.55rem] font-semibold uppercase leading-[1.05] tracking-[-0.015em] text-ink sm:text-[1.9rem] lg:text-[2.15rem]">
+                          {demo.client}
+                        </h2>
+                        <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
+                          {demo.location}
+                        </p>
+                      </div>
+                    </div>
+
+                    <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-muted sm:text-base">
+                      {demo.tagline}
+                    </p>
+
+                    <p className="mt-4 text-[12px] font-medium uppercase tracking-[0.16em] text-faint">
+                      {demo.capabilities.join(' · ')}
+                    </p>
+
+                    <span className="mt-8 inline-flex items-center gap-2.5 text-[15px] font-semibold text-ink">
+                      <span className="border-b border-ink pb-0.5 transition-colors duration-200 group-hover:border-accent group-hover:text-accent">
+                        Vyzkoušet
+                      </span>
+                      <Icon
+                        name="arrow-right"
+                        className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1.5"
+                      />
+                    </span>
+                  </div>
+
+                  {/* Vizuální preview — miniatura reálného call UI */}
+                  <div
+                    className={`lg:col-span-7 ${
+                      reversed ? 'lg:order-1' : 'lg:order-2'
+                    }`}
+                  >
+                    <DemoCallPreview
+                      client={demo.client}
+                      location={demo.location}
+                      initials={demo.initials}
+                      scenario={demo.scenario}
+                    />
+                  </div>
+                </div>
+              </Link>
+            </Reveal>
+          );
+        })}
+      </section>
+
+      {/* ── CTA ──────────────────────────────────────────────────────── */}
+      <section>
+        <div className="mx-auto w-full max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
+          <Reveal>
+            <div className="max-w-2xl">
+              <h2 className="text-balance text-[1.9rem] font-semibold leading-[1.05] tracking-[-0.03em] text-ink sm:text-[2.5rem]">
+                Chcete vlastní AI recepční?
+              </h2>
+              <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted sm:text-base">
+                Dema jsou jen ukázky. Vaše recepční může být vytvořená přesně
+                pro váš business.
+              </p>
+              <Link
+                href="/#kontakt"
+                className="group mt-9 inline-flex items-center gap-2.5 text-[15px] font-semibold text-ink"
+              >
+                <span className="border-b border-ink pb-0.5 transition-colors duration-200 group-hover:border-accent group-hover:text-accent">
+                  Vytvořit vlastní řešení
+                </span>
+                <Icon
+                  name="arrow-right"
+                  className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1.5"
+                />
+              </Link>
             </div>
           </Reveal>
         </div>

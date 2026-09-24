@@ -79,6 +79,32 @@ async function formatResponseError(response: Response): Promise<string> {
   return bodyText || 'Hovor se nepodařilo spustit. Zkuste to prosím znovu.';
 }
 
+/* Vapi SDK hlásí chyby i jako Response (např. 403 „Key doesn't allow
+   assistantId“) — přečteme tělo, ať uživatel vidí skutečnou příčinu. */
+async function formatVapiErrorResponse(response: Response): Promise<string> {
+  let detail = '';
+  try {
+    const contentType = response.headers.get('content-type') ?? '';
+    if (contentType.includes('application/json')) {
+      const json = (await response.json()) as Record<string, unknown>;
+      detail =
+        typeof json.message === 'string'
+          ? json.message
+          : typeof json.error === 'string'
+            ? json.error
+            : '';
+    } else {
+      detail = (await response.text()).slice(0, 200);
+    }
+  } catch {
+    detail = '';
+  }
+  const status = `${response.status} ${response.statusText || ''}`.trim();
+  return detail
+    ? `Vapi: ${detail} (HTTP ${status})`
+    : `Vapi hovor se nepodařilo zahájit (HTTP ${status}).`;
+}
+
 function extractErrorMessage(event: unknown): string {
   if (typeof event === 'string' && event) return event;
   if (event && typeof event === 'object') {
@@ -323,13 +349,18 @@ export default function VoiceDemo({
         vapi.on('error', (event: unknown) => {
           console.error('[VoiceDemo] vapi error event:', event);
           if (!startedRef.current) {
-            /* Hovor nikdy nezačal (např. zamítnutý mikrofon) — ukaž chybu. */
+            /* Hovor nikdy nezačal (např. zamítnutý mikrofon nebo nepovolený
+               asistent u veřejného klíče) — ukaž konkrétní příčinu. */
             notifyCallState(false);
-            setError(
-              extractErrorMessage(event) ||
-                'Hovor se nepodařilo spustit. Zkontrolujte prosím přístup k mikrofonu.',
-            );
-            setState('error');
+            void (async () => {
+              const message =
+                typeof Response !== 'undefined' && event instanceof Response
+                  ? await formatVapiErrorResponse(event)
+                  : extractErrorMessage(event) ||
+                    'Hovor se nepodařilo spustit. Zkontrolujte prosím přístup k mikrofonu.';
+              setError(message);
+              setState('error');
+            })();
           }
         });
 

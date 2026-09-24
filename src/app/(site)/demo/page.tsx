@@ -10,7 +10,8 @@ import { getDefaultShowcase } from '@/lib/demo-showcase';
  */
 
 export const metadata: Metadata = {
-  title: 'AI recepce v praxi | Recepce.tech',
+  /* absolute — root layout má šablonu „%s — Recepce.tech“, aby se přípona neduplikovala */
+  title: { absolute: 'AI recepce v praxi | Recepce.tech' },
   description:
     'Vyzkoušejte si AI hlasového asistenta Recepce.tech na reálném scénáři UGO Salaterie.',
   alternates: { canonical: '/demo' },

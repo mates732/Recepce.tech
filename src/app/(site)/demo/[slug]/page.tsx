@@ -26,14 +26,15 @@ export async function generateMetadata({
   const showcase = findShowcaseBySlug(slug);
 
   if (!showcase) {
-    return { title: 'Demo | Recepce.tech' };
+    return { title: { absolute: 'Demo | Recepce.tech' } };
   }
 
+  /* absolute — root layout má šablonu „%s — Recepce.tech“, aby se přípona neduplikovala */
   const title = `${showcase.client} — AI recepce v praxi | Recepce.tech`;
   const description = `Vyzkoušejte si AI hlasového asistenta ${showcase.client} (${showcase.location}) na reálném scénáři Recepce.tech.`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: { canonical: `/demo/${showcase.slug}` },
     openGraph: {

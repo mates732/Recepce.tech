@@ -97,6 +97,20 @@ export const DEMO_SHOWCASES: DemoShowcase[] = [
       { text: 'Můžu se rovnou objednat?', icon: 'phone-call' },
     ],
   },
+  {
+    slug: 'ludmila',
+    client: 'Textil Ludmila',
+    location: 'Praha 6',
+    initials: 'TL',
+    scenario:
+      'Vybíráte látku na závěsy na míru — potřebujete poradit s metráží, zjistit, co se hodí na stínění oken, nebo se doptat na termín realizace.',
+    suggestions: [
+      { text: 'Potřebuju látku na závěsy.', icon: 'scissors' },
+      { text: 'Kolik metrů látky potřebuju?', icon: 'message-circle' },
+      { text: 'Co na stínění oken?', icon: 'search' },
+      { text: 'Jak dlouho trvá šití na míru?', icon: 'clock' },
+    ],
+  },
 ];
 
 /** Primární demo — UGO je pro klienta první volba. */
